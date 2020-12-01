@@ -21,8 +21,8 @@ public class TargetSourceTest {
             @Override
             public Class<?> getTargetClass() {
                 System.out.println("getTargetClass......");
-//                return TargetSourceInterface.class;
-                return MyTargetSource.class;
+                return TargetSourceInterface.class;
+//                return MyTargetSource.class;
             }
 
             @Override
@@ -47,7 +47,7 @@ public class TargetSourceTest {
         //
         proxyFactory.setExposeProxy(true);
         proxyFactory.setTargetSource(targetSource);
-        proxyFactory.addInterface(TargetSourceInterface.class);
+//        proxyFactory.addInterface(TargetSourceInterface.class);
         proxyFactory.addAdvice(new TestInterceptor());
         MethodBeforeAdvice methodBeforeAdvice = new MethodBeforeAdvice() {
             @Override

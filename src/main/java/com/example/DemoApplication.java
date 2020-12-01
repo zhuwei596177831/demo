@@ -3,6 +3,10 @@ package com.example;
 import com.example.aop.PersonComponent;
 import com.example.aop.UserComponent;
 import com.example.applicationEvent.MyApplicationEvent;
+import org.springframework.aop.aspectj.annotation.AnnotationAwareAspectJAutoProxyCreator;
+import org.springframework.aop.aspectj.autoproxy.AspectJAwareAdvisorAutoProxyCreator;
+import org.springframework.aop.framework.autoproxy.AbstractAdvisorAutoProxyCreator;
+import org.springframework.aop.framework.autoproxy.AbstractAutoProxyCreator;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -72,11 +76,20 @@ public class DemoApplication implements EmbeddedValueResolverAware, EnvironmentA
          **/
 
         /**
+         * @description: BeanPostProcessor:
          * org.springframework.context.annotation.internalConfigurationAnnotationProcessor
          * org.springframework.context.event.internalEventListenerProcessor
          * propertySourcesPlaceholderConfigurer
          * org.springframework.boot.context.properties.ConfigurationPropertiesBeanDefinitionValidator
          * preserveErrorControllerTargetClassPostProcessor
+         **/
+
+        /**
+         * @description: Aop:
+         * @see AnnotationAwareAspectJAutoProxyCreator
+         * @see AspectJAwareAdvisorAutoProxyCreator
+         * @see AbstractAdvisorAutoProxyCreator
+         * @see AbstractAutoProxyCreator
          **/
 
         /**@see ServletRegistrationBean
