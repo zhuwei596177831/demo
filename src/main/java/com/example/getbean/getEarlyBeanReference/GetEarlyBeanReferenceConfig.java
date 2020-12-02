@@ -1,5 +1,6 @@
 package com.example.getbean.getEarlyBeanReference;
 
+import com.example.getbean.getEarlyBeanReference.aop.TestJdkProxy;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.*;
 
@@ -11,14 +12,17 @@ import org.springframework.context.annotation.*;
  */
 @Configuration(proxyBeanMethods = false)
 @ComponentScan(basePackageClasses = {GetEarlyBeanReferenceConfig.class})
-//@EnableAspectJAutoProxy
-@EnableAutoConfiguration
+@EnableAspectJAutoProxy(exposeProxy = true)
+//@EnableAutoConfiguration
 @PropertySource(value = {"classpath:recources.properties"})
 public class GetEarlyBeanReferenceConfig {
 
     public static void main(String[] args) {
         AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(GetEarlyBeanReferenceConfig.class);
-        applicationContext.getBean(EarlyBeanReferenceBeanA.class).test("zww");
+//        applicationContext.getBean(EarlyBeanReferenceBeanA.class).test("zww");
+        applicationContext.getBean(TestJdkProxy.class).test("zww");
+        applicationContext.getBean(PrototypeEarlyBean.class);
+//        applicationContext.getBean(RequestEarlyBean.class);
         applicationContext.close();
     }
 

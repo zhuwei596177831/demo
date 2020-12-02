@@ -3,6 +3,7 @@ package com.example;
 import com.example.aop.PersonComponent;
 import com.example.aop.UserComponent;
 import com.example.applicationEvent.MyApplicationEvent;
+import com.example.getbean.getEarlyBeanReference.RequestEarlyBean;
 import org.springframework.aop.aspectj.annotation.AnnotationAwareAspectJAutoProxyCreator;
 import org.springframework.aop.aspectj.autoproxy.AspectJAwareAdvisorAutoProxyCreator;
 import org.springframework.aop.framework.autoproxy.AbstractAdvisorAutoProxyCreator;
@@ -67,12 +68,13 @@ public class DemoApplication implements EmbeddedValueResolverAware, EnvironmentA
 
     public static void main(String[] args) {
         /**
-         * 1.ConfigurationClassPostProcessor
-         * 2.AutowiredAnnotationBeanPostProcessor
-         * 3.CommonAnnotationBeanPostProcessor
-         * 4.Jpa的PersistenceAnnotationProcessor（没导包就不会注册）
-         * 5.EventListenerMethodProcessor
-         * 6.DefaultEventListenerFactory
+         * @description: 内置BeanFactoryPostProcessor:
+         * @see org.springframework.context.annotation.ConfigurationClassPostProcessor
+         * @see  org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor
+         * @see org.springframework.context.annotation.CommonAnnotationBeanPostProcessor
+         * @see org.springframework.context.event.EventListenerMethodProcessor
+         * @see org.springframework.context.event.DefaultEventListenerFactory
+         * @see Jpa的PersistenceAnnotationProcessor（没导包就不会注册）
          **/
 
         /**
@@ -85,18 +87,31 @@ public class DemoApplication implements EmbeddedValueResolverAware, EnvironmentA
          **/
 
         /**
-         * @description: Aop:
+         * @description: Aop用到的BeanPostProcessor:
          * @see AnnotationAwareAspectJAutoProxyCreator
          * @see AspectJAwareAdvisorAutoProxyCreator
          * @see AbstractAdvisorAutoProxyCreator
          * @see AbstractAutoProxyCreator
          **/
 
-        /**@see ServletRegistrationBean
-         * @see FilterRegistrationBean
-         * @see DelegatingFilterProxyRegistrationBean
-         * @see ServletListenerRegistrationBean
-         * */
+        /**
+         * @description: Aop MethodInterceptor:
+         * @see org.springframework.aop.interceptor.ExposeInvocationInterceptor
+         * @see org.springframework.aop.aspectj.AspectJAfterThrowingAdvice
+         * @see org.springframework.aop.framework.adapter.AfterReturningAdviceInterceptor
+         * @see org.springframework.aop.aspectj.AspectJAfterAdvice
+         * @see org.springframework.aop.aspectj.AspectJAroundAdvice
+         * @see org.springframework.aop.framework.adapter.MethodBeforeAdviceInterceptor
+         **/
+
+        /**
+         * @description:
+         * @see org.springframework.boot.web.servlet.ServletRegistrationBean
+         * @see org.springframework.boot.web.servlet.FilterRegistrationBean
+         * @see org.springframework.boot.web.servlet.FilterRegistrationBean
+         * @see org.springframework.boot.web.servlet.DelegatingFilterProxyRegistrationBean
+         * @see org.springframework.boot.web.servlet.ServletListenerRegistrationBean
+         **/
 
         /**
          * EnvironmentAware

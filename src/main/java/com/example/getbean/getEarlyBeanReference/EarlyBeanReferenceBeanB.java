@@ -1,5 +1,6 @@
 package com.example.getbean.getEarlyBeanReference;
 
+import com.example.getbean.getEarlyBeanReference.aop.TestJdkProxy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -10,6 +11,11 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class EarlyBeanReferenceBeanB {
+    /**
+     * autowired jdk proxy bean
+     */
     @Autowired
-    EarlyBeanReferenceBeanA earlyBeanReferenceBeanA;
+    TestJdkProxy testJdkProxy;
+//    @Autowired
+//    EarlyBeanReferenceBeanA earlyBeanReferenceBeanA;
 }

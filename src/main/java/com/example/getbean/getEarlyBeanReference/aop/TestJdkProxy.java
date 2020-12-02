@@ -6,6 +6,7 @@ package com.example.getbean.getEarlyBeanReference.aop;
  * @description
  */
 public interface TestJdkProxy {
-    default void testMethod() {
-    }
+    String test(String name);
+
+    void currentProxyMethod(String param);
 }

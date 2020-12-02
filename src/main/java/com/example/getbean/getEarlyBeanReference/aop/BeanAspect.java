@@ -14,7 +14,8 @@ import org.springframework.stereotype.Component;
 @Aspect
 public class BeanAspect {
 
-    @Pointcut(value = "execution(* com.example.getbean.getEarlyBeanReference.EarlyBeanReferenceBeanA.*(..))")
+//    @Pointcut(value = "execution(* com.example.getbean.getEarlyBeanReference.EarlyBeanReferenceBeanA.test(..))")
+    @Pointcut(value = "execution(* com.example.getbean.getEarlyBeanReference.aop.TestJdkProxy.test(..))")
     public void pointCut() {
     }
 
@@ -33,7 +34,7 @@ public class BeanAspect {
 
     @AfterReturning(pointcut = "pointCut()", returning = "returnData")
     public void afterReturning(JoinPoint joinPoint, Object returnData) {
-        System.out.println("afterReturning:" + returnData);
+        System.out.println("returnData:" + returnData);
     }
 
     @AfterThrowing(pointcut = "pointCut()", throwing = "myException")
@@ -47,7 +48,7 @@ public class BeanAspect {
             System.out.println("param:" + arg);
         }
         System.out.println("around");
-        Object afterReturning = proceedingJoinPoint.proceed(new Object[]{"朱伟伟"});
+        Object afterReturning = proceedingJoinPoint.proceed(proceedingJoinPoint.getArgs());
         System.out.println("afterReturning:" + afterReturning);
     }
 

@@ -58,17 +58,26 @@ public class EarlyBeanReferenceBeanA implements InitializingBean, DisposableBean
     @Resource
     PersonService personService;
 
+    @Override
     public String test(String name) {
 //        System.out.println(1 / 0);
         Object currentProxy = AopContext.currentProxy();
-        System.out.println("currentProxy......" + currentProxy);
-        EarlyBeanReferenceBeanA earlyBeanReferenceBeanA = (EarlyBeanReferenceBeanA) currentProxy;
-        earlyBeanReferenceBeanA.currentProxyMethod("哈哈哈");
+        System.out.println("currentProxy......" + currentProxy.getClass());
+        System.out.println("this......" + this.getClass());
+//        EarlyBeanReferenceBeanA earlyBeanReferenceBeanA = (EarlyBeanReferenceBeanA) currentProxy;
+//        earlyBeanReferenceBeanA.currentProxyMethod("");
+
+        /**
+         *  jdk proxy bean
+         */
+        TestJdkProxy testJdkProxy = (TestJdkProxy) currentProxy;
+        testJdkProxy.currentProxyMethod("");
         return name;
     }
 
-    public void currentProxyMethod(String name) {
-        System.out.println("currentProxyMethod...... argument:" + name);
+    @Override
+    public void currentProxyMethod(String param) {
+        System.out.println("currentProxyMethod......:");
     }
 
     @PostConstruct
