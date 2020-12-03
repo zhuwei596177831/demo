@@ -1,8 +1,12 @@
 package com.example.getbean.getEarlyBeanReference;
 
 import com.example.getbean.getEarlyBeanReference.aop.TestJdkProxy;
+import com.example.getbean.getEarlyBeanReference.transaction.TransactionTestService;
+import com.example.getbean.getEarlyBeanReference.transaction.TransactionTestServiceImpl;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.*;
+
+import java.util.Map;
 
 /**
  * @author 朱伟伟
@@ -20,9 +24,13 @@ public class GetEarlyBeanReferenceConfig {
     public static void main(String[] args) {
         AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(GetEarlyBeanReferenceConfig.class);
 //        applicationContext.getBean(EarlyBeanReferenceBeanA.class).test("zww");
-        applicationContext.getBean(TestJdkProxy.class).test("zww");
-        applicationContext.getBean(PrototypeEarlyBean.class);
+//        applicationContext.getBean(TestJdkProxy.class).test("zww");
+//        applicationContext.getBean(PrototypeEarlyBean.class);
 //        applicationContext.getBean(RequestEarlyBean.class);
+        applicationContext.getBean(TransactionTestService.class).insert("insert");
+//        applicationContext.getBean(TransactionTestService.class).transactionTemplate("transactionTemplate");
+//        applicationContext.getBean(TransactionTestService.class).platformTransactionManager("platformTransactionManager");
+//        applicationContext.getBean(TransactionTestService.class).getList().forEach(System.out::println);
         applicationContext.close();
     }
 

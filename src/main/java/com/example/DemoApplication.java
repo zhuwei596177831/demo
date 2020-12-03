@@ -4,6 +4,7 @@ import com.example.aop.PersonComponent;
 import com.example.aop.UserComponent;
 import com.example.applicationEvent.MyApplicationEvent;
 import com.example.getbean.getEarlyBeanReference.RequestEarlyBean;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.aop.aspectj.annotation.AnnotationAwareAspectJAutoProxyCreator;
 import org.springframework.aop.aspectj.autoproxy.AspectJAwareAdvisorAutoProxyCreator;
 import org.springframework.aop.framework.autoproxy.AbstractAdvisorAutoProxyCreator;
@@ -29,6 +30,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
 import org.springframework.core.io.support.ResourcePropertySource;
+import org.springframework.transaction.TransactionManager;
 import org.springframework.util.StringValueResolver;
 
 import javax.servlet.ServletRequest;
@@ -40,6 +42,7 @@ import java.util.Map;
 import java.util.Properties;
 
 @SpringBootApplication
+@MapperScan(basePackages = {"com.example.mapper"})
 public class DemoApplication implements EmbeddedValueResolverAware, EnvironmentAware, ResourceLoaderAware, MessageSourceAware, InitializingBean {
 
     //    @Autowired
@@ -64,6 +67,8 @@ public class DemoApplication implements EmbeddedValueResolverAware, EnvironmentA
     private Integer port;
     @Value("${test.resolver}")
     private String resolver;
+    @Autowired
+    TransactionManager transactionManager;
 
 
     public static void main(String[] args) {
@@ -143,6 +148,7 @@ public class DemoApplication implements EmbeddedValueResolverAware, EnvironmentA
          *
          **/
         ConfigurableApplicationContext applicationContext = SpringApplication.run(DemoApplication.class, args);
+//        applicationContext.getBean(RequestEarlyBean.class);
 //        System.out.println("applicationEventPublisher......" + applicationContext);
 //        applicationContext.getEnvironment();
 //        applicationContext.publishEvent(new MyApplicationEvent("朱伟伟"));
@@ -212,6 +218,7 @@ public class DemoApplication implements EmbeddedValueResolverAware, EnvironmentA
         personComponent.getPersonId();
         System.out.println("applicationEventPublisher......" + applicationEventPublisher);
 //        System.out.println("qualifierService......" + qualifierService);
+        System.out.println(transactionManager.getClass());
     }
 
     @Override
