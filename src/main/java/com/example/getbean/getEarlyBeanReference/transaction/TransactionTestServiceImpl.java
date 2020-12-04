@@ -1,5 +1,6 @@
 package com.example.getbean.getEarlyBeanReference.transaction;
 
+import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -26,6 +28,8 @@ public class TransactionTestServiceImpl implements TransactionTestService {
 
     @Autowired
     JdbcTemplate jdbcTemplate;
+    @Autowired
+    TransactionTestService transactionTestService;
 
     @Override
 //    @Transactional
@@ -83,4 +87,25 @@ public class TransactionTestServiceImpl implements TransactionTestService {
         }
     }
 
+    @Override
+    @Transactional
+    public void insertOne(String name) {
+        System.out.println("TransactionTestServiceImpl insertOne");
+        String sql = "insert into transaction.transaction_test(name) values (?);";
+        jdbcTemplate.update(sql, name);
+//        insertTwo("insertTwo");
+//        TransactionTestService transactionTestService = (TransactionTestService) AopContext.currentProxy();
+//        transactionTestService.insertTwo("insertTwo");
+        transactionTestService.insertTwo("insertTwo");
+        System.out.println(1 / 0);
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void insertTwo(String name) {
+        System.out.println("TransactionTestServiceImpl insertTwo");
+        String sql = "insert into transaction.transaction_test(name) values (?);";
+        jdbcTemplate.update(sql, name);
+        System.out.println(1 / 0);
+    }
 }

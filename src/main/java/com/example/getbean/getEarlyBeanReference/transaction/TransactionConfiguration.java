@@ -28,7 +28,7 @@ import java.util.*;
  */
 @Configuration(proxyBeanMethods = false)
 @EnableTransactionManagement
-public class TransactionConfig {
+public class TransactionConfiguration {
 
     @Bean
     public DataSource dataSource() throws SQLException {

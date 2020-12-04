@@ -12,7 +12,15 @@ import java.util.List;
 public interface TransactionTestService {
     @Transactional
     void insert(String name);
+
     List<TransactionTest> getList();
+
     void transactionTemplate(String name);
+
     void platformTransactionManager(String name);
+
+    void insertOne(String name);
+
+    void insertTwo(String name);
+
 }
