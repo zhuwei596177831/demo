@@ -5,6 +5,7 @@ import com.example.getbean.getEarlyBeanReference.async.AsyncService;
 import com.example.getbean.getEarlyBeanReference.transaction.TransactionTestService;
 import com.example.getbean.getEarlyBeanReference.transaction.TransactionTestServiceImpl;
 import com.example.getbean.getEarlyBeanReference.transaction.propagation.OneService;
+import org.springframework.aop.framework.Advised;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.*;
 import org.springframework.scheduling.annotation.AsyncResult;
@@ -22,13 +23,20 @@ import java.util.concurrent.Future;
  */
 @Configuration(proxyBeanMethods = false)
 @ComponentScan(basePackageClasses = {GetEarlyBeanReferenceConfig.class})
-@EnableAspectJAutoProxy(exposeProxy = true)
+@EnableAspectJAutoProxy(exposeProxy = true, proxyTargetClass = true)
 //@EnableAutoConfiguration
 @PropertySource(value = {"classpath:recources.properties"})
 public class GetEarlyBeanReferenceConfig {
 
     public static void main(String[] args) throws Exception {
         AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(GetEarlyBeanReferenceConfig.class);
+//        TestJdkProxy testJdkProxy = applicationContext.getBean(TestJdkProxy.class);
+//        System.out.println(testJdkProxy instanceof Advised);
+//        EarlyBeanReferenceBeanA earlyBeanReferenceBeanA = applicationContext.getBean(EarlyBeanReferenceBeanA.class);
+//        System.out.println(earlyBeanReferenceBeanA instanceof Advised);
+//        TransactionTestServiceImpl transactionTestService = applicationContext.getBean(TransactionTestServiceImpl.class);
+//        System.out.println(transactionTestService instanceof Advised);
+
 //        applicationContext.getBean(EarlyBeanReferenceBeanA.class).test("zww");
 //        applicationContext.getBean(TestJdkProxy.class).test("zww");
 //        applicationContext.getBean(PrototypeEarlyBean.class);
@@ -44,6 +52,8 @@ public class GetEarlyBeanReferenceConfig {
         while (!future.isDone()) {
             System.out.println(future.get());
         }
+//        applicationContext.getBean(EarlyBeanReferenceBeanA.class).earlyReferenceAsyncMethod();
+        applicationContext.getBean(EarlyBeanReferenceBeanB.class).testAsyncMethod();
         applicationContext.close();
     }
 

@@ -9,6 +9,8 @@ import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.support.RootBeanDefinition;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -115,5 +117,27 @@ public class EarlyBeanReferenceBeanA implements InitializingBean, DisposableBean
     @Override
     public void destroy() throws Exception {
         System.out.println("EarlyBeanReferenceBeanA destroy......");
+    }
+
+    /**
+     * @author: 朱伟伟
+     * @date: 2020-12-07 11:09
+     * @description: 循环依赖的bean async测试
+     * 报错原因:
+     * 该Bean已经EarlyBeanReferenceBeanB提前注入(populateBean()->AbstractAutoProxyCreator->getEarlyBeanReference()),
+     *
+     * 之后执行当前bean的initializeBean()时,因为该方法用了@Async注解实现多线程，
+     * 导致Bean又被代理了一次
+     * AsyncAnnotationBeanPostProcessor
+     * ->AbstractBeanFactoryAwareAdvisingPostProcessor
+     * ->AbstractAdvisingBeanPostProcessor(postProcessAfterInitialization())
+     *
+     * EarlyBeanReferenceBeanB注入的是AbstractAutoProxyCreator代理的，版本不一致，于是报错。
+     * @see org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory#doCreateBean
+     **/
+    @Override
+    @Async
+    public void earlyReferenceAsyncMethod() {
+        System.out.println("earlyReferenceAsyncMethod......" + Thread.currentThread().getName());
     }
 }

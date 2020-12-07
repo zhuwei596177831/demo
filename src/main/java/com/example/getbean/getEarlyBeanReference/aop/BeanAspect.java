@@ -1,5 +1,6 @@
 package com.example.getbean.getEarlyBeanReference.aop;
 
+import org.aopalliance.intercept.Joinpoint;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
@@ -14,7 +15,7 @@ import org.springframework.stereotype.Component;
 @Aspect
 public class BeanAspect {
 
-//    @Pointcut(value = "execution(* com.example.getbean.getEarlyBeanReference.EarlyBeanReferenceBeanA.test(..))")
+    //    @Pointcut(value = "execution(* com.example.getbean.getEarlyBeanReference.EarlyBeanReferenceBeanA.test(..))")
     @Pointcut(value = "execution(* com.example.getbean.getEarlyBeanReference.aop.TestJdkProxy.test(..))")
     public void pointCut() {
     }
@@ -50,6 +51,15 @@ public class BeanAspect {
         System.out.println("around");
         Object afterReturning = proceedingJoinPoint.proceed(proceedingJoinPoint.getArgs());
         System.out.println("afterReturning:" + afterReturning);
+    }
+
+    @Pointcut(value = "execution(* com.example.getbean.getEarlyBeanReference.aop.AopServiceImpl.*(..))")
+    public void aopServicePointCut() {
+    }
+
+    @Before(value = "aopServicePointCut()")
+    public void beforeAopService(JoinPoint joinPoint) {
+
     }
 
 }
