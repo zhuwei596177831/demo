@@ -13,13 +13,14 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class EarlyBeanReferenceBeanB {
-    /**
-     * autowired jdk proxy bean
-     * 循环依赖时 EarlyBeanReferenceBeanA async任务必须懒加载注入
-     */
 //    @Autowired
 //    @Lazy
 //    TestJdkProxy testJdkProxy;
+    /**
+     * autowired jdk proxy bean
+     * 循环依赖的bean互相注入时一方有async任务必须懒加载注入
+     * 其它bean注入不用
+     */
     @Autowired
     ObjectProvider<EarlyBeanReferenceBeanA> referenceBeanAObjectProvider;
 

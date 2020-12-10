@@ -2,9 +2,7 @@ package com.example.getbean.getEarlyBeanReference.transaction;
 
 import com.mysql.cj.jdbc.MysqlDataSource;
 import org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator;
-import org.springframework.context.annotation.AdviceMode;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.*;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
@@ -13,6 +11,8 @@ import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionManager;
 import org.springframework.transaction.annotation.AnnotationTransactionAttributeSource;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration;
+import org.springframework.transaction.annotation.TransactionManagementConfigurer;
 import org.springframework.transaction.interceptor.*;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -51,10 +51,21 @@ public class TransactionConfiguration {
         return new NamedParameterJdbcTemplate(dataSource);
     }
 
+    /**
+     * @param dataSource:
+     * @author: 朱伟伟
+     * @date: 2020-12-10 16:39
+     * @description: 1、直接添加transactionManager bean
+     * 2、添加自定义的TransactionManagementConfigurer(only one)
+     **/
     @Bean
     public PlatformTransactionManager transactionManager(DataSource dataSource) {
         return new DataSourceTransactionManager(dataSource);
     }
+//    @Bean
+//    public TransactionManagementConfigurer transactionManagementConfigurer(DataSource dataSource) {
+//        return new MyTransactionManagementConfigurer(dataSource);
+//    }
 
 
     /**
@@ -74,13 +85,13 @@ public class TransactionConfiguration {
 //        rollbackRules.add(new RollbackRuleAttribute(Error.class));
 //        ruleBasedTransactionAttribute.setRollbackRules(rollbackRules);
 //        ruleBasedTransactionAttribute.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+//        ruleBasedTransactionAttribute.setIsolationLevel(TransactionDefinition.ISOLATION_READ_COMMITTED);
 //        methodNamesMap.put("insert*", ruleBasedTransactionAttribute);
 //        methodNamesMap.put("add*", ruleBasedTransactionAttribute);
 //        methodNamesMap.put("update*", ruleBasedTransactionAttribute);
 //        methodNamesMap.put("delete*", ruleBasedTransactionAttribute);
-//        DefaultTransactionAttribute readOnly = new DefaultTransactionAttribute();
+//        DefaultTransactionAttribute readOnly = new DefaultTransactionAttribute(TransactionDefinition.PROPAGATION_NOT_SUPPORTED);
 //        readOnly.setReadOnly(true);
-//        readOnly.setPropagationBehavior(TransactionDefinition.PROPAGATION_NOT_SUPPORTED);
 //        methodNamesMap.put("select*", readOnly);
 //        methodNamesMap.put("get*", readOnly);
 //        methodNamesMap.put("find*", readOnly);
@@ -121,6 +132,10 @@ public class TransactionConfiguration {
     public TransactionTemplate transactionTemplate(PlatformTransactionManager transactionManager) {
         return new TransactionTemplate(transactionManager);
     }
+//    @Bean
+//    public TransactionTemplate transactionTemplate(TransactionManagementConfigurer transactionManagementConfigurer) {
+//        return new TransactionTemplate((PlatformTransactionManager) transactionManagementConfigurer.annotationDrivenTransactionManager());
+//    }
 
     /**
      * @param null:

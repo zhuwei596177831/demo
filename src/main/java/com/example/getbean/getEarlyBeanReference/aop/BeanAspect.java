@@ -62,4 +62,13 @@ public class BeanAspect {
 
     }
 
+    @Pointcut(value = "execution(* com.example.getbean.getEarlyBeanReference.transaction.propagation.OneService.*(..))")
+    public void oneServicePointCut() {
+    }
+
+    @Before(value = "oneServicePointCut()")
+    public void beforeOneService(JoinPoint joinPoint) {
+
+    }
+
 }

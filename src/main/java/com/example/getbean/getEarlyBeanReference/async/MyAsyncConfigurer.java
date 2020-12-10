@@ -30,7 +30,7 @@ public class MyAsyncConfigurer implements AsyncConfigurer {
         executor.setMaxPoolSize(20);  //最大线程数
         executor.setQueueCapacity(1000); //队列大小
         executor.setKeepAliveSeconds(300); //线程最大空闲时间
-        executor.setThreadNamePrefix("async-Executor-"); //指定用于新创建的线程名称的前缀。
+        executor.setThreadNamePrefix("myAsyncConfigurer-async-Executor-"); //指定用于新创建的线程名称的前缀。
         executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy()); // 拒绝策略（一共四种，此处省略）
         // 这一步千万不能忘了，否则报错： java.lang.IllegalStateException: ThreadPoolTaskExecutor not initialized
         executor.initialize();
@@ -40,6 +40,7 @@ public class MyAsyncConfigurer implements AsyncConfigurer {
 
     @Override
     public AsyncUncaughtExceptionHandler getAsyncUncaughtExceptionHandler() {
-        return new SimpleAsyncUncaughtExceptionHandler();
+//        return new SimpleAsyncUncaughtExceptionHandler();
+        return new MyAsyncUncaughtExceptionHandler();
     }
 }

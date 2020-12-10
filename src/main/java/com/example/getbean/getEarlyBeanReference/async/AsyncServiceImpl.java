@@ -13,6 +13,10 @@ import java.util.concurrent.Future;
  */
 @Service
 public class AsyncServiceImpl implements AsyncService {
+
+    public AsyncServiceImpl() {
+    }
+
     @Override
     @Async
     public void asyncMethod() {

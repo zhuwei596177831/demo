@@ -60,6 +60,9 @@ public class EarlyBeanReferenceBeanA implements InitializingBean, DisposableBean
     @Resource
     PersonService personService;
 
+    public EarlyBeanReferenceBeanA() {
+    }
+
     @Override
     public String test(String name) {
 //        System.out.println(1 / 0);

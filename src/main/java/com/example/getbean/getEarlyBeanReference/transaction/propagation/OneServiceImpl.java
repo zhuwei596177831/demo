@@ -2,6 +2,7 @@ package com.example.getbean.getEarlyBeanReference.transaction.propagation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +21,7 @@ public class OneServiceImpl implements OneService {
 
     @Override
     @Transactional
+    @Async
     public void insert(String name) {
         System.out.println("OneServiceImpl insert");
         String sql = "insert into transaction.transaction_test(name) values (?);";

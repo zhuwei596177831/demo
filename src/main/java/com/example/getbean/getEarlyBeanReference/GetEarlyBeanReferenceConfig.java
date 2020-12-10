@@ -10,6 +10,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.*;
 import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -24,6 +25,7 @@ import java.util.concurrent.Future;
 @Configuration(proxyBeanMethods = false)
 @ComponentScan(basePackageClasses = {GetEarlyBeanReferenceConfig.class})
 @EnableAspectJAutoProxy(exposeProxy = true, proxyTargetClass = true)
+//@EnableTransactionManagement
 //@EnableAutoConfiguration
 @PropertySource(value = {"classpath:recources.properties"})
 public class GetEarlyBeanReferenceConfig {
@@ -46,15 +48,15 @@ public class GetEarlyBeanReferenceConfig {
 //        applicationContext.getBean(TransactionTestService.class).platformTransactionManager("platformTransactionManager");
 //        applicationContext.getBean(TransactionTestService.class).getList().forEach(System.out::println);
 //        applicationContext.getBean(TransactionTestService.class).insertOne("insertOne");
-//        applicationContext.getBean(OneService.class).insert("one");
-        applicationContext.getBean(AsyncService.class).asyncMethod();
-        Future<String> future = applicationContext.getBean(AsyncService.class).futureMethod();
-        while (!future.isDone()) {
-            System.out.println(future.get());
-        }
+        applicationContext.getBean(OneService.class).insert("one");
+//        applicationContext.getBean(AsyncService.class).asyncMethod();
+//        Future<String> future = applicationContext.getBean(AsyncService.class).futureMethod();
+//        while (!future.isDone()) {
+//            System.out.println(future.get());
+//        }
 //        applicationContext.getBean(EarlyBeanReferenceBeanA.class).earlyReferenceAsyncMethod();
-        applicationContext.getBean(EarlyBeanReferenceBeanB.class).testAsyncMethod();
-        applicationContext.close();
+//        applicationContext.getBean(EarlyBeanReferenceBeanB.class).testAsyncMethod();
+//        applicationContext.close();
     }
 
     @Bean(initMethod = "initMethod", destroyMethod = "destroyMethod")
