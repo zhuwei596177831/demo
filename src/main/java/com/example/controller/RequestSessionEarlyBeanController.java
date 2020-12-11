@@ -1,7 +1,7 @@
 package com.example.controller;
 
-import com.example.getbean.getEarlyBeanReference.SessionEarlyBean;
-import com.example.getbean.getEarlyBeanReference.RequestEarlyBean;
+import com.test.getbean.getEarlyBeanReference.SessionEarlyBean;
+import com.test.getbean.getEarlyBeanReference.RequestEarlyBean;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;

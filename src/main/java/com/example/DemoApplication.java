@@ -2,8 +2,6 @@ package com.example;
 
 import com.example.aop.PersonComponent;
 import com.example.aop.UserComponent;
-import com.example.applicationEvent.MyApplicationEvent;
-import com.example.getbean.getEarlyBeanReference.RequestEarlyBean;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.aop.aspectj.annotation.AnnotationAwareAspectJAutoProxyCreator;
 import org.springframework.aop.aspectj.autoproxy.AspectJAwareAdvisorAutoProxyCreator;
@@ -11,9 +9,7 @@ import org.springframework.aop.framework.autoproxy.AbstractAdvisorAutoProxyCreat
 import org.springframework.aop.framework.autoproxy.AbstractAutoProxyCreator;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.source.ConfigurationPropertySource;
@@ -23,7 +19,6 @@ import org.springframework.boot.env.PropertySourceLoader;
 import org.springframework.boot.env.YamlPropertySourceLoader;
 import org.springframework.boot.origin.OriginTrackedValue;
 import org.springframework.context.*;
-import org.springframework.context.annotation.Scope;
 import org.springframework.context.event.ApplicationEventMulticaster;
 import org.springframework.core.env.*;
 import org.springframework.core.io.Resource;
@@ -33,8 +28,6 @@ import org.springframework.core.io.support.ResourcePropertySource;
 import org.springframework.transaction.TransactionManager;
 import org.springframework.util.StringValueResolver;
 
-import javax.servlet.ServletRequest;
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
