@@ -1,4 +1,4 @@
-package com.example.configuration.listener;
+package com.example.servletfilterlistener.listener;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;

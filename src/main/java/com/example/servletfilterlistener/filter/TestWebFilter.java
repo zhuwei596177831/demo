@@ -1,4 +1,4 @@
-package com.example.configuration.filter;
+package com.example.servletfilterlistener.filter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,7 +12,7 @@ import java.io.IOException;
  * @date 2020-12-11 18:00:43
  * @description
  */
-@WebFilter(filterName = "testWebFilter", urlPatterns = {"/testWebFilter"})
+//@WebFilter(filterName = "testWebFilter", urlPatterns = {"/testWebFilter"})
 public class TestWebFilter implements Filter {
     private final Logger logger = LoggerFactory.getLogger(TestWebFilter.class);
 

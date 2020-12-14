@@ -1,4 +1,4 @@
-package com.example.configuration.listener;
+package com.example.servletfilterlistener.listener;
 
 import javax.servlet.ServletRequestEvent;
 import javax.servlet.ServletRequestListener;
@@ -14,14 +14,14 @@ public class MyServletRequestListener implements ServletRequestListener {
     public void requestDestroyed(ServletRequestEvent sre) {
         HttpServletRequest httpServletRequest = (HttpServletRequest) sre.getServletRequest();
         System.out.println("###########requestDestroyed:" + httpServletRequest);
-        System.out.println("###########requestDestroyed:" + httpServletRequest.getSession().getId());
+//        System.out.println("###########requestDestroyed:" + httpServletRequest.getSession().getId());
     }
 
     @Override
     public void requestInitialized(ServletRequestEvent sre) {
         HttpServletRequest httpServletRequest = (HttpServletRequest) sre.getServletRequest();
         System.out.println("###########requestInitialized:" + httpServletRequest);
-        String id = httpServletRequest.getSession().getId();
-        System.out.println("###########sessionCreated:" + id);
+//        String id = httpServletRequest.getSession().getId();
+//        System.out.println("###########sessionCreated:" + id);
     }
 }

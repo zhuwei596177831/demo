@@ -1,5 +1,6 @@
-package com.example.configuration.listener;
+package com.example.servletfilterlistener.listener;
 
+import javax.servlet.annotation.WebListener;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 
@@ -8,6 +9,7 @@ import javax.servlet.http.HttpSessionListener;
  * @date 2020-12-11 16:12:38
  * @description
  */
+@WebListener(value = "myHttpSessionListener")
 public class MyHttpSessionListener implements HttpSessionListener {
     @Override
     public void sessionCreated(HttpSessionEvent se) {

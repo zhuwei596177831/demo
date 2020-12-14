@@ -1,4 +1,4 @@
-package com.example.configuration.servlet;
+package com.example.servletfilterlistener.servlet;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;

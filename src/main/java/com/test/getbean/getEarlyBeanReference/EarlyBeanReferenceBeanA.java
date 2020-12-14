@@ -123,7 +123,7 @@ public class EarlyBeanReferenceBeanA implements InitializingBean, DisposableBean
     /**
      * @author: 朱伟伟
      * @date: 2020-12-07 11:09
-     * @description: 循环依赖的bean async测试
+     * @description: 循环依赖的bean已经被代理时(Aop transactional) async异步任务测试
      * 报错原因:
      * 该Bean已经EarlyBeanReferenceBeanB提前注入(populateBean()->AbstractAutoProxyCreator->getEarlyBeanReference()),
      *
