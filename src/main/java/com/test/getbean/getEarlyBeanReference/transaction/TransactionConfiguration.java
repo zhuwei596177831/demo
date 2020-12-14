@@ -38,7 +38,10 @@ public class TransactionConfiguration {
         mysqlDataSource.setServerTimezone("GMT+8");
         mysqlDataSource.setDatabaseName("transaction");
         mysqlDataSource.setUser("root");
-        mysqlDataSource.setPassword("root");
+        //公司
+//        mysqlDataSource.setPassword("root");
+        //笔记本
+        mysqlDataSource.setPassword("manager");
         return mysqlDataSource;
     }
 

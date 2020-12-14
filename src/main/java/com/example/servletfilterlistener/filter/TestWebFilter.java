@@ -12,7 +12,7 @@ import java.io.IOException;
  * @date 2020-12-11 18:00:43
  * @description
  */
-//@WebFilter(filterName = "testWebFilter", urlPatterns = {"/testWebFilter"})
+@WebFilter(filterName = "testWebFilter", urlPatterns = {"/testWebFilter"})
 public class TestWebFilter implements Filter {
     private final Logger logger = LoggerFactory.getLogger(TestWebFilter.class);
 

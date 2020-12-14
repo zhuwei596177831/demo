@@ -20,8 +20,8 @@ public class EarlyBeanReferenceBeanB {
 
     /**
      * autowired jdk proxy bean
-     * 循环依赖的bean互相注入时一方有async任务必须懒加载注入
-     * 其它bean注入不用
+     * 循环依赖的bean互相注入时提前暴露的一方有async任务必须懒加载注入
+     * 其它bean注入不用懒加载
      */
     @Autowired
     ObjectProvider<EarlyBeanReferenceBeanA> referenceBeanAObjectProvider;
@@ -30,7 +30,6 @@ public class EarlyBeanReferenceBeanB {
 //    @Autowired
 //    EarlyBeanReferenceBeanA earlyBeanReferenceBeanA;
 
-    //    @Transactional
     public void testAsyncMethod() {
 //        testJdkProxy.earlyReferenceAsyncMethod();
         referenceBeanAObjectProvider.getObject().earlyReferenceAsyncMethod();

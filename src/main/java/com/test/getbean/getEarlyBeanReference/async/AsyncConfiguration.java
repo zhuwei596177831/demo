@@ -24,7 +24,10 @@ import org.springframework.scheduling.annotation.EnableAsync;
  * 6、若你希望得到异步调用的返回值，请你的返回值用Futrue变量包装起来
  */
 @Configuration(proxyBeanMethods = false)
-@EnableAsync
+//@Async注解所在的类 强制使用cglib代理 注意区分：
+// @EnableAspectJAutoProxy(proxyTargetClass = true)、@EnableTransactionManagement(proxyTargetClass = true)
+// AbstractAutoProxyCreator(处理aop、transactional)
+@EnableAsync(proxyTargetClass = true)
 public class AsyncConfiguration {
 
     @Bean

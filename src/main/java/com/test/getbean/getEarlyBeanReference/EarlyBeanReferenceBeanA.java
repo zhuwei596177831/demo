@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -123,17 +124,18 @@ public class EarlyBeanReferenceBeanA implements InitializingBean, DisposableBean
     /**
      * @author: 朱伟伟
      * @date: 2020-12-07 11:09
-     * @description: 循环依赖的bean已经被代理时(Aop transactional) async异步任务测试
+     * @description: 循环依赖的bean互相注入时 提前暴露的一方有 async异步任务时
      * 报错原因:
-     * 该Bean已经EarlyBeanReferenceBeanB提前注入(populateBean()->AbstractAutoProxyCreator->getEarlyBeanReference()),
-     *
+     * 该Bean已经EarlyBeanReferenceBeanB提前注入,进行了反射创建(populateBean()->AbstractAutoProxyCreator->getEarlyBeanReference()),
+     * <p>
      * 之后执行当前bean的initializeBean()时,因为该方法用了@Async注解实现多线程，
      * 导致Bean又被代理了一次
      * AsyncAnnotationBeanPostProcessor
      * ->AbstractBeanFactoryAwareAdvisingPostProcessor
      * ->AbstractAdvisingBeanPostProcessor(postProcessAfterInitialization())
-     *
-     * EarlyBeanReferenceBeanB注入的是AbstractAutoProxyCreator代理的，版本不一致，于是报错。
+     * <p>
+     * EarlyBeanReferenceBeanB注入的是提前创建的（默认反射创建或者被AbstractAutoProxyCreator代理的），
+     * 版本不一致，于是报错。
      * @see org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory#doCreateBean
      **/
     @Override

@@ -14,6 +14,9 @@ import java.util.Map;
  * @description delegating filter
  */
 public class TestDelegatingFilter implements Filter {
+    /**
+     * ServletComponentScan扫描的filter无法注入进来
+     */
     @Autowired
     private Map<String, Filter> filterMap;
 
@@ -30,7 +33,7 @@ public class TestDelegatingFilter implements Filter {
         Filter filter = filterMap.get(servletPath.replace("/", ""));
         if (filter == null) {
             HttpServletResponse httpServletResponse = (HttpServletResponse) response;
-            httpServletResponse.sendRedirect("www.baidu.com");
+            httpServletResponse.sendRedirect("http://www.baidu.com");
             return;
         }
         filter.doFilter(request, response, chain);
