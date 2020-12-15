@@ -1,6 +1,7 @@
 package com.example.servletfilterlistener.filter;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -14,11 +15,11 @@ import java.util.Map;
  * @description delegating filter
  */
 public class TestDelegatingFilter implements Filter {
-    /**
-     * ServletComponentScan扫描的filter无法注入进来
-     */
+//    @Autowired
+//    private Map<String, Filter> filterMap;
+
     @Autowired
-    private Map<String, Filter> filterMap;
+    private Map<String, FilterRegistrationBean> filterRegistrationBeanMap;
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -30,7 +31,8 @@ public class TestDelegatingFilter implements Filter {
         System.out.println("TestDelegatingFilter doFilter");
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         String servletPath = httpServletRequest.getServletPath();
-        Filter filter = filterMap.get(servletPath.replace("/", ""));
+//        Filter filter = filterMap.get(servletPath.replace("/", ""));
+        Filter filter = filterRegistrationBeanMap.get(servletPath.replace("/", "")).getFilter();
         if (filter == null) {
             HttpServletResponse httpServletResponse = (HttpServletResponse) response;
             httpServletResponse.sendRedirect("http://www.baidu.com");
