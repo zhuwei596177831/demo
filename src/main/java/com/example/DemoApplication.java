@@ -2,6 +2,7 @@ package com.example;
 
 import com.example.aop.PersonComponent;
 import com.example.aop.UserComponent;
+import com.github.lianjiatech.retrofit.spring.boot.annotation.RetrofitScan;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.aop.aspectj.annotation.AnnotationAwareAspectJAutoProxyCreator;
 import org.springframework.aop.aspectj.autoproxy.AspectJAwareAdvisorAutoProxyCreator;
@@ -36,6 +37,7 @@ import java.util.Properties;
 
 @SpringBootApplication
 @MapperScan(basePackages = {"com.example.mapper"})
+@RetrofitScan(basePackages = {"com.example.okhttp.retrofit"})
 public class DemoApplication implements EmbeddedValueResolverAware, EnvironmentAware, ResourceLoaderAware, MessageSourceAware, InitializingBean {
 
     //    @Autowired

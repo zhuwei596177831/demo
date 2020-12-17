@@ -32,8 +32,10 @@ public class TestDelegatingFilter implements Filter {
         String servletPath = httpServletRequest.getServletPath();
         Filter filter = filterMap.get(servletPath.replace("/", ""));
         if (filter == null) {
-            HttpServletResponse httpServletResponse = (HttpServletResponse) response;
-            httpServletResponse.sendRedirect("http://www.baidu.com");
+//            HttpServletResponse httpServletResponse = (HttpServletResponse) response;
+//            httpServletResponse.sendRedirect("http://www.baidu.com");
+//            return;
+            chain.doFilter(request, response);
             return;
         }
         filter.doFilter(request, response, chain);
