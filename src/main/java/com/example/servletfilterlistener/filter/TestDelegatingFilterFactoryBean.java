@@ -3,6 +3,7 @@ package com.example.servletfilterlistener.filter;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
@@ -18,7 +19,8 @@ import java.util.Map;
  * @description
  */
 public class TestDelegatingFilterFactoryBean implements FactoryBean<Filter>, BeanPostProcessor {
-    private final Map<String, Filter> filterMap = new LinkedHashMap<>(4);
+    //    private final Map<String, Filter> filterMap = new LinkedHashMap<>(4);
+    private final Map<String, FilterRegistrationBean> filterRegistrationBeanMap = new LinkedHashMap<>(4);
 
     @Override
     public Filter getObject() throws Exception {
@@ -32,8 +34,9 @@ public class TestDelegatingFilterFactoryBean implements FactoryBean<Filter>, Bea
 
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
-        if (bean instanceof Filter) {
-            filterMap.put(beanName, (Filter) bean);
+        if (bean instanceof FilterRegistrationBean) {
+//            filterMap.put(beanName, (Filter) bean);
+            filterRegistrationBeanMap.put(beanName, (FilterRegistrationBean) bean);
         }
         return bean;
     }
@@ -45,7 +48,8 @@ public class TestDelegatingFilterFactoryBean implements FactoryBean<Filter>, Bea
             System.out.println("TestDelegatingFilterFactoryBeanFilter doFilter");
             HttpServletRequest httpServletRequest = (HttpServletRequest) request;
             String servletPath = httpServletRequest.getServletPath();
-            Filter filter = filterMap.get(servletPath.replace("/", ""));
+//            Filter filter = filterMap.get(servletPath.replace("/", ""));
+            Filter filter = filterRegistrationBeanMap.get(servletPath.replace("/", "")).getFilter();
             if (filter == null) {
 //                HttpServletResponse httpServletResponse = (HttpServletResponse) response;
 //                httpServletResponse.sendRedirect("http://www.baidu.com");
