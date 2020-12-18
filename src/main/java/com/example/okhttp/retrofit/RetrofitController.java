@@ -39,7 +39,23 @@ public class RetrofitController implements InitializingBean {
         GitHubService gitHubService = retrofit.create(GitHubService.class);
         Response<ScenicHttpResult<ScenicList>> response = gitHubService.getScenicList(supplierIdentity, signkey).execute();
         if (response.isSuccessful()) {
-            return response.body();
+            ScenicHttpResult<ScenicList> scenicHttpResult = response.body();
+            System.out.println(scenicHttpResult);
+            return scenicHttpResult;
+        }
+        return null;
+    }
+
+    @GetMapping("/getResponseBodyScenicList")
+    public String getResponseBodyScenicList() throws IOException {
+        GitHubService gitHubService = retrofit.create(GitHubService.class);
+        Response<okhttp3.ResponseBody> response = gitHubService.getStringScenicList(supplierIdentity, signkey).execute();
+        if (response.isSuccessful()) {
+            MediaType mediaType = response.body().contentType();
+            System.out.println(mediaType);
+            String string = response.body().string();
+            System.out.println(string);
+            return string;
         }
         return null;
     }
@@ -48,7 +64,7 @@ public class RetrofitController implements InitializingBean {
     public void afterPropertiesSet() throws Exception {
         retrofit = new Retrofit.Builder()
                 .baseUrl(baseUrl)
-//                .addConverterFactory(new Retrofit2ConverterFactory())
+                .addConverterFactory(new Retrofit2ConverterFactory())
                 .addConverterFactory(JacksonConverterFactory.create())
                 .build();
     }

@@ -1,5 +1,7 @@
 package com.example.okhttp.retrofit.entity;
 
+import com.alibaba.fastjson.JSON;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -36,5 +38,10 @@ public class ScenicHttpResult<T> implements Serializable {
 
     public void setData(List<T> data) {
         this.data = data;
+    }
+
+    @Override
+    public String toString() {
+        return JSON.toJSONString(this);
     }
 }
