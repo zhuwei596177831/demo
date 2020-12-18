@@ -49,14 +49,14 @@ public class TestDelegatingFilterFactoryBean implements FactoryBean<Filter>, Bea
             HttpServletRequest httpServletRequest = (HttpServletRequest) request;
             String servletPath = httpServletRequest.getServletPath();
 //            Filter filter = filterMap.get(servletPath.replace("/", ""));
-            Filter filter = filterRegistrationBeanMap.get(servletPath.replace("/", "")).getFilter();
-            if (filter == null) {
+//            Filter filter = filterRegistrationBeanMap.get(servletPath.replace("/", "")).getFilter();
+//            if (filter == null) {
 //                HttpServletResponse httpServletResponse = (HttpServletResponse) response;
 //                httpServletResponse.sendRedirect("http://www.baidu.com");
-                chain.doFilter(request, response);
-                return;
-            }
-            filter.doFilter(request, response, chain);
+            chain.doFilter(request, response);
+//                return;
+//            }
+//            filter.doFilter(request, response, chain);
         }
     }
 
