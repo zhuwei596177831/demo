@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.JSONPObject;
 import okhttp3.*;
+import okhttp3.logging.HttpLoggingInterceptor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,6 +28,7 @@ public class OkHttpController {
             .connectTimeout(5, TimeUnit.SECONDS)
             .writeTimeout(30, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)
+            .addInterceptor(new HttpLoggingInterceptor())
             .build();
 
     /**
@@ -36,13 +38,19 @@ public class OkHttpController {
      **/
     @GetMapping("/getScenicList")
     public String getScenicList() throws Exception {
-        RequestBody requestBody = new FormBody.Builder()
+        FormBody formBody = new FormBody.Builder()
                 .add("supplierIdentity", supplierIdentity)
                 .add("signkey", signkey)
                 .build();
+        MultipartBody multipartBody = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("supplierIdentity", supplierIdentity)
+                .addFormDataPart("signkey", signkey)
+                .build();
         Request request = new Request.Builder()
                 .url(baseUrl + "getScenicList")
-                .post(requestBody)
+//                .post(formBody)
+                .post(multipartBody)
                 .build();
         try (Response response = okHttpClient.newCall(request).execute()) {
             if (!response.isSuccessful()) {
@@ -51,7 +59,6 @@ public class OkHttpController {
             String result = response.body().string();
             System.out.println(response.body().contentType().toString());
             result = JSON.parseObject(result).toJSONString();
-            System.out.println(result);
             return result;
         }
     }
