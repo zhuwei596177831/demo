@@ -3,6 +3,7 @@ package com.example.okhttp;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.JSONPObject;
+import com.example.okhttp.retrofit.MyLoggingInterceptor;
 import okhttp3.*;
 import okhttp3.logging.HttpLoggingInterceptor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,7 +29,7 @@ public class OkHttpController {
             .connectTimeout(5, TimeUnit.SECONDS)
             .writeTimeout(30, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)
-            .addInterceptor(new HttpLoggingInterceptor())
+            .addInterceptor(new MyLoggingInterceptor())
             .build();
 
     /**
@@ -49,8 +50,8 @@ public class OkHttpController {
                 .build();
         Request request = new Request.Builder()
                 .url(baseUrl + "getScenicList")
-//                .post(formBody)
-                .post(multipartBody)
+                .post(formBody)
+//                .post(multipartBody)
                 .build();
         try (Response response = okHttpClient.newCall(request).execute()) {
             if (!response.isSuccessful()) {
@@ -59,6 +60,8 @@ public class OkHttpController {
             String result = response.body().string();
             System.out.println(response.body().contentType().toString());
             result = JSON.parseObject(result).toJSONString();
+            response.body().close();
+            response.close();
             return result;
         }
     }

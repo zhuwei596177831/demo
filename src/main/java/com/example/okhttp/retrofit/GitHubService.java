@@ -1,5 +1,7 @@
 package com.example.okhttp.retrofit;
 
+import com.alibaba.fastjson.JSONObject;
+import com.example.okhttp.retrofit.entity.BodyJson;
 import com.example.okhttp.retrofit.entity.ScenicHttpResult;
 import com.example.okhttp.retrofit.entity.ScenicList;
 import okhttp3.FormBody;
@@ -51,7 +53,9 @@ public interface GitHubService {
     })
     @POST("retrofitBodyJson/{testPath}")
     Call<ScenicHttpResult<ScenicList>> retrofitBodyJson(@Path(value = "testPath") String testPath,
-                                                        @Body String bodyJson,
+//                                                        @Body String bodyJson,
+                                                        @Body JSONObject bodyJson,
+//                                                        @Body BodyJson bodyJson,
                                                         @Query(value = "projectId") String projectId,
                                                         @QueryMap Map<String, String> queryMap,
                                                         @Header("accessKey") String accessKey,

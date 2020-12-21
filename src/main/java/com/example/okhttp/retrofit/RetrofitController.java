@@ -1,23 +1,28 @@
 package com.example.okhttp.retrofit;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.support.retrofit.Retrofit2ConverterFactory;
+import com.example.okhttp.retrofit.entity.BodyJson;
 import com.example.okhttp.retrofit.entity.ScenicHttpResult;
 import com.example.okhttp.retrofit.entity.ScenicList;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import retrofit2.Response;
 import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author 朱伟伟
@@ -34,10 +39,19 @@ public class RetrofitController implements InitializingBean {
     public final String signkey = "3db0dc1a3dc6821bd0e7a5f772a73c0b";
     private Retrofit retrofit;
 
+    private final OkHttpClient interceptorClient = new OkHttpClient.Builder()
+            .connectTimeout(5, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
+            .writeTimeout(30, TimeUnit.SECONDS)
+            .addInterceptor(new MyLoggingInterceptor())
+            .build();
+
     private final Retrofit localRetrofit = new Retrofit.Builder()
             .baseUrl("http://127.0.0.1:8082/demo/retrofit/")
-            .addConverterFactory(new Retrofit2ConverterFactory())
+            .client(interceptorClient)
             .addConverterFactory(JacksonConverterFactory.create())
+//            .addConverterFactory(new Retrofit2ConverterFactory())
+//            .addConverterFactory(GsonConverterFactory.create())
             .build();
 
     @GetMapping("/getScenicList")
@@ -45,9 +59,7 @@ public class RetrofitController implements InitializingBean {
         GitHubService gitHubService = retrofit.create(GitHubService.class);
         Response<ScenicHttpResult<ScenicList>> response = gitHubService.getScenicList(supplierIdentity, signkey).execute();
         if (response.isSuccessful()) {
-            ScenicHttpResult<ScenicList> scenicHttpResult = response.body();
-//            System.out.println(scenicHttpResult);
-            return scenicHttpResult;
+            return response.body();
         }
         return null;
     }
@@ -70,8 +82,10 @@ public class RetrofitController implements InitializingBean {
     public void afterPropertiesSet() throws Exception {
         retrofit = new Retrofit.Builder()
                 .baseUrl(baseUrl)
-                .addConverterFactory(new Retrofit2ConverterFactory())
+                .client(interceptorClient)
                 .addConverterFactory(JacksonConverterFactory.create())
+//                .addConverterFactory(new Retrofit2ConverterFactory())
+//                .addConverterFactory(GsonConverterFactory.create())
                 .build();
     }
 
@@ -90,7 +104,9 @@ public class RetrofitController implements InitializingBean {
         jsonObject.put("email", "596177831@qq.com");
         return gitHubService.retrofitBodyJson(
                 "testPath",//path
-                jsonObject.toJSONString(),//body json
+//                jsonObject.toJSONString(),//body json
+                jsonObject,//body json
+//                new BodyJson("朱伟伟", "596177831@qq.com"),//body json
                 "596177831",//query projectId
                 Collections.singletonMap("projectName", "哈哈哈测试项目"),//query map
                 "123456789ABCD",//header
@@ -114,6 +130,7 @@ public class RetrofitController implements InitializingBean {
                                                          @RequestHeader(name = "Authorization") String Authorization) throws IOException {
         System.out.println("PathVariable testPath：" + testPath);
         System.out.println("RequestBody bodyJson：" + bodyJson);
+        BodyJson bodyJson1 = JSON.parseObject(bodyJson, BodyJson.class);
         System.out.println("RequestParam projectId：" + projectId);
         System.out.println("RequestParam projectName：" + projectName);
         System.out.println("RequestHeader accessKey：" + accessKey);
@@ -131,7 +148,7 @@ public class RetrofitController implements InitializingBean {
     @GetMapping("/getRetrofitFile")
     public ScenicHttpResult<ScenicList> getRetrofitFile() throws IOException {
         GitHubService gitHubService = localRetrofit.create(GitHubService.class);
-        File file = new File("D:/闫盼盼《 甜蜜的俘虜 》/aHR0cHM6Ly93d3cubXlteXBpYy5uZXQvZGF0YS9hdHRhY2htZW50L2ZvcnVtLzIwMTkwNC8yMS8wMDQ3MTJkbm1jbHV0eXMxa21ubmN0LmpwZy50aHVtYi5qcGc=.jpg");
+        File file = new File("D:\\测试retrofit.jpg");
         okhttp3.RequestBody fileRequestBody = okhttp3.RequestBody.create(null, file);
         List<MultipartBody.Part> parts = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
