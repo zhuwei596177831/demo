@@ -7,6 +7,8 @@ import org.springframework.boot.web.servlet.error.DefaultErrorAttributes;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,7 +24,7 @@ import javax.servlet.http.HttpServletRequest;
  * @date 2020-12-22 17:33:22
  * @description
  */
-@RestController
+//@RestController
 public class TestErrorController implements ErrorController {
     private static final String ERROR_ATTRIBUTE = TestErrorAttributes.class.getName() + ".ERROR";
     private final ServerProperties serverProperties;
@@ -34,7 +36,7 @@ public class TestErrorController implements ErrorController {
     @Autowired
     HttpServletRequest httpServletRequest;
 
-    @RequestMapping(value = "${server.error.path:/demoError}")
+    @RequestMapping(value = "${server.error.path}")
     public ErrorResult errorResult() {
         HttpStatus status = getStatus(httpServletRequest);
         WebRequest webRequest = new ServletWebRequest(httpServletRequest);

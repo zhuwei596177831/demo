@@ -34,9 +34,9 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration(proxyBeanMethods = false)
 public class SpringWebConfig {
-    @Bean
-    public TestErrorAttributes testErrorAttributes() {
-        return new TestErrorAttributes();
-    }
+//    @Bean
+//    public TestErrorAttributes testErrorAttributes() {
+//        return new TestErrorAttributes();
+//    }
 
 }
