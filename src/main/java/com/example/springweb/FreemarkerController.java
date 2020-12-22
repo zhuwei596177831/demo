@@ -23,15 +23,18 @@ import java.util.Date;
  * @description
  */
 @Controller
-public class TestResourceController {
+public class FreemarkerController {
 
     @Autowired
     HttpServletRequest httpServletRequest;
 
-    @RequestMapping(value = "/testResources")
+    @RequestMapping(value = "/freemarkerResources")
     public String testResources(Model model) {
-        httpServletRequest.setAttribute("timestamp", new Date());
-        httpServletRequest.setAttribute("message", "message");
-        return "testResources";
+        return "freemarkerResources";
+    }
+
+    @RequestMapping(value = "/staticResources")
+    public String staticResources(Model model) {
+        return "staticResources";
     }
 }

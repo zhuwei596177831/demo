@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>404页面</title>
+    <title>freemarkerResources</title>
 </head>
 <body>
-404
+freemarkerResources
 </body>
 </html>
