@@ -15,6 +15,7 @@ import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -30,6 +31,7 @@ public class FreemarkerController {
 
     @RequestMapping(value = "/freemarkerResources")
     public String testResources(Model model) {
+        model.addAttribute("timestamp", LocalDateTime.now());
         return "freemarkerResources";
     }
 

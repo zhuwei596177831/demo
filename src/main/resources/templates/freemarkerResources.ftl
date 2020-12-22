@@ -5,6 +5,7 @@
     <title>freemarkerResources</title>
 </head>
 <body>
-freemarkerResources
+freemarkerResources<br>
+${timestamp!}
 </body>
 </html>
