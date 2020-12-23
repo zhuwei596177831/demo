@@ -65,7 +65,6 @@ public class DemoApplication implements EmbeddedValueResolverAware, EnvironmentA
     @Autowired
     TransactionManager transactionManager;
 
-
     public static void main(String[] args) {
         /**
          * @description: 内置BeanFactoryPostProcessor:
@@ -126,6 +125,18 @@ public class DemoApplication implements EmbeddedValueResolverAware, EnvironmentA
          * BeanNameAware
          * BeanClassLoaderAware
          * BeanFactoryAware
+         **/
+
+        /**
+         * @description:
+         *      beanFactory.registerResolvableDependency(BeanFactory.class, beanFactory);
+         * 		beanFactory.registerResolvableDependency(ResourceLoader.class, this);
+         * 		beanFactory.registerResolvableDependency(ApplicationEventPublisher.class, this);
+         * 		beanFactory.registerResolvableDependency(ApplicationContext.class, this);
+         * 	    beanFactory.registerResolvableDependency(ServletRequest.class, new RequestObjectFactory());
+         * 		beanFactory.registerResolvableDependency(ServletResponse.class, new ResponseObjectFactory());
+         * 		beanFactory.registerResolvableDependency(HttpSession.class, new SessionObjectFactory());
+         * 		beanFactory.registerResolvableDependency(WebRequest.class, new WebRequestObjectFactory());
          **/
 
         /**

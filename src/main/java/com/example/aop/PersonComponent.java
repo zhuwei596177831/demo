@@ -8,8 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @description
  */
 public class PersonComponent {
-    @Autowired
+    //    @Autowired
     private UserComponent userComponent;
+
+    @Autowired
+    void injectUserComponent(UserComponent userComponent) {
+        this.userComponent = userComponent;
+    }
 
     public void getPersonId() {
         System.out.println("getPersonId......");

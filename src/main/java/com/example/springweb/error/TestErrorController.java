@@ -1,6 +1,8 @@
 package com.example.springweb.error;
 
+import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.boot.autoconfigure.web.ErrorProperties;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.boot.web.servlet.error.DefaultErrorAttributes;
@@ -33,8 +35,25 @@ public class TestErrorController implements ErrorController {
         this.serverProperties = serverProperties;
     }
 
+    /**
+     * @author: 朱伟伟
+     * @date: 2020-12-23 9:21
+     * @description:
+     * @see org.springframework.web.context.support.WebApplicationContextUtils#registerWebApplicationScopes
+     **/
+//    @Autowired
+    private HttpServletRequest httpServletRequest;
+    private BeanFactory beanFactory;
+
     @Autowired
-    HttpServletRequest httpServletRequest;
+    void setHttpServletRequest(HttpServletRequest httpServletRequest) {
+        this.httpServletRequest = httpServletRequest;
+    }
+
+    @Autowired
+    void setBeanFactory(BeanFactory beanFactory) {
+        this.beanFactory = beanFactory;
+    }
 
     @RequestMapping(value = "${server.error.path}")
     public ErrorResult errorResult() {

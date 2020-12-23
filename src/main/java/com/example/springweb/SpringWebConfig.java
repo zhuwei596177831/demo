@@ -13,7 +13,8 @@ import org.springframework.context.annotation.Configuration;
  * @see org.springframework.web.multipart.support.StandardServletMultipartResolver
  * @see org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver
  * <p>
- * requestMappingHandlerMapping -> {RequestMappingHandlerMapping@6823}
+ * handlerMappings:
+ * @see org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping
  * beanNameHandlerMapping -> {BeanNameUrlHandlerMapping@6975}
  * routerFunctionMapping -> {RouterFunctionMapping@6807}
  * resourceHandlerMapping -> {SimpleUrlHandlerMapping@6977}
