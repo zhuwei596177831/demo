@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Configuration;
  * <p>
  * handlerMappings:
  * @see org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping
- * beanNameHandlerMapping -> {BeanNameUrlHandlerMapping@6975}
+ * @see org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping
  * routerFunctionMapping -> {RouterFunctionMapping@6807}
  * resourceHandlerMapping -> {SimpleUrlHandlerMapping@6977}
  * welcomePageHandlerMapping -> {WelcomePageHandlerMapping@6973}

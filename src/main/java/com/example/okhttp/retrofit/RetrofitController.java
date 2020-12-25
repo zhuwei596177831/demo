@@ -11,6 +11,7 @@ import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import retrofit2.Response;
@@ -18,6 +19,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
@@ -55,7 +57,8 @@ public class RetrofitController implements InitializingBean {
             .build();
 
     @GetMapping("/getScenicList")
-    public ScenicHttpResult<ScenicList> getScenicList() throws IOException {
+    public ScenicHttpResult<ScenicList> getScenicList(HttpServletRequest request, Model model, String name) throws IOException {
+        System.out.println(Thread.currentThread().getName());
         GitHubService gitHubService = retrofit.create(GitHubService.class);
         Response<ScenicHttpResult<ScenicList>> response = gitHubService.getScenicList(supplierIdentity, signkey).execute();
         if (response.isSuccessful()) {
@@ -136,7 +139,7 @@ public class RetrofitController implements InitializingBean {
         System.out.println("RequestHeader accessKey：" + accessKey);
         System.out.println("RequestHeader signKey：" + signKey);
         System.out.println("RequestHeader Authorization：" + Authorization);
-        return getScenicList();
+        return getScenicList(null, null, null);
     }
 
     /**
@@ -163,7 +166,7 @@ public class RetrofitController implements InitializingBean {
         System.out.println("studentName：" + studentName);
         System.out.println("图片文件名称：" + imageFile.getOriginalFilename());
         System.out.println("图片文件大小：" + imageFile.getSize());
-        return getScenicList();
+        return getScenicList(null, null, null);
     }
 
 
