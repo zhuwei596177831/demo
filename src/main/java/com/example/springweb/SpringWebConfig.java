@@ -5,6 +5,7 @@ import com.example.springweb.error.TestErrorController;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
  * @author 朱伟伟
@@ -34,7 +35,7 @@ import org.springframework.context.annotation.Configuration;
  * defaultViewResolver -> {InternalResourceViewResolver@6799}
  */
 @Configuration(proxyBeanMethods = false)
-public class SpringWebConfig {
+public class SpringWebConfig implements WebMvcConfigurer {
 //    @Bean
 //    public TestErrorAttributes testErrorAttributes() {
 //        return new TestErrorAttributes();
