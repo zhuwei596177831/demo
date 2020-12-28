@@ -5,6 +5,7 @@ import com.example.springweb.error.TestErrorController;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
@@ -17,11 +18,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * handlerMappings:
  * @see org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping
  * @see org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping
- * routerFunctionMapping -> {RouterFunctionMapping@6807}
- * resourceHandlerMapping -> {SimpleUrlHandlerMapping@6977}
- * welcomePageHandlerMapping -> {WelcomePageHandlerMapping@6973}
+ * @see org.springframework.web.servlet.function.support.RouterFunctionMapping
+ * @see org.springframework.web.servlet.handler.SimpleUrlHandlerMapping
+ * @see org.springframework.boot.autoconfigure.web.servlet.WelcomePageHandlerMapping
  * <p>
- * requestMappingHandlerAdapter -> {RequestMappingHandlerAdapter@6830}
+ * @see org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter
  * handlerFunctionAdapter -> {HandlerFunctionAdapter@6821}
  * httpRequestHandlerAdapter -> {HttpRequestHandlerAdapter@7060}
  * simpleControllerHandlerAdapter -> {SimpleControllerHandlerAdapter@7062}
@@ -41,4 +42,9 @@ public class SpringWebConfig implements WebMvcConfigurer {
 //        return new TestErrorAttributes();
 //    }
 
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new HandlerInterceptor1());
+    }
 }
