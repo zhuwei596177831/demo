@@ -1,12 +1,13 @@
 package com.example.springweb;
 
-import com.example.springweb.error.TestErrorAttributes;
-import com.example.springweb.error.TestErrorController;
-import org.springframework.boot.autoconfigure.web.ServerProperties;
+import com.example.springweb.HandlerInterceptor.FileHandlerInterceptor;
+import com.example.springweb.HandlerInterceptor.MappedHandlerInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.handler.MappedInterceptor;
 
 /**
  * @author 朱伟伟
@@ -27,8 +28,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * httpRequestHandlerAdapter -> {HttpRequestHandlerAdapter@7060}
  * simpleControllerHandlerAdapter -> {SimpleControllerHandlerAdapter@7062}
  * <p>
- * errorAttributes -> {DefaultErrorAttributes@7117}
- * handlerExceptionResolver -> {HandlerExceptionResolverComposite@7119}
+ * {@link org.springframework.boot.web.servlet.error.DefaultErrorAttributes}
+ * {@link org.springframework.web.servlet.handler.HandlerExceptionResolverComposite}
  * <p>
  * viewResolver -> {ContentNegotiatingViewResolver@6681}
  * beanNameViewResolver -> {BeanNameViewResolver@6679}
@@ -42,9 +43,19 @@ public class SpringWebConfig implements WebMvcConfigurer {
 //        return new TestErrorAttributes();
 //    }
 
+    @Bean
+    LocaleResolver localeResolver() {
+        return new MyLocaleResolver();
+    }
+
+    @Bean
+    MappedInterceptor mappedInterceptor() {
+        return new MappedInterceptor(new String[]{"/testMappedInterceptor"}, new String[]{}, new MappedHandlerInterceptor());
+    }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new HandlerInterceptor1());
+        registry.addInterceptor(new FileHandlerInterceptor()).addPathPatterns("/testFile");
     }
+
 }

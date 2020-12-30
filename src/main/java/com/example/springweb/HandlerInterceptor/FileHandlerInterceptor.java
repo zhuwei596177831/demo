@@ -1,4 +1,4 @@
-package com.example.springweb;
+package com.example.springweb.HandlerInterceptor;
 
 import com.alibaba.fastjson.JSON;
 import com.example.generic.Result;
@@ -23,7 +23,7 @@ import java.util.Map;
  * @date 2020-12-28 11:07:24
  * @description
  */
-public class HandlerInterceptor1 implements HandlerInterceptor {
+public class FileHandlerInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         if (request instanceof MultipartHttpServletRequest) {
