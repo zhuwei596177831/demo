@@ -6,6 +6,7 @@ import com.alibaba.fastjson.support.retrofit.Retrofit2ConverterFactory;
 import com.example.okhttp.retrofit.entity.BodyJson;
 import com.example.okhttp.retrofit.entity.ScenicHttpResult;
 import com.example.okhttp.retrofit.entity.ScenicList;
+import com.example.springweb.customPathPrefix.ApiScenicPrefix;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
@@ -33,7 +34,7 @@ import java.util.concurrent.TimeUnit;
  */
 @RestController
 @RequestMapping("/retrofit")
-public class RetrofitController implements InitializingBean {
+public class RetrofitController implements InitializingBean, ApiScenicPrefix {
     @Value("${klxiyou.baseUrl}")
     private String baseUrl;
 
@@ -56,8 +57,49 @@ public class RetrofitController implements InitializingBean {
 //            .addConverterFactory(GsonConverterFactory.create())
             .build();
 
-    @GetMapping("/getScenicList")
+    @GetMapping(path = "/getScenicList", produces = {org.springframework.http.MediaType.APPLICATION_JSON_VALUE})
     public ScenicHttpResult<ScenicList> getScenicList(HttpServletRequest request, Model model, String name) throws IOException {
+        String contentType = request.getContentType();
+        String name1 = request.getParameter("name");
+        System.out.println(Thread.currentThread().getName());
+        GitHubService gitHubService = retrofit.create(GitHubService.class);
+        Response<ScenicHttpResult<ScenicList>> response = gitHubService.getScenicList(supplierIdentity, signkey).execute();
+        if (response.isSuccessful()) {
+            return response.body();
+        }
+        return null;
+    }
+
+    /**
+     * @description:
+     * // 指定request中必须包含某些参数值时，才让该方法处理
+     * 	// 使用 params 元素，你可以让多个处理方法处理到同一个URL 的请求, 而这些请求的参数是不一样的
+     * 	// 如：@RequestMapping(value = "/fetch", params = {"personId=10"} 和 @RequestMapping(value = "/fetch", params = {"personId=20"}
+     * 	// 这两个方法都处理请求`/fetch`，但是参数不一样，进入的方法也不一样~~~~
+     * 	// 支持!myParam和myParam!=myValue这种~~~
+     * 	String[] params() default {};
+     *
+     * 	// 指定request中必须包含某些指定的header值，才能让该方法处理请求
+     * 	// @RequestMapping(value = "/head", headers = {"content-type=text/plain"}
+     * 	String[] headers() default {};
+     *
+     * 	// 指定处理请求request的**提交内容类型**(Content-Type),例如application/json、text/html等
+     * 	// 相当于只有指定的这些Content-Type的才处理
+     * 	// @RequestMapping(value = "/cons", consumes = {"application/json", "application/XML"}
+     * 	// 不指定表示处理所有~~  取值参见枚举类：org.springframework.http.MediaType
+     * 	// 它可以使用!text/plain形如这样非的表达方式
+     * 	String[] consumes() default {};
+     *
+     * 	// 指定返回的内容类型，返回的内容类型必须是request请求头(Accept)中所包含的类型
+     * 	// 仅当request请求头中的(Accept)类型中包含该指定类型才返回；
+     * 	// 参见枚举类：org.springframework.http.MediaType
+     * 	// 它可以使用!text/plain形如这样非的表达方式
+     * 	String[] produces() default {};
+     **/
+    @PostMapping(path = "/getScenicList", produces = {org.springframework.http.MediaType.APPLICATION_JSON_VALUE},
+            consumes = {org.springframework.http.MediaType.APPLICATION_JSON_VALUE})
+    public ScenicHttpResult<ScenicList> getPostScenicList(HttpServletRequest request, Model model, String name) throws IOException {
+        String contentType = request.getContentType();
         System.out.println(Thread.currentThread().getName());
         GitHubService gitHubService = retrofit.create(GitHubService.class);
         Response<ScenicHttpResult<ScenicList>> response = gitHubService.getScenicList(supplierIdentity, signkey).execute();

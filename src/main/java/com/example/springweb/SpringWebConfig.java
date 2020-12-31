@@ -2,10 +2,15 @@ package com.example.springweb;
 
 import com.example.springweb.HandlerInterceptor.FileHandlerInterceptor;
 import com.example.springweb.HandlerInterceptor.MappedHandlerInterceptor;
+import com.example.springweb.customPathPrefix.ApiScenicPrefix;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.web.method.HandlerTypePredicate;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.handler.MappedInterceptor;
 
@@ -37,7 +42,10 @@ import org.springframework.web.servlet.handler.MappedInterceptor;
  * defaultViewResolver -> {InternalResourceViewResolver@6799}
  */
 @Configuration(proxyBeanMethods = false)
+@PropertySource(value = {"classpath:patchPrefix.properties"})
 public class SpringWebConfig implements WebMvcConfigurer {
+    @Value("${scenic.prefix}")
+    private String scenicPrefix;
 //    @Bean
 //    public TestErrorAttributes testErrorAttributes() {
 //        return new TestErrorAttributes();
@@ -58,4 +66,17 @@ public class SpringWebConfig implements WebMvcConfigurer {
         registry.addInterceptor(new FileHandlerInterceptor()).addPathPatterns("/testFile");
     }
 
+    @Override
+    public void configurePathMatch(PathMatchConfigurer configurer) {
+        //"close /users" also matches to "/users.*". 默认已关闭
+        configurer.setUseSuffixPatternMatch(false);
+        configurer.setUseRegisteredSuffixPatternMatch(false);
+        //"close /users" also matches to "/users/". 默认开启
+        configurer.setUseTrailingSlashMatch(false);
+        //添加自定义RequestMapping prefix 支持占位符 http://127.0.0.1:8082/demo/api/scenic/v1/retrofit/getScenicList
+//        configurer.addPathPrefix("${scenic.prefix}", ApiScenicPrefix.class::isAssignableFrom);
+//        configurer.addPathPrefix(scenicPrefix, ApiScenicPrefix.class::isAssignableFrom);
+        HandlerTypePredicate predicate = HandlerTypePredicate.forBasePackage("com.example.okhttp");
+        configurer.addPathPrefix(scenicPrefix, predicate);
+    }
 }

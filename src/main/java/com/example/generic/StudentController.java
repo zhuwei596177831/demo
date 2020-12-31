@@ -69,4 +69,20 @@ public class StudentController {
         return Result.ok(mapList);
     }
 
+    /**
+     * @author: 朱伟伟
+     * @date: 2020-12-31 13:51
+     * @description:
+     * @see org.springframework.web.servlet.handler.AbstractHandlerMethodMapping.MappingRegistry#nameLookup
+     **/
+    @GetMapping("/testNameLookup")
+    public Result getNameLookup() {
+        return Result.ok();
+    }
+
+    @GetMapping(name = "nameLookup", path = "/getNameLookup")
+    public Result getNameLookup(String name) {
+        return Result.ok(name);
+    }
+
 }
