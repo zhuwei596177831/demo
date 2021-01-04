@@ -1,6 +1,9 @@
 package com.example.springweb;
 
+import org.springframework.http.MediaType;
 import org.springframework.util.FileCopyUtils;
+import org.springframework.util.StreamUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 
 import javax.servlet.ReadListener;
@@ -18,7 +21,7 @@ import java.io.InputStreamReader;
  * @description
  */
 public class MyHttpServletRequestWrapper extends HttpServletRequestWrapper {
-    private final byte[] body;
+    private final String body;
     private ServletInputStream servletInputStream;
     private BufferedReader bufferedReader;
 
@@ -30,11 +33,16 @@ public class MyHttpServletRequestWrapper extends HttpServletRequestWrapper {
      */
     public MyHttpServletRequestWrapper(HttpServletRequest request) throws IOException {
         super(request);
-        this.body = FileCopyUtils.copyToByteArray(request.getInputStream());
-        this.servletInputStream = new BodyCachingInputStream(body);
+        if (MediaType.APPLICATION_FORM_URLENCODED_VALUE.equals(request.getContentType()) ||
+                StringUtils.startsWithIgnoreCase(request.getContentType(), "multipart/")) {
+            this.body = "";
+        } else {
+            this.body = new String(StreamUtils.copyToByteArray(request.getInputStream()));
+        }
+        this.servletInputStream = new BodyCachingInputStream(body.getBytes());
     }
 
-    public byte[] getBody() {
+    public String getBody() {
         return body;
     }
 

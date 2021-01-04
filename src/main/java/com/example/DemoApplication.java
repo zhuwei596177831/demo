@@ -3,6 +3,7 @@ package com.example;
 import com.example.aop.PersonComponent;
 import com.example.aop.UserComponent;
 import com.github.lianjiatech.retrofit.spring.boot.annotation.RetrofitScan;
+import com.test.getbean.getEarlyBeanReference.RequestEarlyBean;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.aop.aspectj.annotation.AnnotationAwareAspectJAutoProxyCreator;
 import org.springframework.aop.aspectj.autoproxy.AspectJAwareAdvisorAutoProxyCreator;
