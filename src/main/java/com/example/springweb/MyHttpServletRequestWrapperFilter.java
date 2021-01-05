@@ -1,5 +1,6 @@
 package com.example.springweb;
 
+import org.springframework.boot.web.servlet.filter.OrderedFilter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -15,10 +16,14 @@ import java.io.IOException;
  * @description
  */
 @Component
-public class MyHttpServletRequestWrapperFilter extends OncePerRequestFilter {
+public class MyHttpServletRequestWrapperFilter extends OncePerRequestFilter implements OrderedFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         filterChain.doFilter(new MyHttpServletRequestWrapper(request), response);
-//        filterChain.doFilter(new MyRequestWrapper(request), response);
+    }
+
+    @Override
+    public int getOrder() {
+        return HIGHEST_PRECEDENCE;
     }
 }

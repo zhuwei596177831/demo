@@ -1,6 +1,5 @@
 package com.example.validation;
 
-import lombok.Data;
 
 import javax.validation.constraints.NotNull;
 
@@ -8,7 +7,6 @@ import javax.validation.constraints.NotNull;
  * @author 朱伟伟
  * @description
  **/
-@Data
 public class Group {
 
     @NotNull(message = "id不能为空", groups = {UpdateGroupClass.class})
@@ -18,4 +16,11 @@ public class Group {
 
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 }

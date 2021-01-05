@@ -7,8 +7,15 @@ import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.AbstractRequestLoggingFilter;
 
+import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.Instant;
 
@@ -17,8 +24,10 @@ import java.time.Instant;
  * @date 2021-01-04 17:56:59
  * @description
  */
-@Component
+//@Component
+@WebFilter(filterName = "customRequestLoggingFilter", urlPatterns = {"/*"})
 public class CustomRequestLoggingFilter extends AbstractRequestLoggingFilter {
+    private HttpServletResponse httpServletResponse;
 
     //这些配置都可以在init-param中进行设置,但是基于注解的，这里就不要这么麻烦了，统一在初始化的时候设置值吧
     //private boolean includeQueryString = false;
@@ -44,6 +53,12 @@ public class CustomRequestLoggingFilter extends AbstractRequestLoggingFilter {
     }
 
     @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        this.httpServletResponse = response;
+        super.doFilterInternal(request, response, filterChain);
+    }
+
+    @Override
     protected boolean shouldLog(HttpServletRequest request) {
         String method = request.getMethod();
         return HttpMethod.POST.matches(method) || HttpMethod.PUT.matches(method) || HttpMethod.DELETE.matches(method);
@@ -63,6 +78,19 @@ public class CustomRequestLoggingFilter extends AbstractRequestLoggingFilter {
                 .concat(getConfigTypeLog(request))
                 .concat(getThreadId())
                 .concat(message));
+    }
+
+    @Override
+    protected String getMessagePayload(HttpServletRequest request) {
+        String payload = super.getMessagePayload(request);
+        if (payload != null) {
+            try {
+                payload = URLDecoder.decode(payload, request.getCharacterEncoding());
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+        }
+        return payload;
     }
 
     //拼装contentType

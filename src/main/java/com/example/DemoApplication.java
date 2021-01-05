@@ -2,6 +2,7 @@ package com.example;
 
 import com.example.aop.PersonComponent;
 import com.example.aop.UserComponent;
+import com.example.servletfilterlistener.filter.TestWebFilter;
 import com.github.lianjiatech.retrofit.spring.boot.annotation.RetrofitScan;
 import com.test.getbean.getEarlyBeanReference.RequestEarlyBean;
 import org.mybatis.spring.annotation.MapperScan;
@@ -20,6 +21,7 @@ import org.springframework.boot.env.PropertiesPropertySourceLoader;
 import org.springframework.boot.env.PropertySourceLoader;
 import org.springframework.boot.env.YamlPropertySourceLoader;
 import org.springframework.boot.origin.OriginTrackedValue;
+import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.context.*;
 import org.springframework.context.event.ApplicationEventMulticaster;
 import org.springframework.core.env.*;
@@ -38,6 +40,7 @@ import java.util.Properties;
 
 @SpringBootApplication
 @MapperScan(basePackages = {"com.example.mapper"})
+@ServletComponentScan
 @RetrofitScan(basePackages = {"com.example.okhttp.retrofit"})
 public class DemoApplication implements EmbeddedValueResolverAware, EnvironmentAware, ResourceLoaderAware, MessageSourceAware, InitializingBean {
 
@@ -155,6 +158,7 @@ public class DemoApplication implements EmbeddedValueResolverAware, EnvironmentA
          *
          **/
         ConfigurableApplicationContext applicationContext = SpringApplication.run(DemoApplication.class, args);
+//        TestWebFilter testWebFilter = applicationContext.getBean(TestWebFilter.class);
 //        applicationContext.getBean(RequestEarlyBean.class);
 //        System.out.println("applicationEventPublisher......" + applicationContext);
 //        applicationContext.getEnvironment();

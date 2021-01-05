@@ -1,6 +1,5 @@
 package com.example.validation;
 
-import lombok.Data;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -10,7 +9,6 @@ import javax.validation.constraints.NotNull;
  * @date 2020-08-05 12:01:23
  * @description
  */
-@Data
 public class CasCade {
     @NotNull(message = "CasCade id不能为空")
     private String id;
@@ -20,4 +18,20 @@ public class CasCade {
 
 //    @Valid
 //    private List<User> userList;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 }

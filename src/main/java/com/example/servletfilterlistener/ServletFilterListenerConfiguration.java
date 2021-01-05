@@ -21,7 +21,7 @@ import java.util.Collections;
  * @description
  */
 @Configuration
-@ServletComponentScan(basePackageClasses = {ServletFilterListenerConfiguration.class})
+//@ServletComponentScan(basePackageClasses = {ServletFilterListenerConfiguration.class})
 public class ServletFilterListenerConfiguration {
     @Bean
     public TestServlet testServlet() {

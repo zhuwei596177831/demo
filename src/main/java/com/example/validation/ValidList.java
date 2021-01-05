@@ -1,6 +1,5 @@
 package com.example.validation;
 
-import lombok.Data;
 
 import javax.validation.Valid;
 import java.util.*;
@@ -10,11 +9,18 @@ import java.util.*;
  * @date 2020-08-05 12:14:21
  * @description 自定义validation list
  */
-@Data
 public class ValidList<E> implements List<E> {
 
     @Valid
     private List<E> list = new ArrayList<>();//这里看需要实例化需要的List类型
+
+    public List<E> getList() {
+        return list;
+    }
+
+    public void setList(List<E> list) {
+        this.list = list;
+    }
 
     @Override
     public int size() {

@@ -12,8 +12,9 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * @author 朱伟伟
  * @date 2020-12-31 10:55:47
- * @description
+ * @description 自定义一个handler beanName必须以/开头
  * @see org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping
+ * @see org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter
  */
 @Controller("/customHandlerMappingController")
 public class CustomHandlerMappingController extends AbstractController {
