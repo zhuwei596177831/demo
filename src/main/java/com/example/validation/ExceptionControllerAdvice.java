@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
  * @date 2020-08-04 20:46
  * @description
  **/
-@RestControllerAdvice
+//@RestControllerAdvice
 public class ExceptionControllerAdvice {
 
 //    @ExceptionHandler(BindException.class)

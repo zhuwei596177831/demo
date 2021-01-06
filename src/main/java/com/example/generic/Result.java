@@ -9,7 +9,8 @@ import java.util.Collection;
  * @date 2020-12-27 11:52:23
  * @description
  */
-public class Result<T> {
+public class Result<T> extends BaseEntity {
+    private static final long serialVersionUID = -4845075787435077803L;
     private String code;
     private String msg;
     private T data;

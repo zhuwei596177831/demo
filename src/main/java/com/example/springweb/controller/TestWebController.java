@@ -1,4 +1,4 @@
-package com.example.springweb;
+package com.example.springweb.controller;
 
 import com.example.generic.Result;
 import org.springframework.beans.factory.annotation.Autowired;

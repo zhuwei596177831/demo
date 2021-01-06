@@ -2,14 +2,19 @@ package com.example.springweb;
 
 import com.example.springweb.HandlerInterceptor.FileHandlerInterceptor;
 import com.example.springweb.HandlerInterceptor.MappedHandlerInterceptor;
-import com.example.springweb.customPathPrefix.ApiScenicPrefix;
+import com.example.springweb.support.MyLocaleResolver;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.web.ResourceProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.MethodParameter;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.web.bind.support.WebDataBinderFactory;
+import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.HandlerTypePredicate;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
+import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
+import org.springframework.web.method.support.ModelAndViewContainer;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.handler.MappedInterceptor;
@@ -28,7 +33,7 @@ import java.util.List;
  * @see org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping
  * @see org.springframework.web.servlet.function.support.RouterFunctionMapping
  * @see org.springframework.web.servlet.handler.SimpleUrlHandlerMapping
- * @see org.springframework.boot.autoconfigure.web.servlet.WelcomePageHandlerMapping
+// * @see org.springframework.boot.autoconfigure.web.servlet.WelcomePageHandlerMapping
  * <p>
  * handlerAdapters:
  * @see org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter
@@ -131,5 +136,30 @@ public class SpringWebConfig implements WebMvcConfigurer {
     @Override
     public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
 
+    }
+
+    @Override
+    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
+        HandlerMethodArgumentResolver argumentResolver = new HandlerMethodArgumentResolver() {
+            @Override
+            public boolean supportsParameter(MethodParameter parameter) {
+                return false;
+            }
+
+            @Override
+            public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
+                return null;
+            }
+        };
+        resolvers.add(argumentResolver);
+    }
+
+    @Override
+    public void addReturnValueHandlers(List<HandlerMethodReturnValueHandler> handlers) {
+
+    }
+
+    @Override
+    public void configureAsyncSupport(AsyncSupportConfigurer configurer) {
     }
 }

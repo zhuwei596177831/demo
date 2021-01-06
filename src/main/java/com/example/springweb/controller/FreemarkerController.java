@@ -1,4 +1,4 @@
-package com.example.springweb;
+package com.example.springweb.controller;
 
 import com.example.springweb.error.ErrorResult;
 import com.example.springweb.error.TestErrorAttributes;

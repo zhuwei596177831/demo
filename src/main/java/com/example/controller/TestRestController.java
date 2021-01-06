@@ -15,8 +15,8 @@ import javax.servlet.http.HttpServletRequest;
  * @date 2020-09-22 15:22:07
  * @description
  */
-@RestController
-@SessionAttributes(value = {"user"}, types = {User.class})
+//@RestController
+//@SessionAttributes(value = {"user"}, types = {User.class})
 public class TestRestController {
 
     @GetMapping(value = {"/test", "/test1"})

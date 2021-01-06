@@ -1,4 +1,4 @@
-package com.example.springweb;
+package com.example.springweb.filter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
