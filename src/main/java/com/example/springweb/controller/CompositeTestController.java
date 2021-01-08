@@ -52,7 +52,7 @@ public class CompositeTestController {
 //        modelMap.put("name", "zww");
 //    }
     @ModelAttribute
-    public void controllerAdviceModelAttribute(@RequestParam Map map) {
+    public void controllerAdviceModelAttribute(String name) {
         System.out.println("");
     }
 
