@@ -28,7 +28,7 @@ public class CompositeTestController {
     @MethodDesc(value = "RequestBodyAdvice和ResponseBodyAdvice测试")
     @GetMapping("/testRequestResponseBodyAdvice")
     public Result testGetDataBinderFactory(@RequestBody(required = false) String data,
-                                           @ModelAttribute(name = "name") String name,
+                                           @ModelAttribute(name = "name") String name
 //                                           @ModelAttribute(name = "sessionMap") Map sessionMap
     ) {
         return Result.ok();
@@ -42,19 +42,19 @@ public class CompositeTestController {
      * (! AnnotatedElementUtils.hasAnnotation ( method, RequestMapping.class) &&
      * AnnotatedElementUtils.hasAnnotation(method, ModelAttribute.class));
      **/
-    @ModelAttribute(name = "name")
-    public String controllerAdviceModelAttribute(ModelMap modelMap, NativeWebRequest nativeWebRequest) {
-        return "zww";
-    }
+//    @ModelAttribute(name = "name")
+//    public String controllerAdviceModelAttribute(ModelMap modelMap, NativeWebRequest nativeWebRequest) {
+//        return "zww";
+//    }
 
 //    @ModelAttribute(name = "name")
 //    public void controllerAdviceModelAttribute(ModelMap modelMap, NativeWebRequest nativeWebRequest) {
 //        modelMap.put("name", "zww");
 //    }
-//    @ModelAttribute
-//    public void controllerAdviceModelAttribute(ModelMap modelMap, NativeWebRequest nativeWebRequest) {
-//        System.out.println("");
-//    }
+    @ModelAttribute
+    public void controllerAdviceModelAttribute(@RequestParam Map map) {
+        System.out.println("");
+    }
 
     /**
      * @param webDataBinder:
