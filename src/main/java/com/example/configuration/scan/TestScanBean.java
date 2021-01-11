@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 @Component
 //@ComponentScan(basePackages = {"com.example.configuration.bean.importConfigurationScanBean"})
 //@Scope(scopeName = ConfigurableBeanFactory.SCOPE_PROTOTYPE, proxyMode = ScopedProxyMode.TARGET_CLASS)
-@PropertySource(value = {"classpath:test.properties", "classpath:recources.properties"})
+@PropertySource(value = {"classpath:test.properties", "classpath:resources.properties"})
 public class TestScanBean implements InitializingBean {
     @Value("${test.value}")
     private String testValue;

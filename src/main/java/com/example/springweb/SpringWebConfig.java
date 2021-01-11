@@ -2,12 +2,14 @@ package com.example.springweb;
 
 import com.example.springweb.HandlerInterceptor.FileHandlerInterceptor;
 import com.example.springweb.HandlerInterceptor.MappedHandlerInterceptor;
+import com.example.springweb.converter.StringToMapConverter;
 import com.example.springweb.support.MyLocaleResolver;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.MethodParameter;
+import org.springframework.format.FormatterRegistry;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -15,10 +17,13 @@ import org.springframework.web.method.HandlerTypePredicate;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
 import org.springframework.web.method.support.ModelAndViewContainer;
+import org.springframework.web.multipart.MultipartRequest;
+import org.springframework.web.multipart.support.StandardMultipartHttpServletRequest;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.handler.MappedInterceptor;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -33,7 +38,7 @@ import java.util.List;
  * @see org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping
  * @see org.springframework.web.servlet.function.support.RouterFunctionMapping
  * @see org.springframework.web.servlet.handler.SimpleUrlHandlerMapping
-// * @see org.springframework.boot.autoconfigure.web.servlet.WelcomePageHandlerMapping
+ * // * @see org.springframework.boot.autoconfigure.web.servlet.WelcomePageHandlerMapping
  * <p>
  * handlerAdapters:
  * @see org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter
@@ -52,8 +57,9 @@ import java.util.List;
  * defaultViewResolver -> {InternalResourceViewResolver@6799}
  */
 @Configuration(proxyBeanMethods = false)
-@PropertySource(value = {"classpath:patchPrefix.properties"})
+@PropertySource(value = {"classpath:patchPrefix.properties", "classpath:resources.properties"})
 public class SpringWebConfig implements WebMvcConfigurer {
+
     @Value("${scenic.prefix}")
     private String scenicPrefix;
 //    @Bean
@@ -161,5 +167,16 @@ public class SpringWebConfig implements WebMvcConfigurer {
 
     @Override
     public void configureAsyncSupport(AsyncSupportConfigurer configurer) {
+    }
+
+    /**
+     * @param formatterRegistry:
+     * @author: 朱伟伟
+     * @date: 2021-01-11 15:27
+     * @description:
+     **/
+    @Override
+    public void addFormatters(FormatterRegistry formatterRegistry) {
+//        formatterRegistry.addConverter(new StringToMapConverter());
     }
 }

@@ -1,4 +1,4 @@
-package com.example.springweb.databinder;
+package com.example.springweb.propertyeditor;
 
 import java.beans.PropertyEditorSupport;
 import java.text.ParseException;

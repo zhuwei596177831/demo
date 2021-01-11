@@ -235,7 +235,7 @@ public class DemoApplication implements EmbeddedValueResolverAware, EnvironmentA
     @Override
     public void setResourceLoader(ResourceLoader resourceLoader) {
         System.out.println("resourceLoader......" + resourceLoader.getClass().getName());
-        Resource resource = resourceLoader.getResource("classpath:recources.properties");
+        Resource resource = resourceLoader.getResource("classpath:resources.properties");
         try {
             ResourcePropertySource resourcePropertySource = new ResourcePropertySource(resource);
             MutablePropertySources mutablePropertySources = new MutablePropertySources();
@@ -253,7 +253,7 @@ public class DemoApplication implements EmbeddedValueResolverAware, EnvironmentA
         PropertySourceLoader propertySourceLoader = new PropertiesPropertySourceLoader();
         try {
             Properties properties = PropertiesLoaderUtils.loadProperties(resource);
-            List<PropertySource<?>> propertySourceList = propertySourceLoader.load("recources.properties", resource);
+            List<PropertySource<?>> propertySourceList = propertySourceLoader.load("resources.properties", resource);
             for (PropertySource<?> propertySource : propertySourceList) {
                 Map<String, OriginTrackedValue> map = (Map<String, OriginTrackedValue>) propertySource.getSource();
                 for (Map.Entry<String, OriginTrackedValue> entry : map.entrySet()) {

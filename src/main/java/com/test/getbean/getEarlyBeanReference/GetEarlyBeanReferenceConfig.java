@@ -15,7 +15,7 @@ import org.springframework.context.annotation.*;
 @EnableAspectJAutoProxy(exposeProxy = true, proxyTargetClass = true)
 //@EnableTransactionManagement
 //@EnableAutoConfiguration
-@PropertySource(value = {"classpath:recources.properties"})
+@PropertySource(value = {"classpath:resources.properties"})
 public class GetEarlyBeanReferenceConfig {
 
     public static void main(String[] args) throws Exception {

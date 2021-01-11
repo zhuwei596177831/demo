@@ -39,6 +39,7 @@ public class MyHttpServletRequestWrapper extends HttpServletRequestWrapper {
         } else {
             this.body = new String(StreamUtils.copyToByteArray(request.getInputStream()));
         }
+//        this.body = new String(StreamUtils.copyToByteArray(request.getInputStream()));
         this.servletInputStream = new BodyCachingInputStream(body.getBytes());
     }
 

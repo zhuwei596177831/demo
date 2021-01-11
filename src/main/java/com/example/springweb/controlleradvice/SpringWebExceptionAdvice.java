@@ -1,5 +1,6 @@
 package com.example.springweb.controlleradvice;
 
+import com.example.springweb.propertyeditor.MapPropertyEditor;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -7,6 +8,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
+
+import java.util.Map;
 
 /**
  * @author 朱伟伟
@@ -25,10 +28,10 @@ public class SpringWebExceptionAdvice {
      * @description: (! AnnotatedElementUtils.hasAnnotation ( method, RequestMapping.class) &&
      * AnnotatedElementUtils.hasAnnotation(method, ModelAttribute.class));
      **/
-    @ModelAttribute(name = "name")
-    public String exceptionAdviceModelAttribute(ModelMap modelMap, NativeWebRequest nativeWebRequest) {
-        return "zww";
-    }
+//    @ModelAttribute(name = "name")
+//    public String exceptionAdviceModelAttribute(ModelMap modelMap, NativeWebRequest nativeWebRequest) {
+//        return "zww";
+//    }
 //    @ModelAttribute
 //    public void exceptionAdviceModelAttribute(String name) {
 //        System.out.println("");
@@ -41,8 +44,10 @@ public class SpringWebExceptionAdvice {
      * @date: 2021-01-06 16:56
      * @description: AnnotatedElementUtils.hasAnnotation(method, InitBinder.class);
      **/
-    @InitBinder
-    public void exceptionAdviceInitBinder(WebDataBinder webDataBinder, String name) {
-        System.out.println(webDataBinder.getClass());
-    }
+//    @InitBinder
+//    public void testInitBinder(WebDataBinder webDataBinder, String name) {
+//        System.out.println(webDataBinder.getClass());
+//        webDataBinder.registerCustomEditor(Map.class, new MapPropertyEditor());
+//    }
+
 }

@@ -33,7 +33,7 @@ public class PropertyResolverTest {
         map.put("encoding", "gbk");
         MapPropertySource mapPropertySource = new MapPropertySource("mapPropertySource", map);
         System.out.println(mapPropertySource.getProperty("encoding"));
-        ResourcePropertySource resourcePropertySource = new ResourcePropertySource("resourcePropertySource", "classpath:recources.properties");
+        ResourcePropertySource resourcePropertySource = new ResourcePropertySource("resourcePropertySource", "classpath:resources.properties");
         System.out.println(resourcePropertySource.getProperty("test.name"));
         MutablePropertySources mutablePropertySources = new MutablePropertySources();
         mutablePropertySources.addFirst(mapPropertySource);
@@ -48,7 +48,7 @@ public class PropertyResolverTest {
     public void testPlaceholdersResolver() throws IOException {
         PropertyPlaceholderHelper propertyPlaceholderHelper = new PropertyPlaceholderHelper(
                 SystemPropertyUtils.PLACEHOLDER_PREFIX, SystemPropertyUtils.PLACEHOLDER_SUFFIX, SystemPropertyUtils.VALUE_SEPARATOR, true);
-        ResourcePropertySource resourcePropertySource = new ResourcePropertySource("resourcePropertySource", "classpath:recources.properties");
+        ResourcePropertySource resourcePropertySource = new ResourcePropertySource("resourcePropertySource", "classpath:resources.properties");
         MutablePropertySources mutablePropertySources = new MutablePropertySources();
         mutablePropertySources.addLast(resourcePropertySource);
         PropertySourcesPlaceholdersResolver propertySourcesPlaceholdersResolver = new PropertySourcesPlaceholdersResolver(
