@@ -84,6 +84,67 @@ public class CompositeTestController {
         return Result.ok();
     }
 
+    /**
+     * @param path:
+     * @param map:
+     * @author: 朱伟伟
+     * @date: 2021-01-12 11:08
+     * @description: {@link org.springframework.web.servlet.mvc.method.annotation.PathVariableMethodArgumentResolver}
+     * 标注@PathVariable并且有name属性的map: 需要自定义
+     * {@link Converter} or {@link java.beans.PropertyEditor}转换
+     **/
+    @PostMapping("/pathVariableMethodArgumentResolver/{path}/{secondPatch}/{hasNamePathMap}")
+    public Result pathVariableMethodArgumentResolver(
+            @PathVariable(name = "path", required = false) String path,
+            @PathVariable(name = "secondPatch", required = false) String secondPatch,
+            @PathVariable(name = "hasNamePathMap", required = false) Map hasNamePathMap
+    ) {
+        return Result.ok();
+    }
+
+    /**
+     * @param notHaveNamePathMap:
+     * @author: 朱伟伟
+     * @date: 2021-01-12 13:36
+     * @description: {@link org.springframework.web.servlet.mvc.method.annotation.PathVariableMapMethodArgumentResolver}
+     * (ann != null && Map.class.isAssignableFrom(parameter.getParameterType()) && !StringUtils.hasText(ann.value()))
+     **/
+    @PostMapping("/pathVariableMapMethodArgumentResolver/{notHaveNamePathMap}")
+    public Result pathVariableMapMethodArgumentResolver(
+            @PathVariable(required = false) Map notHaveNamePathMap
+    ) {
+        return Result.ok();
+    }
+
+    /**
+     * @author: 朱伟伟
+     * @date: 2021-01-12 16:54
+     * @description: {@link org.springframework.web.method.annotation.RequestHeaderMethodArgumentResolver}
+     * (parameter.hasParameterAnnotation(RequestHeader.class)
+     * && !Map.class.isAssignableFrom(parameter.nestedIfOptional().getNestedParameterType()))
+     **/
+    @PostMapping("/requestHeaderMethodArgumentResolver")
+    public Result requestHeaderMethodArgumentResolver(
+            @RequestHeader(name = "key") String key,
+            @RequestHeader(name = "sign") String sign
+    ) {
+        return Result.ok();
+    }
+
+    /**
+     * @author: 朱伟伟
+     * @date: 2021-01-12 16:58
+     * @description: {@link org.springframework.web.method.annotation.RequestHeaderMapMethodArgumentResolver}
+     * (parameter.hasParameterAnnotation(RequestHeader.class) && Map.class.isAssignableFrom(parameter.getParameterType()))
+     **/
+    @PostMapping("/requestHeaderMapMethodArgumentResolver")
+    public Result requestHeaderMapMethodArgumentResolver(
+            @RequestHeader(name = "map") Map map,
+            @RequestHeader(name = "multiValueMap") MultiValueMap multiValueMap
+    ) {
+        return Result.ok();
+    }
+
 
     /**
      * @author: 朱伟伟
@@ -115,29 +176,19 @@ public class CompositeTestController {
      * @InitBinder 所在方法必须是void
      * 进入HandlerMethod、@ModelAttribute标注的方法前执行每一个InitBinder进行满足条件参数的数据自定义绑定
      * 先执行@ControllerAdvice initBinder然后controller的initBinder
+     * 前提：参数对应的HandlerMethodArgumentResolver有调用binderFactory.createBinder方法
+     * @like org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver实现
+     * @like org.springframework.web.servlet.mvc.method.annotation.ServletModelAttributeMethodProcessor
      * 方法参数类型
      * @see RequestMappingHandlerAdapter#getInitBinderArgumentResolvers
      * @see org.springframework.web.method.support.HandlerMethodArgumentResolver#supportsParameter
      * 属性value: HandlerMethod方法参数
      * @see org.springframework.web.method.annotation.InitBinderDataBinderFactory#isBinderMethodApplicable
      **/
-    @InitBinder(value = {"hasRequestParamNameMap", "address"})
+    @InitBinder(value = {"hasRequestParamNameMap", "address", "hasNamePathMap"})
     public void controllerInitBinder(WebDataBinder webDataBinder, NativeWebRequest webRequest) {
         System.out.println(webDataBinder.getClass());
         webDataBinder.registerCustomEditor(Map.class, new MapPropertyEditor());
     }
-
-    private static class RequestParamEntity {
-        private String name;
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-    }
-
 
 }
