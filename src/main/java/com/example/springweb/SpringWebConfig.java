@@ -10,7 +10,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.MethodParameter;
 import org.springframework.format.FormatterRegistry;
+import org.springframework.format.support.FormattingConversionService;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.web.accept.ContentNegotiationManager;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.HandlerTypePredicate;
@@ -22,6 +24,9 @@ import org.springframework.web.multipart.support.StandardMultipartHttpServletReq
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.handler.MappedInterceptor;
+import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
+import org.springframework.web.servlet.resource.ResourceUrlProvider;
+import org.springframework.web.util.UrlPathHelper;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -100,6 +105,19 @@ public class SpringWebConfig implements WebMvcConfigurer {
 //        configurer.addPathPrefix(scenicPrefix, ApiScenicPrefix.class::isAssignableFrom);
         HandlerTypePredicate predicate = HandlerTypePredicate.forBasePackage("com.example.okhttp");
         configurer.addPathPrefix(scenicPrefix, predicate);
+
+        /**
+         * @param configurer:
+         * @author: 朱伟伟
+         * @date: 2021-01-13 10:03
+         * @description: 开启矩阵变量
+         * @see org.springframework.web.servlet.mvc.method.RequestMappingInfoHandlerMapping#handleMatch
+         * @see WebMvcConfigurationSupport#requestMappingHandlerMapping
+         * @see WebMvcConfigurationSupport#getPathMatchConfigurer
+         **/
+        UrlPathHelper urlPathHelper = new UrlPathHelper();
+        urlPathHelper.setRemoveSemicolonContent(false);
+        configurer.setUrlPathHelper(urlPathHelper);
     }
 
     private static final String[] CLASSPATH_RESOURCE_LOCATIONS = {"classpath:/META-INF/resources/",

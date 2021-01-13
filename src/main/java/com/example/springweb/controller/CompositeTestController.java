@@ -1,6 +1,7 @@
 package com.example.springweb.controller;
 
 import com.example.generic.Result;
+import com.example.springweb.entity.WorkGroup;
 import com.example.springweb.propertyeditor.MapPropertyEditor;
 import com.example.springweb.support.MethodDesc;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -145,6 +147,49 @@ public class CompositeTestController {
         return Result.ok();
     }
 
+    /**
+     * @param matrixVariablePath:
+     * @param id:
+     * @param nameList:
+     * @author: 朱伟伟
+     * @date: 2021-01-13 9:53
+     * http://127.0.0.1:8082/demo/matrixVariableMethodArgumentResolver/qwer;id=123456;nameList=zww,myly
+     * @description: 矩阵变量 {@link org.springframework.web.servlet.mvc.method.annotation.MatrixVariableMethodArgumentResolver}
+     **/
+    @PostMapping("/matrixVariableMethodArgumentResolver/{matrixVariablePath}")
+    public Result matrixVariableMethodArgumentResolver(
+            @PathVariable(name = "matrixVariablePath") String matrixVariablePath,
+            @MatrixVariable(name = "id", pathVar = "matrixVariablePath") String id,
+            @MatrixVariable(name = "nameList", pathVar = "matrixVariablePath") List<String> nameList
+    ) {
+        return Result.ok();
+    }
+
+    @ModelAttribute
+    public void testModelAttribute(ModelMap modelMap) {
+        ModelAttributeEntity modelAttributeEntity = new ModelAttributeEntity("111");
+        modelMap.addAttribute("modelAttributeEntity", modelAttributeEntity);
+        WorkGroup workGroup = new WorkGroup();
+        workGroup.setName("ddd");
+        workGroup.setLeaderName("ggg");
+        modelMap.addAttribute("modelWorkGroup", workGroup);
+    }
+    /**
+     * @author: 朱伟伟
+     * @date: 2021-01-13 18:01
+     * @description: {@link org.springframework.web.servlet.mvc.method.annotation.ServletModelAttributeMethodProcessor}
+     **/
+    @PostMapping("/servletModelAttributeMethodProcessor/{pathValue}")
+    public Result servletModelAttributeMethodProcessor(
+            @ModelAttribute(name = "name") String name,
+            @ModelAttribute(name = "pathValue") String pathValue,
+            @ModelAttribute(name = "modelAttributeEntity") ModelAttributeEntity modelAttributeEntity,
+            @ModelAttribute(name = "modelWorkGroup") WorkGroup modelWorkGroup,
+            WorkGroup requestWorkGroup
+    ) {
+        return Result.ok();
+    }
+
 
     /**
      * @author: 朱伟伟
@@ -190,5 +235,25 @@ public class CompositeTestController {
         System.out.println(webDataBinder.getClass());
         webDataBinder.registerCustomEditor(Map.class, new MapPropertyEditor());
     }
+
+    private static class ModelAttributeEntity {
+        private String id;
+
+        public ModelAttributeEntity(String id) {
+            this.id = id;
+        }
+
+        public ModelAttributeEntity() {
+        }
+
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+    }
+
 
 }
