@@ -2,6 +2,7 @@ package com.example.springweb.entity;
 
 import com.example.generic.BaseEntity;
 
+import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
 
 public class WorkGroup extends BaseEntity {
@@ -19,6 +20,7 @@ public class WorkGroup extends BaseEntity {
     /**
      * 班组名称
      */
+    @NotEmpty(message = "班组名称不能为空")
     private String name;
 
     /**

@@ -11,6 +11,7 @@ import org.springframework.format.FormatterRegistry;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -22,6 +23,8 @@ import org.springframework.web.multipart.support.StandardMultipartHttpServletReq
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.constraints.NotEmpty;
+import java.beans.ConstructorProperties;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +39,7 @@ import java.util.Map;
  */
 @RestController
 @SessionAttributes(names = {"sessionMap"}, types = {Map.class})
+@Validated
 public class CompositeTestController {
 
     @Autowired
@@ -59,7 +63,7 @@ public class CompositeTestController {
     @PostMapping("/requestParamMethodArgumentResolver")
     public Result requestParamMethodArgumentResolver(@RequestParam(required = false, name = "${requestParam.email}") String email,
                                                      @RequestParam(required = false, name = "#{1+5}") Integer length,
-                                                     String address,
+                                                     @NotEmpty String address,
                                                      MultipartFile singleFile,
                                                      MultipartFile[] multipartFileArray,
                                                      Collection<MultipartFile> multipartFileCollection,
@@ -174,6 +178,7 @@ public class CompositeTestController {
         workGroup.setLeaderName("ggg");
         modelMap.addAttribute("modelWorkGroup", workGroup);
     }
+
     /**
      * @author: 朱伟伟
      * @date: 2021-01-13 18:01
@@ -183,9 +188,9 @@ public class CompositeTestController {
     public Result servletModelAttributeMethodProcessor(
             @ModelAttribute(name = "name") String name,
             @ModelAttribute(name = "pathValue") String pathValue,
-            @ModelAttribute(name = "modelAttributeEntity") ModelAttributeEntity modelAttributeEntity,
-            @ModelAttribute(name = "modelWorkGroup") WorkGroup modelWorkGroup,
-            WorkGroup requestWorkGroup
+            @ModelAttribute(name = "modelAttributeEntity", binding = false) ModelAttributeEntity modelAttributeEntity,
+            @ModelAttribute(name = "modelWorkGroup", binding = false) WorkGroup modelWorkGroup,
+            @Validated WorkGroup requestWorkGroup
     ) {
         return Result.ok();
     }
@@ -254,6 +259,5 @@ public class CompositeTestController {
             this.id = id;
         }
     }
-
 
 }

@@ -6,12 +6,14 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import javax.validation.ConstraintViolationException;
+
 /**
  * @author 朱伟伟
  * @date 2020-08-04 20:46
  * @description
  **/
-//@RestControllerAdvice
+@RestControllerAdvice
 public class ExceptionControllerAdvice {
 
 //    @ExceptionHandler(BindException.class)
@@ -28,6 +30,10 @@ public class ExceptionControllerAdvice {
 //        return objectError.getDefaultMessage();
 //    }
 
+    @ExceptionHandler(ConstraintViolationException.class)
+    public Result constraintViolationExceptionHandler(ConstraintViolationException e) {
+        return new Result<>(ResultCode.VALIDATE_FAILED, e.getMessage(), null);
+    }
 
     @ExceptionHandler(BindException.class)
     public Result MethodArgumentNotValidExceptionHandler(BindException e) {
