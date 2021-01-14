@@ -25,6 +25,7 @@ import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.handler.MappedInterceptor;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 import org.springframework.web.servlet.resource.ResourceUrlProvider;
 import org.springframework.web.util.UrlPathHelper;
 
@@ -152,16 +153,37 @@ public class SpringWebConfig implements WebMvcConfigurer {
         configurer.enable("defaultServletHandling");
     }
 
+    /**
+     * @param converters:
+     * @author: 朱伟伟
+     * @date: 2021-01-14 17:49
+     * @description: 自定义添加 {@link HttpMessageConverter}
+     **/
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
 
     }
 
+    /**
+     * @param converters:
+     * @author: 朱伟伟
+     * @date: 2021-01-14 17:49
+     * @description: This may be useful for example to allow default converters to be registered
+     * and then insert a custom converter through this method.
+     **/
     @Override
     public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
 
     }
 
+    /**
+     * @param resolvers:
+     * @author: 朱伟伟
+     * @date: 2021-01-14 17:46
+     * @description: 自定义 {@link HandlerMethodArgumentResolver}
+     * 排在spring默认添加之后
+     * @see RequestMappingHandlerAdapter#afterPropertiesSet()
+     **/
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
         HandlerMethodArgumentResolver argumentResolver = new HandlerMethodArgumentResolver() {
@@ -178,6 +200,14 @@ public class SpringWebConfig implements WebMvcConfigurer {
         resolvers.add(argumentResolver);
     }
 
+    /**
+     * @param handlers:
+     * @author: 朱伟伟
+     * @date: 2021-01-14 17:46
+     * @description: 自定义 {@link HandlerMethodReturnValueHandler}
+     * 排在spring默认添加之后
+     * @see RequestMappingHandlerAdapter#afterPropertiesSet()
+     **/
     @Override
     public void addReturnValueHandlers(List<HandlerMethodReturnValueHandler> handlers) {
 
