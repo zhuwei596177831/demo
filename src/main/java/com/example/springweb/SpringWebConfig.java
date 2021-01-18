@@ -158,9 +158,30 @@ public class SpringWebConfig implements WebMvcConfigurer {
      * @author: 朱伟伟
      * @date: 2021-01-14 17:49
      * @description: 自定义添加 {@link HttpMessageConverter}
+     * 默认提供的converter:
+     * {@link org.springframework.http.converter.ByteArrayHttpMessageConverter} application/octet-stream、/* defaultCharset:null
+     * {@link org.springframework.http.converter.StringHttpMessageConverter} text/plain、/*  defaultCharset:UTF-8
+     * {@link org.springframework.http.converter.StringHttpMessageConverter} text/plain、/*  defaultCharset:ISO-8859-1
+     * {@link org.springframework.http.converter.ResourceHttpMessageConverter}   defaultCharset:null
+     * {@link org.springframework.http.converter.ResourceRegionHttpMessageConverter}   defaultCharset:null
+     *
+     * application/xml、text/xml、application/*+xml defaultCharset:null
+     * {@link org.springframework.http.converter.xml.SourceHttpMessageConverter}
+     *
+     * application/x-www-form-urlencoded、multipart/form-data、multipart/mixed defaultCharset:UTF-8
+     * {@link org.springframework.http.converter.support.AllEncompassingFormHttpMessageConverter}
+     *
+     * application/json、application/*+json defaultCharset:null
+     * {@link org.springframework.http.converter.json.MappingJackson2HttpMessageConverter} 两个 暂未明白为啥????
+     *
+     * application/xml、text/xml、application/*+xml defaultCharset:null
+     * {@link org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter}
+     *
      **/
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+        //[application/octet-stream, text/plain, application/xml, text/xml, application/x-www-form-urlencoded,
+        // application/*+xml, multipart/form-data, multipart/mixed, application/json, application/*+json, */*]
 
     }
 

@@ -1,5 +1,7 @@
-package com.example.validation;
+package com.example.springweb.entity;
 
+
+import com.example.generic.Result;
 
 /**
  * @author 朱伟伟
@@ -38,6 +40,10 @@ public enum ResultCode {
 
     public void setMsg(String msg) {
         this.msg = msg;
+    }
+
+    public Result getResult() {
+        return new Result<>(String.valueOf(this.code), this.msg, null);
     }
 
 }

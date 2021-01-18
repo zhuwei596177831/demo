@@ -99,6 +99,7 @@ public class CompositeTestController {
      * 标注@PathVariable并且有name属性的map: 需要自定义
      * {@link Converter} or {@link java.beans.PropertyEditor}转换
      **/
+    @MethodDesc(value = "PathVariableMethodArgumentResolver")
     @PostMapping("/pathVariableMethodArgumentResolver/{path}/{secondPatch}/{hasNamePathMap}")
     public Result pathVariableMethodArgumentResolver(
             @PathVariable(name = "path", required = false) String path,
@@ -115,6 +116,7 @@ public class CompositeTestController {
      * @description: {@link org.springframework.web.servlet.mvc.method.annotation.PathVariableMapMethodArgumentResolver}
      * (ann != null && Map.class.isAssignableFrom(parameter.getParameterType()) && !StringUtils.hasText(ann.value()))
      **/
+    @MethodDesc(value = "PathVariableMapMethodArgumentResolver")
     @PostMapping("/pathVariableMapMethodArgumentResolver/{notHaveNamePathMap}")
     public Result pathVariableMapMethodArgumentResolver(
             @PathVariable(required = false) Map notHaveNamePathMap
@@ -129,6 +131,7 @@ public class CompositeTestController {
      * (parameter.hasParameterAnnotation(RequestHeader.class)
      * && !Map.class.isAssignableFrom(parameter.nestedIfOptional().getNestedParameterType()))
      **/
+    @MethodDesc(value = "RequestHeaderMethodArgumentResolver")
     @PostMapping("/requestHeaderMethodArgumentResolver")
     public Result requestHeaderMethodArgumentResolver(
             @RequestHeader(name = "key") String key,
@@ -143,6 +146,7 @@ public class CompositeTestController {
      * @description: {@link org.springframework.web.method.annotation.RequestHeaderMapMethodArgumentResolver}
      * (parameter.hasParameterAnnotation(RequestHeader.class) && Map.class.isAssignableFrom(parameter.getParameterType()))
      **/
+    @MethodDesc(value = "RequestHeaderMapMethodArgumentResolver")
     @PostMapping("/requestHeaderMapMethodArgumentResolver")
     public Result requestHeaderMapMethodArgumentResolver(
             @RequestHeader(name = "map") Map map,
@@ -160,6 +164,7 @@ public class CompositeTestController {
      * http://127.0.0.1:8082/demo/matrixVariableMethodArgumentResolver/qwer;id=123456;nameList=zww,myly
      * @description: 矩阵变量 {@link org.springframework.web.servlet.mvc.method.annotation.MatrixVariableMethodArgumentResolver}
      **/
+    @MethodDesc(value = "MatrixVariableMethodArgumentResolver")
     @PostMapping("/matrixVariableMethodArgumentResolver/{matrixVariablePath}")
     public Result matrixVariableMethodArgumentResolver(
             @PathVariable(name = "matrixVariablePath") String matrixVariablePath,
@@ -184,6 +189,7 @@ public class CompositeTestController {
      * @date: 2021-01-13 18:01
      * @description: {@link org.springframework.web.servlet.mvc.method.annotation.ServletModelAttributeMethodProcessor}
      **/
+    @MethodDesc(value = "ServletModelAttributeMethodProcessor")
     @PostMapping("/servletModelAttributeMethodProcessor/{pathValue}")
     public Result servletModelAttributeMethodProcessor(
             @ModelAttribute(name = "name") String name,
@@ -192,6 +198,21 @@ public class CompositeTestController {
             @ModelAttribute(name = "modelWorkGroup", binding = false) WorkGroup modelWorkGroup,
             @Validated WorkGroup requestWorkGroup
     ) {
+        return Result.ok();
+    }
+
+    /**
+     * @param bytes:
+     * @param data:
+     * @author: 朱伟伟
+     * @date: 2021-01-18 17:04
+     * @description:
+     * {@link org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor}
+     * {@link org.springframework.http.converter.HttpMessageConverter}
+     **/
+    @MethodDesc(value = "RequestResponseBodyMethodProcessor")
+    @PostMapping("/requestResponseBodyMethodProcessor")
+    public Result requestResponseBodyMethodProcessor(@RequestBody String data) {
         return Result.ok();
     }
 
@@ -229,6 +250,7 @@ public class CompositeTestController {
      * 前提：参数对应的HandlerMethodArgumentResolver有调用binderFactory.createBinder方法
      * @like org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver实现
      * @like org.springframework.web.servlet.mvc.method.annotation.ServletModelAttributeMethodProcessor
+     * @like org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor
      * 方法参数类型
      * @see RequestMappingHandlerAdapter#getInitBinderArgumentResolvers
      * @see org.springframework.web.method.support.HandlerMethodArgumentResolver#supportsParameter

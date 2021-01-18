@@ -27,6 +27,8 @@ import java.time.Instant;
 //@Component
 @WebFilter(filterName = "customRequestLoggingFilter", urlPatterns = {"/*"})
 public class CustomRequestLoggingFilter extends AbstractRequestLoggingFilter {
+    private final Logger logger = LoggerFactory.getLogger(getClass());
+
     private HttpServletResponse httpServletResponse;
 
     //这些配置都可以在init-param中进行设置,但是基于注解的，这里就不要这么麻烦了，统一在初始化的时候设置值吧
@@ -66,7 +68,7 @@ public class CustomRequestLoggingFilter extends AbstractRequestLoggingFilter {
 
     @Override
     protected void beforeRequest(HttpServletRequest request, String message) {
-        logger.info(calcRequestTime(request)
+        logger.info("CustomRequestLoggingFilter beforeRequest:\n{}", calcRequestTime(request)
                 .concat(getConfigTypeLog(request))
                 .concat(getThreadId())
                 .concat(message));
@@ -74,7 +76,7 @@ public class CustomRequestLoggingFilter extends AbstractRequestLoggingFilter {
 
     @Override
     protected void afterRequest(HttpServletRequest request, String message) {
-        logger.info(calcRequestTime(request)
+        logger.info("CustomRequestLoggingFilter afterRequest:{}\n", calcRequestTime(request)
                 .concat(getConfigTypeLog(request))
                 .concat(getThreadId())
                 .concat(message));

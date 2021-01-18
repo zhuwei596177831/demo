@@ -1,10 +1,13 @@
 package com.example.springweb.controlleradvice;
 
 import com.example.generic.Result;
+import com.example.springweb.entity.ResultCode;
 import com.example.springweb.support.MethodDesc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -32,9 +35,55 @@ import java.util.Objects;
 public class RequestResponseBodyInterceptor extends RequestBodyAdviceAdapter implements ResponseBodyAdvice<Result> {
     private static final Logger logger = LoggerFactory.getLogger(RequestResponseBodyInterceptor.class);
 
+    @Autowired
+    ConversionService mvcConversionService;
+
     @Override
     public boolean supports(MethodParameter methodParameter, Type targetType, Class<? extends HttpMessageConverter<?>> converterType) {
-        return true;
+        return methodParameter.hasParameterAnnotation(RequestBody.class);
+    }
+
+    /**
+     * @param inputMessage:  request消息
+     * @param parameter:     方法参数
+     * @param targetType:    方法类型
+     * @param converterType: HttpMessageConverter
+     * @author: 朱伟伟
+     * @date: 2021-01-18 16:48
+     * @description: read之前
+     **/
+    @Override
+    public HttpInputMessage beforeBodyRead(HttpInputMessage inputMessage, MethodParameter parameter, Type targetType, Class<? extends HttpMessageConverter<?>> converterType) throws IOException {
+        return super.beforeBodyRead(inputMessage, parameter, targetType, converterType);
+    }
+
+    /**
+     * @param body:          read后的body
+     * @param inputMessage:  request消息
+     * @param parameter:     方法参数
+     * @param targetType:    方法类型
+     * @param converterType: HttpMessageConverter
+     * @author: 朱伟伟
+     * @date: 2021-01-18 16:42
+     * @description: read之后
+     **/
+    @Override
+    public Object afterBodyRead(Object body, HttpInputMessage inputMessage, MethodParameter parameter, Type targetType, Class<? extends HttpMessageConverter<?>> converterType) {
+        if (parameter.hasMethodAnnotation(MethodDesc.class)) {
+            MethodDesc methodDesc = parameter.getMethodAnnotation(MethodDesc.class);
+            if (methodDesc != null) {
+                logger.info("{}接收:\n{}", methodDesc.value(), body);
+            }
+        }
+        return super.afterBodyRead(body, inputMessage, parameter, targetType, converterType);
+    }
+
+    @Override
+    public Object handleEmptyBody(Object body, HttpInputMessage inputMessage, MethodParameter parameter, Type targetType, Class<? extends HttpMessageConverter<?>> converterType) {
+//        if (mvcConversionService.canConvert(String.class, parameter.getParameterType())) {
+//            return mvcConversionService.convert(ResultCode.REQUEST_BODY_MISSING.getResult().toString(), parameter.getParameterType());
+//        }
+        return super.handleEmptyBody(body, inputMessage, parameter, targetType, converterType);
     }
 
     @Override
@@ -44,9 +93,12 @@ public class RequestResponseBodyInterceptor extends RequestBodyAdviceAdapter imp
 
     @Override
     public Result beforeBodyWrite(Result body, MethodParameter returnType, MediaType selectedContentType, Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
-        MethodDesc methodDesc = returnType.getMethodAnnotation(MethodDesc.class);
-        String desc = methodDesc != null ? methodDesc.value() : returnType.getContainingClass().getName() + "." + Objects.requireNonNull(returnType.getMethod()).getName();
-        logger.info("{}返回:\n{}", desc, body);
+        if (returnType.hasMethodAnnotation(MethodDesc.class)) {
+            MethodDesc methodDesc = returnType.getMethodAnnotation(MethodDesc.class);
+            if (methodDesc != null) {
+                logger.info("{}返回:\n{}", methodDesc.value(), body);
+            }
+        }
         return body;
     }
 }
