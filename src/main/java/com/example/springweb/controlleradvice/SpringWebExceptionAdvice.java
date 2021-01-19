@@ -1,8 +1,12 @@
 package com.example.springweb.controlleradvice;
 
+import com.example.generic.Result;
+import com.example.springweb.entity.ResultCode;
 import com.example.springweb.propertyeditor.MapPropertyEditor;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -49,5 +53,23 @@ public class SpringWebExceptionAdvice {
 //        System.out.println(webDataBinder.getClass());
 //        webDataBinder.registerCustomEditor(Map.class, new MapPropertyEditor());
 //    }
+
+    /**
+     * @param e:
+     * @author: 朱伟伟
+     * @date: 2021-01-19 15:03
+     * @description:
+     * @see org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor#readWithMessageConverters
+     **/
+    @ExceptionHandler(value = {HttpMessageNotReadableException.class})
+    public Result httpMessageNotReadableException(HttpMessageNotReadableException e) {
+        return ResultCode.REQUEST_BODY_MISSING.getResult(e.getMessage());
+    }
+
+    @ExceptionHandler(value = {Exception.class})
+    public Result httpMessageNotReadableException(Exception e) {
+        return ResultCode.COMMON.getResult(e.getMessage());
+    }
+
 
 }

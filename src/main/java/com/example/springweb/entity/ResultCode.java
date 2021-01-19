@@ -3,6 +3,8 @@ package com.example.springweb.entity;
 
 import com.example.generic.Result;
 
+import java.text.MessageFormat;
+
 /**
  * @author 朱伟伟
  * @description
@@ -14,7 +16,9 @@ public enum ResultCode {
 
     VALIDATE_FAILED(1002, "参数校验失败"),
 
-    REQUEST_BODY_MISSING(1003, "请求不存在"),
+    REQUEST_BODY_MISSING(1003, "{0}"),
+
+    COMMON(1004, "{0}"),
 
     ERROR(5000, "未知错误");
 
@@ -44,6 +48,11 @@ public enum ResultCode {
 
     public Result getResult() {
         return new Result<>(String.valueOf(this.code), this.msg, null);
+    }
+
+    public Result getResult(Object... errMsg) {
+        String format = MessageFormat.format(this.msg, errMsg);
+        return new Result<>(String.valueOf(this.code), format, null);
     }
 
 }

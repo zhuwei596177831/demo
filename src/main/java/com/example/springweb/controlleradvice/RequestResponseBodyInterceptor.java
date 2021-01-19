@@ -1,18 +1,23 @@
 package com.example.springweb.controlleradvice;
 
+import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 import com.example.generic.Result;
 import com.example.springweb.entity.ResultCode;
 import com.example.springweb.support.MethodDesc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
+import org.springframework.http.server.ServletServerHttpResponse;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -22,7 +27,10 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestBodyAdviceAd
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.lang.reflect.Type;
+import java.util.Collection;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -32,7 +40,7 @@ import java.util.Objects;
  * 必须配合@ControllerAdvice一起使用
  */
 @ControllerAdvice(annotations = {RestController.class})
-public class RequestResponseBodyInterceptor extends RequestBodyAdviceAdapter implements ResponseBodyAdvice<Result> {
+public class RequestResponseBodyInterceptor extends RequestBodyAdviceAdapter implements ResponseBodyAdvice<Object> {
     private static final Logger logger = LoggerFactory.getLogger(RequestResponseBodyInterceptor.class);
 
     @Autowired
@@ -88,11 +96,20 @@ public class RequestResponseBodyInterceptor extends RequestBodyAdviceAdapter imp
 
     @Override
     public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
-        return returnType.getMethod() != null && Result.class.isAssignableFrom(returnType.getMethod().getReturnType());
+        Method method = returnType.getMethod();
+        if (method == null) {
+            return false;
+        }
+        Class<?> returnClass = method.getReturnType();
+        return BeanUtils.isSimpleProperty(returnClass) || returnClass.isAssignableFrom(Collection.class) || returnClass.isAssignableFrom(Map.class);
     }
 
     @Override
-    public Result beforeBodyWrite(Result body, MethodParameter returnType, MediaType selectedContentType, Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
+    public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request,
+                                  ServerHttpResponse response) {
+        if (!(body instanceof Result || body instanceof String)) {
+            body = Result.ok(body);
+        }
         if (returnType.hasMethodAnnotation(MethodDesc.class)) {
             MethodDesc methodDesc = returnType.getMethodAnnotation(MethodDesc.class);
             if (methodDesc != null) {
@@ -101,4 +118,5 @@ public class RequestResponseBodyInterceptor extends RequestBodyAdviceAdapter imp
         }
         return body;
     }
+
 }

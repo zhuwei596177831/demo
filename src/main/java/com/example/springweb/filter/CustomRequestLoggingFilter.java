@@ -18,6 +18,8 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Enumeration;
+import java.util.Map;
 
 /**
  * @author 朱伟伟
@@ -28,8 +30,6 @@ import java.time.Instant;
 @WebFilter(filterName = "customRequestLoggingFilter", urlPatterns = {"/*"})
 public class CustomRequestLoggingFilter extends AbstractRequestLoggingFilter {
     private final Logger logger = LoggerFactory.getLogger(getClass());
-
-    private HttpServletResponse httpServletResponse;
 
     //这些配置都可以在init-param中进行设置,但是基于注解的，这里就不要这么麻烦了，统一在初始化的时候设置值吧
     //private boolean includeQueryString = false;
@@ -56,7 +56,6 @@ public class CustomRequestLoggingFilter extends AbstractRequestLoggingFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        this.httpServletResponse = response;
         super.doFilterInternal(request, response, filterChain);
     }
 
@@ -76,7 +75,7 @@ public class CustomRequestLoggingFilter extends AbstractRequestLoggingFilter {
 
     @Override
     protected void afterRequest(HttpServletRequest request, String message) {
-        logger.info("CustomRequestLoggingFilter afterRequest:{}\n", calcRequestTime(request)
+        logger.info("CustomRequestLoggingFilter afterRequest:\n{}", calcRequestTime(request)
                 .concat(getConfigTypeLog(request))
                 .concat(getThreadId())
                 .concat(message));

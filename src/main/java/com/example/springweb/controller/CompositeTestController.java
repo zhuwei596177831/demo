@@ -1,5 +1,6 @@
 package com.example.springweb.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.example.generic.Result;
 import com.example.springweb.entity.WorkGroup;
 import com.example.springweb.propertyeditor.MapPropertyEditor;
@@ -22,12 +23,12 @@ import org.springframework.web.multipart.MultipartRequest;
 import org.springframework.web.multipart.support.StandardMultipartHttpServletRequest;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.Part;
 import javax.validation.constraints.NotEmpty;
 import java.beans.ConstructorProperties;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author 朱伟伟
@@ -69,6 +70,11 @@ public class CompositeTestController {
                                                      Collection<MultipartFile> multipartFileCollection,
                                                      @RequestParam(name = "hasRequestParamNameMap") Map map
     ) {
+        return Result.ok();
+    }
+
+    @PostMapping("/testLog")
+    public Result testLog(@RequestParam String id, @RequestParam String name) {
         return Result.ok();
     }
 
@@ -206,14 +212,55 @@ public class CompositeTestController {
      * @param data:
      * @author: 朱伟伟
      * @date: 2021-01-18 17:04
-     * @description:
-     * {@link org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor}
+     * @description: {@link org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor}
      * {@link org.springframework.http.converter.HttpMessageConverter}
+     * {@link org.springframework.web.servlet.mvc.method.annotation.RequestBodyAdvice}
      **/
     @MethodDesc(value = "RequestResponseBodyMethodProcessor")
     @PostMapping("/requestResponseBodyMethodProcessor")
-    public Result requestResponseBodyMethodProcessor(@RequestBody String data) {
-        return Result.ok();
+    public String requestResponseBodyMethodProcessor(
+            @RequestBody String data
+//            @RequestBody WorkGroup workGroup
+    ) {
+        return "success";
+    }
+
+    /**
+     * @author: 朱伟伟
+     * @date: 2021-01-19 15:28
+     * @description: {@link org.springframework.web.servlet.mvc.method.annotation.RequestPartMethodArgumentResolver}
+     **/
+    @PostMapping("/requestPartMethodArgumentResolver")
+    public String requestPartMethodArgumentResolver(
+            @RequestPart MultipartFile singleFile,
+            @RequestPart Collection<MultipartFile> fileCollection,
+            @RequestPart MultipartFile[] fileArray,
+            @RequestPart Part singlePart,
+            @RequestPart Collection<Part> partCollection,
+            @RequestPart Part[] partArray
+    ) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("name", "朱伟伟");
+        return jsonObject.toJSONString();
+    }
+
+
+    /**
+     * @param JSESSIONID:
+     * @param cookie:
+     * @author: 朱伟伟
+     * @date: 2021-01-19 17:42
+     * @description: {@link org.springframework.web.servlet.mvc.method.annotation.ServletCookieValueMethodArgumentResolver}
+     **/
+    @PostMapping("/servletCookieValueMethodArgumentResolver")
+    public Map<String, String> servletCookieValueMethodArgumentResolver(
+            @CookieValue(value = "JSESSIONID") String JSESSIONID,
+            @CookieValue(value = "cookie") Cookie cookie
+    ) {
+        Map<String, String> map = new HashMap<>(4);
+        map.put("JSESSIONID", JSESSIONID);
+        map.put("cookie", cookie.getValue());
+        return map;
     }
 
 
