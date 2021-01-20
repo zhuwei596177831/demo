@@ -1,6 +1,7 @@
 package com.example.validation;
 
 import org.springframework.core.MethodParameter;
+import org.springframework.core.annotation.Order;
 import org.springframework.validation.BindException;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -18,6 +19,7 @@ import javax.validation.ConstraintViolationException;
  * @description
  **/
 @RestControllerAdvice
+@Order(value = 1)
 public class ExceptionControllerAdvice {
 
 //    @ExceptionHandler(BindException.class)

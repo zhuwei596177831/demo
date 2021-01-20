@@ -3,6 +3,7 @@ package com.example.springweb.controlleradvice;
 import com.example.generic.Result;
 import com.example.springweb.entity.ResultCode;
 import com.example.springweb.propertyeditor.MapPropertyEditor;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.WebDataBinder;
@@ -24,6 +25,7 @@ import java.util.Map;
  * {@link RequestMappingHandlerAdapter#getDataBinderFactory}
  */
 @RestControllerAdvice
+@Order(value = 10)
 public class SpringWebExceptionAdvice {
 
     /**
@@ -67,7 +69,7 @@ public class SpringWebExceptionAdvice {
     }
 
     @ExceptionHandler(value = {Exception.class})
-    public Result httpMessageNotReadableException(Exception e) {
+    public Result exception(Exception e) {
         return ResultCode.COMMON.getResult(e.getMessage());
     }
 

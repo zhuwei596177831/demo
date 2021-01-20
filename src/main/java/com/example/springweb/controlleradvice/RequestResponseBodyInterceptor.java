@@ -100,8 +100,12 @@ public class RequestResponseBodyInterceptor extends RequestBodyAdviceAdapter imp
         if (method == null) {
             return false;
         }
-        Class<?> returnClass = method.getReturnType();
-        return BeanUtils.isSimpleProperty(returnClass) || returnClass.isAssignableFrom(Collection.class) || returnClass.isAssignableFrom(Map.class);
+        return true;
+//        Class<?> returnClass = method.getReturnType();
+//        return BeanUtils.isSimpleProperty(returnClass)
+//                || returnClass.isAssignableFrom(Collection.class)
+//                || returnClass.isAssignableFrom(Map.class)
+//                || returnClass.isAssignableFrom(Result.class);
     }
 
     @Override

@@ -3,8 +3,11 @@ package com.example.springweb;
 import com.example.springweb.HandlerInterceptor.FileHandlerInterceptor;
 import com.example.springweb.HandlerInterceptor.MappedHandlerInterceptor;
 import com.example.springweb.converter.StringToMapConverter;
+import com.example.springweb.support.MyHandlerMethodArgumentResolver;
 import com.example.springweb.support.MyLocaleResolver;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -12,6 +15,7 @@ import org.springframework.core.MethodParameter;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.format.support.FormattingConversionService;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.accept.ContentNegotiationManager;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -30,7 +34,9 @@ import org.springframework.web.servlet.resource.ResourceUrlProvider;
 import org.springframework.web.util.UrlPathHelper;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * @author 朱伟伟
@@ -64,7 +70,7 @@ import java.util.List;
  */
 @Configuration(proxyBeanMethods = false)
 @PropertySource(value = {"classpath:patchPrefix.properties", "classpath:resources.properties"})
-public class SpringWebConfig implements WebMvcConfigurer {
+public class SpringWebConfig implements WebMvcConfigurer, BeanPostProcessor {
 
     @Value("${scenic.prefix}")
     private String scenicPrefix;
@@ -164,19 +170,18 @@ public class SpringWebConfig implements WebMvcConfigurer {
      * {@link org.springframework.http.converter.StringHttpMessageConverter} text/plain、/*  defaultCharset:ISO-8859-1
      * {@link org.springframework.http.converter.ResourceHttpMessageConverter}   defaultCharset:null
      * {@link org.springframework.http.converter.ResourceRegionHttpMessageConverter}   defaultCharset:null
-     *
+     * <p>
      * application/xml、text/xml、application/*+xml defaultCharset:null
      * {@link org.springframework.http.converter.xml.SourceHttpMessageConverter}
-     *
+     * <p>
      * application/x-www-form-urlencoded、multipart/form-data、multipart/mixed defaultCharset:UTF-8
      * {@link org.springframework.http.converter.support.AllEncompassingFormHttpMessageConverter}
-     *
+     * <p>
      * application/json、application/*+json defaultCharset:null
      * {@link org.springframework.http.converter.json.MappingJackson2HttpMessageConverter} 两个 暂未明白为啥????
-     *
+     * <p>
      * application/xml、text/xml、application/*+xml defaultCharset:null
      * {@link org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter}
-     *
      **/
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
@@ -207,18 +212,7 @@ public class SpringWebConfig implements WebMvcConfigurer {
      **/
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
-        HandlerMethodArgumentResolver argumentResolver = new HandlerMethodArgumentResolver() {
-            @Override
-            public boolean supportsParameter(MethodParameter parameter) {
-                return false;
-            }
-
-            @Override
-            public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
-                return null;
-            }
-        };
-        resolvers.add(argumentResolver);
+//        resolvers.add(new MyHandlerMethodArgumentResolver());
     }
 
     /**
@@ -236,16 +230,46 @@ public class SpringWebConfig implements WebMvcConfigurer {
 
     @Override
     public void configureAsyncSupport(AsyncSupportConfigurer configurer) {
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        executor.setCorePoolSize(10); //核心线程数
+        executor.setMaxPoolSize(20);  //最大线程数
+        executor.setQueueCapacity(1000); //队列大小
+        executor.setKeepAliveSeconds(300); //线程最大空闲时间
+        executor.setThreadNamePrefix("mvc-async-Executor-"); //指定用于新创建的线程名称的前缀。
+        executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy()); // 拒绝策略（一共四种，此处省略）
+        // 这一步千万不能忘了，否则报错： java.lang.IllegalStateException: ThreadPoolTaskExecutor not initialized
+        executor.initialize();
+        configurer.setTaskExecutor(executor);
+//        return new SimpleAsyncTaskExecutor();
     }
 
     /**
      * @param formatterRegistry:
      * @author: 朱伟伟
      * @date: 2021-01-11 15:27
-     * @description:
+     * @description: 全局添加自定义的converter
      **/
     @Override
     public void addFormatters(FormatterRegistry formatterRegistry) {
 //        formatterRegistry.addConverter(new StringToMapConverter());
+    }
+
+    /**
+     * @author: 朱伟伟
+     * @date: 2021-01-20 17:45
+     * @description:  添加自定义HandlerMethodArgumentResolver
+     **/
+    @Override
+    public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+        if (bean instanceof RequestMappingHandlerAdapter) {
+            RequestMappingHandlerAdapter handlerAdapter = (RequestMappingHandlerAdapter) bean;
+            List<HandlerMethodArgumentResolver> argumentResolvers = handlerAdapter.getArgumentResolvers();
+            if (argumentResolvers != null) {
+                argumentResolvers = new ArrayList<>(argumentResolvers);
+                argumentResolvers.add(0, new MyHandlerMethodArgumentResolver());
+                handlerAdapter.setArgumentResolvers(argumentResolvers);
+            }
+        }
+        return bean;
     }
 }

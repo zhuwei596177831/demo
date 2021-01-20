@@ -9,25 +9,35 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.format.FormatterRegistry;
+import org.springframework.http.*;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.context.request.NativeWebRequest;
+import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.HandlerMethod;
+import org.springframework.web.method.annotation.ModelFactory;
+import org.springframework.web.method.support.ModelAndViewContainer;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.MultipartRequest;
 import org.springframework.web.multipart.support.StandardMultipartHttpServletRequest;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyEmitter;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.Part;
+import javax.servlet.ServletInputStream;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.*;
 import javax.validation.constraints.NotEmpty;
 import java.beans.ConstructorProperties;
+import java.io.*;
+import java.net.URI;
 import java.util.*;
 
 /**
@@ -75,9 +85,9 @@ public class CompositeTestController {
 
     @PostMapping("/testLog")
     public Result testLog(@RequestParam String id, @RequestParam String name) {
+        httpServletRequest.getSession().setAttribute("sessionName", "sessionName");
         return Result.ok();
     }
-
 
     /**
      * @author: 朱伟伟
@@ -181,13 +191,15 @@ public class CompositeTestController {
     }
 
     @ModelAttribute
-    public void testModelAttribute(ModelMap modelMap) {
+    public void testModelAttribute(ModelMap modelMap, HttpSession httpSession) {
         ModelAttributeEntity modelAttributeEntity = new ModelAttributeEntity("111");
         modelMap.addAttribute("modelAttributeEntity", modelAttributeEntity);
         WorkGroup workGroup = new WorkGroup();
         workGroup.setName("ddd");
         workGroup.setLeaderName("ggg");
         modelMap.addAttribute("modelWorkGroup", workGroup);
+
+        httpSession.setAttribute("sessionMap", Collections.singletonMap("name", "哈哈哈"));
     }
 
     /**
@@ -215,14 +227,16 @@ public class CompositeTestController {
      * @description: {@link org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor}
      * {@link org.springframework.http.converter.HttpMessageConverter}
      * {@link org.springframework.web.servlet.mvc.method.annotation.RequestBodyAdvice}
+     * @see org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod#setResponseStatus
      **/
     @MethodDesc(value = "RequestResponseBodyMethodProcessor")
     @PostMapping("/requestResponseBodyMethodProcessor")
-    public String requestResponseBodyMethodProcessor(
-            @RequestBody String data
-//            @RequestBody WorkGroup workGroup
+//    @ResponseStatus(code = HttpStatus.OK, reason = "ok")
+    public Result requestResponseBodyMethodProcessor(
+//            @RequestBody String data
+            @RequestBody @Validated WorkGroup workGroup
     ) {
-        return "success";
+        return Result.ok();
     }
 
     /**
@@ -261,6 +275,97 @@ public class CompositeTestController {
         map.put("JSESSIONID", JSESSIONID);
         map.put("cookie", cookie.getValue());
         return map;
+    }
+
+
+    /**
+     * @param sessionName:
+     * @author: 朱伟伟
+     * @date: 2021-01-20 9:31
+     * @description: {@link org.springframework.web.servlet.mvc.method.annotation.SessionAttributeMethodArgumentResolver}
+     **/
+    @PostMapping("/sessionAttributeMethodArgumentResolver")
+    public Result sessionAttributeMethodArgumentResolver(
+            @SessionAttribute(name = "sessionName") String sessionName,
+            @SessionAttribute(name = "sessionMap", required = false) Map sessionMap
+    ) {
+        return Result.ok();
+    }
+
+
+    /**
+     * @param sessionName:
+     * @author: 朱伟伟
+     * @date: 2021-01-20 9:31
+     * @description: {@link org.springframework.web.servlet.mvc.method.annotation.RequestAttributeMethodArgumentResolver}
+     **/
+    @PostMapping("/requestAttributeMethodArgumentResolver")
+    public Result requestAttributeMethodArgumentResolver(
+            @RequestAttribute(name = "requestAttributeName") String requestAttributeName
+    ) {
+        return Result.ok();
+    }
+
+    /**
+     * @author: 朱伟伟
+     * @date: 2021-01-20 10:01
+     * @description: {@link org.springframework.web.servlet.mvc.method.annotation.ServletRequestMethodArgumentResolver}
+     **/
+    @PostMapping("/servletRequestMethodArgumentResolver")
+    public Result servletRequestMethodArgumentResolver(
+            ServletWebRequest servletWebRequest,
+            HttpServletRequest httpServletRequest,
+//            MultipartHttpServletRequest multipartHttpServletRequest,
+            HttpSession httpSession,
+            InputStream inputStream,
+            Reader reader,
+            HttpMethod httpMethod) throws IOException {
+        ServletInputStream inputStream1 = httpServletRequest.getInputStream();
+        BufferedReader reader1 = httpServletRequest.getReader();
+        return Result.ok();
+    }
+
+    /**
+     * @author: 朱伟伟
+     * @date: 2021-01-20 10:17
+     * @description: {@link org.springframework.web.servlet.mvc.method.annotation.ServletResponseMethodArgumentResolver}
+     **/
+    @PostMapping("/servletResponseMethodArgumentResolver")
+    public Result servletResponseMethodArgumentResolver(
+//            HttpServletResponse servletResponse
+//            Writer writer
+//            OutputStream outputStream
+    ) {
+        return Result.ok();
+    }
+
+    /**
+     * @author: 朱伟伟
+     * @date: 2021-01-20 15:44
+     * @description: {@link org.springframework.web.servlet.mvc.method.annotation.HttpEntityMethodProcessor}
+     **/
+    @PostMapping("/httpEntityMethodProcessorArgumentResolver")
+    public Result httpEntityMethodProcessorArgumentResolver(
+            RequestEntity<WorkGroup> requestEntity
+//            HttpEntity<WorkGroup> httpEntity
+    ) {
+        return Result.ok(requestEntity);
+    }
+
+
+    /**
+     * @param sessionStatus:
+     * @author: 朱伟伟
+     * @date: 2021-01-20 14:31
+     * @description: {@link org.springframework.web.method.annotation.SessionStatusMethodArgumentResolver}
+     * @see RequestMappingHandlerAdapter#getModelAndView
+     * @see ModelFactory#updateModel
+     **/
+    @PostMapping("/sessionStatusMethodArgumentResolver")
+    public Result sessionStatusMethodArgumentResolver(SessionStatus sessionStatus) {
+        //清除 @SessionAttributes 临时存储的session attribute
+        sessionStatus.setComplete();
+        return Result.ok();
     }
 
 
@@ -328,5 +433,22 @@ public class CompositeTestController {
             this.id = id;
         }
     }
+
+
+    /**
+     * @author: 朱伟伟
+     * @date: 2021-01-20 16:38
+     * @description: {@link org.springframework.web.servlet.mvc.method.annotation.HttpEntityMethodProcessor}
+     **/
+    @MethodDesc(value = "httpEntityMethodProcessorReturnValueHandler")
+    @PostMapping("/httpEntityMethodProcessorReturnValueHandler")
+    public HttpEntity<WorkGroup> httpEntityMethodProcessorReturnValueHandler() {
+        WorkGroup workGroup = new WorkGroup();
+        workGroup.setName("朱伟伟");
+//        HttpEntity<WorkGroup> httpEntity = new HttpEntity<>(workGroup);
+        HttpEntity<WorkGroup> httpEntity = new RequestEntity<>(workGroup, HttpMethod.resolve(httpServletRequest.getMethod()), URI.create(httpServletRequest.getRequestURL().toString()));
+        return httpEntity;
+    }
+
 
 }
