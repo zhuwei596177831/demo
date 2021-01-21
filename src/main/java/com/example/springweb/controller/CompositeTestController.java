@@ -38,6 +38,9 @@ import javax.validation.constraints.NotEmpty;
 import java.beans.ConstructorProperties;
 import java.io.*;
 import java.net.URI;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.*;
 
 /**
@@ -236,7 +239,11 @@ public class CompositeTestController {
 //            @RequestBody String data
             @RequestBody @Validated WorkGroup workGroup
     ) {
-        return Result.ok();
+        workGroup.setDate(new Date());
+        workGroup.setLocalDate(LocalDate.now());
+        workGroup.setLocalTime(LocalTime.now());
+        workGroup.setEntryTime(LocalDateTime.now());
+        return Result.ok(workGroup);
     }
 
     /**

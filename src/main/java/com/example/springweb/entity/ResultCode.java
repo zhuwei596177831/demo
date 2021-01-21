@@ -16,7 +16,7 @@ public enum ResultCode {
 
     VALIDATE_FAILED(1002, "参数校验失败"),
 
-    REQUEST_BODY_MISSING(1003, "{0}"),
+    REQUEST_BODY_READ_ERROR(1003, "{0}"),
 
     COMMON(1004, "{0}"),
 

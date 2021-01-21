@@ -1,9 +1,13 @@
 package com.example.springweb.entity;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.example.generic.BaseEntity;
 
 import javax.validation.constraints.NotEmpty;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.Date;
 
 public class WorkGroup extends BaseEntity {
     private static final long serialVersionUID = -1070687930887054576L;
@@ -46,6 +50,7 @@ public class WorkGroup extends BaseEntity {
     /**
      * 进场日期
      */
+//    @JSONField(format = "yyyy/MM/dd HH:mm:ss")
     private LocalDateTime entryTime;
 
     /**
@@ -62,6 +67,12 @@ public class WorkGroup extends BaseEntity {
      * 备注
      */
     private String remark;
+//    @JSONField(format = "yyyy/MM/dd HH:mm:ss")
+    private Date date;
+//    @JSONField(format = "yyyy/MM/dd")
+    private LocalDate localDate;
+//    @JSONField(format = "HH:mm:ss")
+    private LocalTime localTime;
 
     public String getId() {
         return id;
@@ -149,5 +160,29 @@ public class WorkGroup extends BaseEntity {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public LocalDate getLocalDate() {
+        return localDate;
+    }
+
+    public void setLocalDate(LocalDate localDate) {
+        this.localDate = localDate;
+    }
+
+    public LocalTime getLocalTime() {
+        return localTime;
+    }
+
+    public void setLocalTime(LocalTime localTime) {
+        this.localTime = localTime;
     }
 }

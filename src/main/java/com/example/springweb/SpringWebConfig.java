@@ -1,11 +1,15 @@
 package com.example.springweb;
 
+import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.alibaba.fastjson.support.config.FastJsonConfig;
+import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 import com.example.springweb.HandlerInterceptor.FileHandlerInterceptor;
 import com.example.springweb.HandlerInterceptor.MappedHandlerInterceptor;
 import com.example.springweb.converter.StringToMapConverter;
 import com.example.springweb.support.MyHandlerMethodArgumentResolver;
 import com.example.springweb.support.MyLocaleResolver;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.context.annotation.Bean;
@@ -14,6 +18,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.MethodParameter;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.format.support.FormattingConversionService;
+import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.accept.ContentNegotiationManager;
@@ -25,7 +30,9 @@ import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
 import org.springframework.web.method.support.ModelAndViewContainer;
 import org.springframework.web.multipart.MultipartRequest;
 import org.springframework.web.multipart.support.StandardMultipartHttpServletRequest;
+import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.LocaleResolver;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.handler.MappedInterceptor;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
@@ -34,7 +41,10 @@ import org.springframework.web.servlet.resource.ResourceUrlProvider;
 import org.springframework.web.util.UrlPathHelper;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ThreadPoolExecutor;
 
@@ -187,7 +197,7 @@ public class SpringWebConfig implements WebMvcConfigurer, BeanPostProcessor {
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         //[application/octet-stream, text/plain, application/xml, text/xml, application/x-www-form-urlencoded,
         // application/*+xml, multipart/form-data, multipart/mixed, application/json, application/*+json, */*]
-
+//        converters.add(new FastJsonHttpMessageConverter());
     }
 
     /**
@@ -200,6 +210,29 @@ public class SpringWebConfig implements WebMvcConfigurer, BeanPostProcessor {
     @Override
     public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
 
+    }
+
+    /**
+     * @author: 朱伟伟
+     * @date: 2021-01-21 10:28
+     * @description: springboot方式配置自定义的 {@link HttpMessageConverter}使其放在最前面
+     * @see org.springframework.boot.autoconfigure.http.HttpMessageConvertersAutoConfiguration#messageConverters
+     * @see org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration.WebMvcAutoConfigurationAdapter#configureMessageConverters
+     **/
+    @Bean
+    FastJsonHttpMessageConverter fastJsonHttpMessageConverter() {
+        FastJsonHttpMessageConverter fastJsonHttpMessageConverter = new FastJsonHttpMessageConverter();
+        //限制只处理 application/json Content-Type类型的数据转换  默认*/* !!!!!
+        fastJsonHttpMessageConverter.setSupportedMediaTypes(Collections.singletonList(MediaType.APPLICATION_JSON));
+        FastJsonConfig fastJsonConfig = new FastJsonConfig();
+        fastJsonConfig.setSerializerFeatures(
+                SerializerFeature.WriteNullStringAsEmpty,
+                SerializerFeature.WriteNullListAsEmpty,
+                SerializerFeature.WriteMapNullValue,
+                SerializerFeature.WriteDateUseDateFormat
+        );
+        fastJsonHttpMessageConverter.setFastJsonConfig(fastJsonConfig);
+        return fastJsonHttpMessageConverter;
     }
 
     /**
@@ -257,7 +290,7 @@ public class SpringWebConfig implements WebMvcConfigurer, BeanPostProcessor {
     /**
      * @author: 朱伟伟
      * @date: 2021-01-20 17:45
-     * @description:  添加自定义HandlerMethodArgumentResolver
+     * @description: 添加自定义HandlerMethodArgumentResolver
      **/
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
@@ -271,5 +304,29 @@ public class SpringWebConfig implements WebMvcConfigurer, BeanPostProcessor {
             }
         }
         return bean;
+    }
+
+    /**
+     * @author: 朱伟伟
+     * @date: 2021-01-21 14:29
+     * @description: 自定义添加HandlerExceptionResolver(会覆盖spring提供的默认的)
+     * @see WebMvcConfigurationSupport#addDefaultHandlerExceptionResolvers
+     * {@link org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver}
+     * {@link org.springframework.web.servlet.mvc.annotation.ResponseStatusExceptionResolver}
+     * {@link org.springframework.web.servlet.mvc.support.DefaultHandlerExceptionResolver}
+     *
+     * <li>{@link org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver} for handling exceptions through
+     * {@link org.springframework.web.bind.annotation.ExceptionHandler} methods.
+     * <li>{@link org.springframework.web.servlet.mvc.annotation.ResponseStatusExceptionResolver} for exceptions annotated with
+     * {@link org.springframework.web.bind.annotation.ResponseStatus}.
+     * <li>{@link org.springframework.web.servlet.mvc.support.DefaultHandlerExceptionResolver} for resolving known Spring exception types
+     **/
+    @Override
+    public void configureHandlerExceptionResolvers(List<HandlerExceptionResolver> resolvers) {
+    }
+
+    @Override
+    public void extendHandlerExceptionResolvers(List<HandlerExceptionResolver> resolvers) {
+
     }
 }

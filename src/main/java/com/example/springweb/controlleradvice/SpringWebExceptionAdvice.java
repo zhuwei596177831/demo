@@ -65,7 +65,7 @@ public class SpringWebExceptionAdvice {
      **/
     @ExceptionHandler(value = {HttpMessageNotReadableException.class})
     public Result httpMessageNotReadableException(HttpMessageNotReadableException e) {
-        return ResultCode.REQUEST_BODY_MISSING.getResult(e.getMessage());
+        return ResultCode.REQUEST_BODY_READ_ERROR.getResult(e.getMessage());
     }
 
     @ExceptionHandler(value = {Exception.class})
