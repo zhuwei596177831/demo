@@ -5,6 +5,7 @@ import com.example.generic.Result;
 import com.example.springweb.entity.WorkGroup;
 import com.example.springweb.propertyeditor.MapPropertyEditor;
 import com.example.springweb.support.MethodDesc;
+import com.example.validation.ResultCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.convert.converter.Converter;
@@ -13,6 +14,7 @@ import org.springframework.http.*;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
@@ -34,6 +36,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.ServletInputStream;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.*;
+import javax.validation.ConstraintViolationException;
 import javax.validation.constraints.NotEmpty;
 import java.beans.ConstructorProperties;
 import java.io.*;
@@ -58,6 +61,19 @@ public class CompositeTestController {
 
     @Autowired
     HttpServletRequest httpServletRequest;
+
+    /**
+     * @author: 朱伟伟
+     * @date: 2021-01-22 9:34
+     * @description:
+     * @see org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport#handlerExceptionResolver
+     * @see org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver#doResolveHandlerMethodException
+     * @see org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver#getExceptionHandlerMethod
+     **/
+    @ExceptionHandler(ConstraintViolationException.class)
+    public com.example.validation.Result constraintViolationExceptionHandler(ConstraintViolationException e) {
+        return new com.example.validation.Result<>(ResultCode.VALIDATE_FAILED, e.getMessage(), null);
+    }
 
 
     /**
@@ -218,6 +234,7 @@ public class CompositeTestController {
             @ModelAttribute(name = "modelAttributeEntity", binding = false) ModelAttributeEntity modelAttributeEntity,
             @ModelAttribute(name = "modelWorkGroup", binding = false) WorkGroup modelWorkGroup,
             @Validated WorkGroup requestWorkGroup
+//            BindingResult bindingResult
     ) {
         return Result.ok();
     }
