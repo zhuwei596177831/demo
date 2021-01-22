@@ -33,6 +33,11 @@ public class Result<T> extends BaseEntity {
         return new Result<>("0001", "失败", null);
     }
 
+    public static <T> Result<T> fail(T data) {
+        return new Result<>("0001", "失败", data);
+    }
+
+
     public static <E> Result<ArrayData<E>> ok(Collection<E> data) {
         if (data instanceof Page) {
             Page<E> page = (Page<E>) data;

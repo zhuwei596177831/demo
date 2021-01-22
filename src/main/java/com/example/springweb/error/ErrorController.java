@@ -4,8 +4,10 @@ package com.example.springweb.error;
 import com.example.generic.Result;
 import org.springframework.boot.autoconfigure.web.ErrorProperties;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,15 +43,14 @@ public class ErrorController implements org.springframework.boot.web.servlet.err
     }
 
     @RequestMapping
-    @ResponseBody
-    public Map error(HttpServletRequest request) {
+    public HttpEntity<Result> error(HttpServletRequest request) {
         Map<String, Object> map = new HashMap<>(8);
         map.put("time", LocalDateTime.now());
         map.put("path", request.getRequestURL().toString());
         Integer status = (Integer) request.getAttribute("javax.servlet.error.status_code");
         map.put("status", status);
         map.put("error", HttpStatus.valueOf(status).getReasonPhrase());
-        return map;
+        return new HttpEntity<>(Result.fail(map));
     }
 
 
