@@ -14,7 +14,7 @@ public enum ResultCode {
 
     FAILED(1001, "响应失败"),
 
-    VALIDATE_FAILED(1002, "参数校验失败"),
+    VALIDATE_FAILED(1002, "{0}"),
 
     REQUEST_BODY_READ_ERROR(1003, "{0}"),
 

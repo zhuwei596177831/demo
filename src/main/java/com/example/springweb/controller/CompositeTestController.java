@@ -2,10 +2,10 @@ package com.example.springweb.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.example.generic.Result;
+import com.example.springweb.entity.ResultCode;
 import com.example.springweb.entity.WorkGroup;
 import com.example.springweb.propertyeditor.MapPropertyEditor;
 import com.example.springweb.support.MethodDesc;
-import com.example.validation.ResultCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.convert.converter.Converter;
@@ -38,6 +38,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.*;
 import javax.validation.ConstraintViolationException;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.beans.ConstructorProperties;
 import java.io.*;
 import java.net.URI;
@@ -71,8 +72,9 @@ public class CompositeTestController {
      * @see org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver#getExceptionHandlerMethod
      **/
     @ExceptionHandler(ConstraintViolationException.class)
-    public com.example.validation.Result constraintViolationExceptionHandler(ConstraintViolationException e) {
-        return new com.example.validation.Result<>(ResultCode.VALIDATE_FAILED, e.getMessage(), null);
+    @ResponseBody
+    public Result constraintViolationExceptionHandler(ConstraintViolationException e) {
+        return ResultCode.VALIDATE_FAILED.getResult(e.getMessage());
     }
 
 
@@ -120,7 +122,7 @@ public class CompositeTestController {
     public Result requestParamMapMethodArgumentResolver(
 //            @RequestParam Map map,
             @RequestParam MultiValueMap multiValueMap,
-            MultipartFile singleFile
+            @NotNull MultipartFile singleFile
     ) {
         return Result.ok();
     }

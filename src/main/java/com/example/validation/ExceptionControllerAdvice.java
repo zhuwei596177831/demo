@@ -1,6 +1,5 @@
 package com.example.validation;
 
-import org.springframework.core.MethodParameter;
 import org.springframework.core.annotation.Order;
 import org.springframework.validation.BindException;
 import org.springframework.validation.ObjectError;
@@ -10,6 +9,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.ModelAndViewContainer;
+import com.example.generic.Result;
+import com.example.springweb.entity.ResultCode;
 
 import javax.validation.ConstraintViolationException;
 
@@ -38,7 +39,7 @@ public class ExceptionControllerAdvice {
 
     @ExceptionHandler(ConstraintViolationException.class)
     public Result constraintViolationExceptionHandler(ConstraintViolationException e) {
-        return new Result<>(ResultCode.VALIDATE_FAILED, e.getMessage(), null);
+        return ResultCode.VALIDATE_FAILED.getResult(e.getMessage());
     }
 
     /**
@@ -51,7 +52,7 @@ public class ExceptionControllerAdvice {
     @ExceptionHandler(BindException.class)
     public Result MethodArgumentNotValidExceptionHandler(BindException e) {
         ObjectError objectError = e.getBindingResult().getAllErrors().get(0);
-        return new Result<>(ResultCode.VALIDATE_FAILED, objectError.getDefaultMessage(), null);
+        return ResultCode.VALIDATE_FAILED.getResult(objectError.getDefaultMessage());
     }
 
     /**
@@ -64,7 +65,7 @@ public class ExceptionControllerAdvice {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Result MethodArgumentNotValidExceptionHandler(MethodArgumentNotValidException e) {
         ObjectError objectError = e.getBindingResult().getAllErrors().get(0);
-        return new Result<>(ResultCode.VALIDATE_FAILED, objectError.getDefaultMessage(), null);
+        return ResultCode.VALIDATE_FAILED.getResult(objectError.getDefaultMessage());
     }
 
 }
