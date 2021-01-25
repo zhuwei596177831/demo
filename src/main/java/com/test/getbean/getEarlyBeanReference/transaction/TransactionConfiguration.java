@@ -19,6 +19,7 @@ import java.sql.SQLException;
  * @author 朱伟伟
  * @date 2020-12-03 10:44:05
  * @description
+ * @see org.springframework.boot.autoconfigure.transaction.TransactionAutoConfiguration
  * @see org.springframework.transaction.annotation.TransactionManagementConfigurationSelector
  * @see AutoProxyRegistrar
  * @see ProxyTransactionManagementConfiguration
@@ -86,6 +87,7 @@ public class TransactionConfiguration {
      * @date: 2020-12-03 10:51
      * @description: 声明式事务：
      * 使用拦截器（AOP方式的直接使用)
+     * "xxx*", "*xxx", "*xxx*" and "xxx*yyy"
      **/
     // 配置一个事务的拦截器（相当于一个AOP的`环绕通知`）
 //    @Bean
