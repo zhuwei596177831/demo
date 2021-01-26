@@ -8,7 +8,8 @@ import org.springframework.stereotype.Component;
 /**
  * @author 朱伟伟
  * @date 2020-11-27 10:39:58
- * @description
+ * @description AspectJ方式AOP的advisor：
+ * {@link org.springframework.aop.aspectj.annotation.InstantiationModelAwarePointcutAdvisorImpl}
  */
 @Component
 @Aspect

@@ -1,9 +1,7 @@
 package com.test.getbean.getEarlyBeanReference.aop;
 
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
-import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.annotation.*;
 import org.springframework.stereotype.Component;
 
 /**
@@ -21,6 +19,18 @@ public class TransactionTestServiceAspect {
 
     @Before(value = "pointCut()")
     public void before(JoinPoint joinPoint) {
-        System.out.println("TransactionTestServiceAspect before");
     }
+
+    @After(value = "pointCut()")
+    public void after(JoinPoint joinPoint) {
+    }
+
+    @AfterReturning(pointcut = "pointCut()", returning = "returnData")
+    public void afterReturning(JoinPoint joinPoint, Object returnData) {
+    }
+
+    @AfterThrowing(pointcut = "pointCut()", throwing = "myException")
+    public void afterThrowing(JoinPoint joinPoint, Exception myException) {
+    }
+
 }

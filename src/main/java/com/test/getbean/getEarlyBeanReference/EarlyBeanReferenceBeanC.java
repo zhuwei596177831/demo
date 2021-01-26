@@ -14,8 +14,8 @@ public class EarlyBeanReferenceBeanC {
     public EarlyBeanReferenceBeanC() {
     }
 
-    @Autowired
-    EarlyBeanReferenceBeanA earlyBeanReferenceBeanA;
+//    @Autowired
+//    EarlyBeanReferenceBeanA earlyBeanReferenceBeanA;
     @Autowired
     EarlyBeanReferenceBeanB earlyBeanReferenceBeanB;
 }

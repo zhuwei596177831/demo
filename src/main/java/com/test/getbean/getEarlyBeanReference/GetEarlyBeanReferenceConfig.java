@@ -1,5 +1,6 @@
 package com.test.getbean.getEarlyBeanReference;
 
+import com.test.getbean.getEarlyBeanReference.transaction.TransactionTestService;
 import com.test.getbean.getEarlyBeanReference.transaction.propagation.OneService;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.*;
@@ -13,6 +14,7 @@ import org.springframework.context.annotation.*;
 @Configuration(proxyBeanMethods = false)
 @ComponentScan(basePackageClasses = {GetEarlyBeanReferenceConfig.class})
 @EnableAspectJAutoProxy(exposeProxy = true, proxyTargetClass = true)
+//@EnableAspectJAutoProxy
 //@EnableTransactionManagement
 //@EnableAutoConfiguration
 @PropertySource(value = {"classpath:resources.properties"})

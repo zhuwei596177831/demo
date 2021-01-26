@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionManager;
 import org.springframework.transaction.annotation.AnnotationTransactionAttributeSource;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration;
@@ -120,10 +121,13 @@ public class TransactionConfiguration {
      * @date: 2020-12-03 17:01
      * @description: 注解方式(手动添加TransactionInterceptor)
      * {@link org.springframework.transaction.annotation.Transactional}
+     * @see TransactionAspectSupport#determineTransactionManager
      **/
 //    @Bean
 //    public TransactionInterceptor transactionInterceptor(TransactionManager transactionManager) {
-//        return new TransactionInterceptor(transactionManager, new AnnotationTransactionAttributeSource(true));
+//        TransactionInterceptor transactionInterceptor = new TransactionInterceptor(transactionManager, new AnnotationTransactionAttributeSource(true));
+//        transactionInterceptor.setTransactionManagerBeanName("secondTransactionManager");
+//        return transactionInterceptor;
 //    }
 
     // 配置一个自动代理创建器  决定这个事务拦截器要作用于哪些Bean上

@@ -89,20 +89,33 @@ public class TransactionTestServiceImpl implements TransactionTestService {
     }
 
     @Override
-    @Transactional
+    @Transactional(transactionManager = "secondTransactionManager")
     public void insertOne(String name) {
         System.out.println("TransactionTestServiceImpl insertOne");
         String sql = "insert into transaction.transaction_test(name) values (?);";
         jdbcTemplate.update(sql, name);
+
 //        insertTwo("insertTwo");
+
 //        TransactionTestService transactionTestService = (TransactionTestService) AopContext.currentProxy();
 //        transactionTestService.insertTwo("insertTwo");
+
         transactionTestService.insertTwo("insertTwo");
-        System.out.println(1 / 0);
+
+        //Global transaction is marked as rollback-only but transactional code requested commit
+        //Transaction rolled back because it has been marked as rollback-only
+//        try {
+//            transactionTestService.insertTwo("insertTwo");
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+
+//        System.out.println(1 / 0);
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
+//    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Transactional
     public void insertTwo(String name) {
         System.out.println("TransactionTestServiceImpl insertTwo");
         String sql = "insert into transaction.transaction_test(name) values (?);";
