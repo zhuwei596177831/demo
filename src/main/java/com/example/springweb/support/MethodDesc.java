@@ -10,6 +10,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 @Documented
+@Inherited
 public @interface MethodDesc {
     /**
      * @author: 朱伟伟

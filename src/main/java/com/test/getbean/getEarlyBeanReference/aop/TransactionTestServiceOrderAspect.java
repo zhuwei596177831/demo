@@ -12,9 +12,9 @@ import org.springframework.stereotype.Component;
  * @date 2020-12-03 16:03:11
  * @description
  */
-@Component
-@Aspect
-@Order
+//@Component
+//@Aspect
+//@Order
 public class TransactionTestServiceOrderAspect {
 
     @Pointcut(value = "execution(* com.test.getbean.getEarlyBeanReference.transaction.TransactionTestService.*(..))")

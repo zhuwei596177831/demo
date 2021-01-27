@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 @Aspect
 public class TransactionTestServiceAspect {
 
-    @Pointcut(value = "execution(* com.test.getbean.getEarlyBeanReference.transaction.TransactionTestService.*(..))")
+    @Pointcut(value = "execution(* com.test.getbean.getEarlyBeanReference.transaction.TransactionTestService.getList(..))")
     public void pointCut() {
     }
 
