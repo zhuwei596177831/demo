@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * @author 朱伟伟
@@ -21,6 +24,9 @@ import java.util.concurrent.TimeUnit;
 @RestController
 @RequestMapping("/okHttp")
 public class OkHttpController {
+
+    private ReentrantReadWriteLock readWriteLock = new ReentrantReadWriteLock(true);
+    private Lock lock = new ReentrantLock(true);
 
     public final String baseUrl = "http://www.klxiyou.com/api/scenic/";
     public final String supplierIdentity = "4569";
@@ -38,31 +44,41 @@ public class OkHttpController {
      * @description: 景区列表
      **/
     @GetMapping("/getScenicList")
+//    public synchronized String getScenicList() throws Exception {
     public String getScenicList() throws Exception {
-        FormBody formBody = new FormBody.Builder()
-                .add("supplierIdentity", supplierIdentity)
-                .add("signkey", signkey)
-                .build();
-        MultipartBody multipartBody = new MultipartBody.Builder()
-                .setType(MultipartBody.FORM)
-                .addFormDataPart("supplierIdentity", supplierIdentity)
-                .addFormDataPart("signkey", signkey)
-                .build();
-        Request request = new Request.Builder()
-                .url(baseUrl + "getScenicList")
-                .post(formBody)
-//                .post(multipartBody)
-                .build();
-        try (Response response = okHttpClient.newCall(request).execute()) {
-            if (!response.isSuccessful()) {
-                throw new IOException("Unexpected code " + response);
-            }
-            String result = response.body().string();
-            System.out.println(response.body().contentType().toString());
-            result = JSON.parseObject(result).toJSONString();
-            response.body().close();
-            response.close();
-            return result;
+        try {
+            readWriteLock.readLock().lock();
+//            lock.lock();
+//            FormBody formBody = new FormBody.Builder()
+//                    .add("supplierIdentity", supplierIdentity)
+//                    .add("signkey", signkey)
+//                    .build();
+//            MultipartBody multipartBody = new MultipartBody.Builder()
+//                    .setType(MultipartBody.FORM)
+//                    .addFormDataPart("supplierIdentity", supplierIdentity)
+//                    .addFormDataPart("signkey", signkey)
+//                    .build();
+//            Request request = new Request.Builder()
+//                    .url(baseUrl + "getScenicList")
+//                    .post(formBody)
+////                .post(multipartBody)
+//                    .build();
+//            try (Response response = okHttpClient.newCall(request).execute()) {
+//                if (!response.isSuccessful()) {
+//                    throw new IOException("Unexpected code " + response);
+//                }
+//                String result = response.body().string();
+//                System.out.println(response.body().contentType().toString());
+//                result = JSON.parseObject(result).toJSONString();
+//                response.body().close();
+//                response.close();
+//                return result;
+//            }
+            Thread.sleep(100);
+            return "";
+        } finally {
+            readWriteLock.readLock().unlock();
+//            lock.unlock();
         }
     }
 
