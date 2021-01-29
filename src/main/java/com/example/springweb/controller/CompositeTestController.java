@@ -10,10 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.format.FormatterRegistry;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.*;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.util.StopWatch;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
@@ -97,6 +99,10 @@ public class CompositeTestController {
     public Result requestParamMethodArgumentResolver(@RequestParam(required = false, name = "${requestParam.email}") String email,
                                                      @RequestParam(required = false, name = "#{1+5}") Integer length,
                                                      @NotEmpty String address,
+                                                     @NotNull @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime localDateTime,
+                                                     @NotNull @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date date,
+                                                     @NotNull @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate localDate,
+                                                     @NotNull @DateTimeFormat(pattern = "HH:mm:ss") LocalTime localTime,
                                                      MultipartFile singleFile,
                                                      MultipartFile[] multipartFileArray,
                                                      Collection<MultipartFile> multipartFileCollection,
@@ -258,11 +264,23 @@ public class CompositeTestController {
     public Result requestResponseBodyMethodProcessor(
 //            @RequestBody String data
             @RequestBody @Validated WorkGroup workGroup
-    ) {
+    ) throws Exception {
+        StopWatch stopWatch = new StopWatch(UUID.randomUUID().toString());
+        Thread.sleep(2000);
+        stopWatch.start("requestResponseBodyMethodProcessor");
         workGroup.setDate(new Date());
         workGroup.setLocalDate(LocalDate.now());
         workGroup.setLocalTime(LocalTime.now());
         workGroup.setEntryTime(LocalDateTime.now());
+        stopWatch.stop();
+        System.out.println(stopWatch.getTotalTimeSeconds());
+        System.out.println(stopWatch.shortSummary());
+        stopWatch.start("sss");
+        Thread.sleep(1000);
+        stopWatch.stop();
+        System.out.println(stopWatch.getTotalTimeSeconds());
+        System.out.println(stopWatch.shortSummary());
+        System.out.println(stopWatch.prettyPrint());
         return Result.ok(workGroup);
     }
 

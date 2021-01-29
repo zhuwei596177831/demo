@@ -2,6 +2,7 @@ package com.example.springweb.entity;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.example.generic.BaseEntity;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotEmpty;
 import java.time.LocalDate;
@@ -48,12 +49,6 @@ public class WorkGroup extends BaseEntity {
     private Integer leaderGender;
 
     /**
-     * 进场日期
-     */
-//    @JSONField(format = "yyyy/MM/dd HH:mm:ss")
-    private LocalDateTime entryTime;
-
-    /**
      * 出场日期
      */
     private LocalDateTime exitTime;
@@ -67,12 +62,57 @@ public class WorkGroup extends BaseEntity {
      * 备注
      */
     private String remark;
+    @DateTimeFormat(pattern = "yyyy/MM/dd HH:mm:ss")
+    private Date dateTimeFormatDate;
+    @DateTimeFormat(pattern = "yyyyMMdd HH:mm:ss")
+    private LocalDateTime dateTimeFormatLocalDateTime;
+    @DateTimeFormat(pattern = "yyyyMMdd")
+    private LocalDate dateTimeFormatLocalDate;
+    @DateTimeFormat(pattern = "HH:mm:ss")
+    private LocalTime dateTimeFormatLocalTime;
+    /**
+     * 进场日期
+     */
+//    @JSONField(format = "yyyy/MM/dd HH:mm:ss")
+    private LocalDateTime entryTime;
 //    @JSONField(format = "yyyy/MM/dd HH:mm:ss")
     private Date date;
 //    @JSONField(format = "yyyy/MM/dd")
     private LocalDate localDate;
 //    @JSONField(format = "HH:mm:ss")
     private LocalTime localTime;
+
+    public LocalDate getDateTimeFormatLocalDate() {
+        return dateTimeFormatLocalDate;
+    }
+
+    public void setDateTimeFormatLocalDate(LocalDate dateTimeFormatLocalDate) {
+        this.dateTimeFormatLocalDate = dateTimeFormatLocalDate;
+    }
+
+    public LocalTime getDateTimeFormatLocalTime() {
+        return dateTimeFormatLocalTime;
+    }
+
+    public void setDateTimeFormatLocalTime(LocalTime dateTimeFormatLocalTime) {
+        this.dateTimeFormatLocalTime = dateTimeFormatLocalTime;
+    }
+
+    public LocalDateTime getDateTimeFormatLocalDateTime() {
+        return dateTimeFormatLocalDateTime;
+    }
+
+    public void setDateTimeFormatLocalDateTime(LocalDateTime dateTimeFormatLocalDateTime) {
+        this.dateTimeFormatLocalDateTime = dateTimeFormatLocalDateTime;
+    }
+
+    public Date getDateTimeFormatDate() {
+        return dateTimeFormatDate;
+    }
+
+    public void setDateTimeFormatDate(Date dateTimeFormatDate) {
+        this.dateTimeFormatDate = dateTimeFormatDate;
+    }
 
     public String getId() {
         return id;

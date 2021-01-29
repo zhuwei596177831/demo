@@ -1,7 +1,9 @@
 package com.jdk.executor;
 
+import java.io.IOException;
 import java.util.Random;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author 朱伟伟
@@ -14,8 +16,33 @@ import java.util.concurrent.*;
  */
 public class ExecutorTest {
 
+    private static int count = 0;
+//    private volatile static int count = 0;
 
-    public static void main(String[] args) {
+    private static AtomicInteger atomicInteger = new AtomicInteger(0);
+
+
+    public static void main(String[] args) throws IOException, InterruptedException {
+
+        final CountDownLatch countDownLatch = new CountDownLatch(100);
+
+        for (int i = 0; i < 100; i++) {
+            new Thread(() -> {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                atomicInteger.getAndIncrement();
+//                count++;
+                countDownLatch.countDown();
+            }).start();
+        }
+        countDownLatch.await();
+//        System.out.println(count);
+        System.out.println(atomicInteger);
+
+
 //        testCachePool();
 //        testFixedThreadPool();
 //        testSingleThreadPool();
@@ -30,17 +57,49 @@ public class ExecutorTest {
 //            System.out.println(i);
 //        });
 
-        Random random = new Random(100);
-        for (int i = 0; i < 4; i++) {
-            System.out.println(random.nextInt(5));
-        }
-        System.out.println("==========");
-        Random random1 = new Random(100);
-        for (int i = 0; i < 4; i++) {
-            System.out.println(random1.nextInt(5));
-        }
+//        Random random = new Random(100);
+//        for (int i = 0; i < 4; i++) {
+//            System.out.println(random.nextInt(5));
+//        }
+//        System.out.println("==========");
+//        Random random1 = new Random(100);
+//        for (int i = 0; i < 4; i++) {
+//            System.out.println(random1.nextInt(5));
+//        }
+//        ScheduledExecutorService executorService = null;
+//        try {
+//            executorService = Executors.newSingleThreadScheduledExecutor();
+//            executorService.scheduleWithFixedDelay(() -> {
+//                System.out.println(Thread.currentThread().getName());
+//            }, 1, 1, TimeUnit.SECONDS);
+//        } finally {
+//            assert executorService != null;
+//            executorService.shutdown();
+//        }
+//        System.in.read();
+//        Thread thread = new Thread(new SecondThread());
+//        //设置子线程为守护线程 主线程结束 子线程也结束
+////        thread.setDaemon(true);
+//        thread.start();
+//        thread.join();
+//        System.out.println("主线程结束");
 
     }
+
+
+    static class SecondThread implements Runnable {
+        @Override
+        public void run() {
+            System.out.println("子线程run");
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.out.println("子线程结束");
+        }
+    }
+
 
     private static void testCachePool() {
         //核心线程数:0

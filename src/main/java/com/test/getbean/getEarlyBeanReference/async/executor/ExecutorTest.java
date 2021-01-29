@@ -16,7 +16,7 @@ public class ExecutorTest {
         Runnable shortTask2 = () -> System.out.println("complete a short task");
         Runnable longTask = () -> {
             try {
-                Thread.sleep(10000);
+                Thread.sleep(5000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
