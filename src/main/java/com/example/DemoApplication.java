@@ -70,6 +70,7 @@ public class DemoApplication implements EmbeddedValueResolverAware, EnvironmentA
     TransactionManager transactionManager;
 
     public static void main(String[] args) {
+        //classpath*:com/example/**/*.class
         /**
          * @description: 内置BeanFactoryPostProcessor:
          * @see org.springframework.context.annotation.ConfigurationClassPostProcessor
