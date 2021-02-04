@@ -8,8 +8,7 @@ import org.springframework.context.annotation.*;
 /**
  * @author 朱伟伟
  * @date 2021-02-03 09:35:13
- * @description
- * {@link ConfigurationClassPostProcessor}
+ * @description {@link ConfigurationClassPostProcessor}
  * {@link ConfigurationClassParser}
  * {@link ClassPathBeanDefinitionScanner}
  * {@link ConfigurationClassBeanDefinitionReader}
@@ -36,6 +35,11 @@ public class ConfigurationAnalyzeTest extends AbstractConfigurationAnalyze imple
     TestMethodBean1 testMethodBean1(TestMethodBean testMethodBean) {
 //        testMethodBean();
         return new TestMethodBean1();
+    }
+
+    @Bean
+    TestFactoryBean testFactoryBean() {
+        return new TestFactoryBean();
     }
 
 

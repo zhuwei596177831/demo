@@ -13,6 +13,7 @@ import org.springframework.aop.framework.autoproxy.AbstractAutoProxyCreator;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.source.ConfigurationPropertySource;
@@ -117,20 +118,45 @@ public class DemoApplication implements EmbeddedValueResolverAware, EnvironmentA
          * @see org.springframework.boot.web.servlet.ServletListenerRegistrationBean
          **/
 
-        /**
-         * EnvironmentAware
-         * EmbeddedValueResolverAware
-         * ResourceLoaderAware
-         * ApplicationEventPublisherAware
-         * MessageSourceAware
-         * ApplicationContextAware
-         **/
 
         /**
-         * BeanNameAware
-         * BeanClassLoaderAware
-         * BeanFactoryAware
+         * @description: initializeBean时给bean设置相关aware
+         * @see org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory#invokeAwareMethods
+         * {@link org.springframework.beans.factory.BeanNameAware}
+         * {@link org.springframework.beans.factory.BeanFactoryAware}
+         * {@link org.springframework.beans.factory.BeanClassLoaderAware}
          **/
+        /**
+         * @description: {@link org.springframework.context.support.ApplicationContextAwareProcessor} 为bean设置相关aware
+         * @see org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory#initializeBean
+         * {@link EnvironmentAware}
+         * {@link EmbeddedValueResolverAware}
+         * {@link ResourceLoaderAware}
+         * {@link ApplicationEventPublisherAware}
+         * {@link MessageSourceAware}
+         * {@link ApplicationContextAware}
+         **/
+        /**
+         * @description:  {@link org.springframework.boot.web.servlet.context.WebApplicationContextServletContextAwareProcessor}为bean设置相关aware
+         * {@link org.springframework.web.context.ServletContextAware}
+         * @see org.springframework.context.support.AbstractApplicationContext#postProcessBeanFactory
+         * @see org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext#postProcessBeanFactory
+         * @see org.springframework.web.context.support.AbstractRefreshableWebApplicationContext#postProcessBeanFactory
+         **/
+        /**
+         * @description: ignoreDependencyInterface
+         * {@link org.springframework.beans.factory.BeanNameAware}
+         * {@link org.springframework.beans.factory.BeanFactoryAware}
+         * {@link org.springframework.beans.factory.BeanClassLoaderAware}
+         * {@link EnvironmentAware}
+         * {@link EmbeddedValueResolverAware}
+         * {@link ResourceLoaderAware}
+         * {@link ApplicationEventPublisherAware}
+         * {@link MessageSourceAware}
+         * {@link ApplicationContextAware}
+         * {@link org.springframework.web.context.ServletContextAware}
+         **/
+
 
         /**
          * @description:
