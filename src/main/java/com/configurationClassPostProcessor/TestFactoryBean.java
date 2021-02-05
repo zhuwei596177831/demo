@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
  * @author 朱伟伟
  * @date 2021-02-04 17:47:20
  * @description
+ * @see org.springframework.beans.factory.support.AbstractBeanFactory#getObjectFromFactoryBean
  */
 //@Component
 public class TestFactoryBean implements FactoryBean<TestFactoryBeanBean> {

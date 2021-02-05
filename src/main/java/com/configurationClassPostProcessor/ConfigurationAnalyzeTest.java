@@ -2,6 +2,7 @@ package com.configurationClassPostProcessor;
 
 import com.example.configuration.bean.TestImportBeanDefinitionRegistrar;
 import com.example.configuration.bean.TestImportSelector;
+import org.springframework.beans.factory.BeanFactory;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.*;
 
@@ -22,7 +23,9 @@ public class ConfigurationAnalyzeTest extends AbstractConfigurationAnalyze imple
 
     public static void main(String[] args) {
         AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(ConfigurationAnalyzeTest.class);
-        System.out.println(applicationContext.getBean(TestMethodBean.class));
+        applicationContext.getBean(BeanFactory.FACTORY_BEAN_PREFIX + "testFactoryBean");
+        applicationContext.getBean("testFactoryBean");
+//        System.out.println(applicationContext.getBean(TestMethodBean.class));
     }
 
     @Bean
