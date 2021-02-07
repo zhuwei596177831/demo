@@ -20,8 +20,15 @@ import java.io.IOException;
 public class TestWebFilter implements Filter {
     private final Logger logger = LoggerFactory.getLogger(TestWebFilter.class);
 
+
+    public TestWebFilter() {
+        System.out.println("");
+    }
+
     @Autowired
     private ApplicationContext applicationContext;
+
+
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
