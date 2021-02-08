@@ -25,8 +25,11 @@ public class Child {
         AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext("com.nonAutowired");
 //        AutowireCapableBeanFactory autowireCapableBeanFactory = applicationContext.getAutowireCapableBeanFactory();
 //        Child child = (Child) autowireCapableBeanFactory.createBean(Child.class, AutowireCapableBeanFactory.AUTOWIRE_BY_NAME, false);
+//        Child child = autowireCapableBeanFactory.createBean(Child.class);//null
         ConfigurableListableBeanFactory beanFactory = applicationContext.getBeanFactory();
-        Child child = (Child) beanFactory.createBean(Child.class, AutowireCapableBeanFactory.AUTOWIRE_BY_NAME, false);
+//        Child child = (Child) beanFactory.createBean(Child.class, AutowireCapableBeanFactory.AUTOWIRE_BY_NAME, false);
+        Child child = (Child) beanFactory.createBean(Child.class, AutowireCapableBeanFactory.AUTOWIRE_BY_TYPE, false);
+//        Child child = beanFactory.createBean(Child.class);//null
         System.out.println(child.getHelloService());
     }
 }
