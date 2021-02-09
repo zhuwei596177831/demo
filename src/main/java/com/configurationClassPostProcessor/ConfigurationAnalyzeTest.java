@@ -18,10 +18,10 @@ import java.util.Collection;
  * {@link ClassPathBeanDefinitionScanner}
  * {@link ConfigurationClassBeanDefinitionReader}
  */
-@EnableAutoConfiguration
+//@EnableAutoConfiguration
 @Configuration(proxyBeanMethods = false)
 @PropertySource(value = {"classpath:test.properties"})
-@Import(value = {ImportClass.class, TestImportSelector.class, TestImportBeanDefinitionRegistrar.class})
+@Import(value = {ImportClass.class, TestImportSelector.class, TestImportBeanDefinitionRegister.class})
 @ComponentScan(basePackageClasses = {ConfigurationAnalyzeTest.class})
 public class ConfigurationAnalyzeTest extends AbstractConfigurationAnalyze implements ConfigurationAnalyzeInterface {
 
@@ -32,8 +32,6 @@ public class ConfigurationAnalyzeTest extends AbstractConfigurationAnalyze imple
 //    GenericBean<String, String> stringStringGenericBean;
 //    @Autowired
 //    GenericBean<Object, Object> objectObjectGenericBean;
-
-
     public static void main(String[] args) {
         AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(ConfigurationAnalyzeTest.class);
         applicationContext.getBean(BeanFactory.FACTORY_BEAN_PREFIX + "testFactoryBean");
