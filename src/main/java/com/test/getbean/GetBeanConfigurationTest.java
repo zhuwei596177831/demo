@@ -1,5 +1,6 @@
 package com.test.getbean;
 
+import org.springframework.beans.factory.BeanFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 /**
@@ -10,13 +11,13 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 public class GetBeanConfigurationTest {
     public static void main(String[] args) {
         AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(GetBeanConfiguration.class);
-//        applicationContext.getBean(FactoryBeanInstance.class);
-//        applicationContext.getBean("getBeanFactoryBean");
+//        System.out.println(applicationContext.getBean(FactoryBeanInstance.class));
+//        System.out.println(applicationContext.getBean("getBeanFactoryBean"));
+//
+//        System.out.println(applicationContext.getBean(GetBeanFactoryBean.class));
+//        System.out.println(applicationContext.getBean(GetBeanFactoryBean.class));
+//        System.out.println(applicationContext.getBean(BeanFactory.FACTORY_BEAN_PREFIX + "getBeanFactoryBean"));
 
-//        applicationContext.getBean(GetBeanFactoryBean.class);
-//        applicationContext.getBean(GetBeanFactoryBean.class);
-//        applicationContext.getBean(BeanFactory.FACTORY_BEAN_PREFIX + "getBeanFactoryBean");
-
-        applicationContext.getBean(PrototypeBeanA.class);
+//        applicationContext.getBean(PrototypeBeanA.class);
     }
 }

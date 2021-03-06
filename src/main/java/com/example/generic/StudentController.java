@@ -2,6 +2,7 @@ package com.example.generic;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.mapper.StudentMapper;
+import com.example.service.StudentService;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +19,14 @@ import java.util.*;
 public class StudentController {
     @Autowired
     StudentMapper studentMapper;
+    @Autowired
+    private StudentService studentService;
+
+    @GetMapping("/testTransactional")
+    public Result<Integer> testTransactional() {
+        Integer num = studentService.updateById();
+        return Result.ok(num);
+    }
 
     @GetMapping("/insertStudent")
     public Result<Integer> insertStudent(Student student) {

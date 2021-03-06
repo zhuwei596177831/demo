@@ -17,7 +17,7 @@ public class ImportClass {
 //    GenericBean<Object, Object> objectObjectGenericBean;
 
     @Resource
-    CompoScanBean scanBean;
+    ComponentScanBean scanBean;
 
     @PostConstruct
     public void init(){
