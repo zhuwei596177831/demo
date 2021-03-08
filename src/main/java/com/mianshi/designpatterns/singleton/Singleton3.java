@@ -1,4 +1,4 @@
-package com.mianshi.singleton;
+package com.mianshi.designpatterns.singleton;
 
 /**
  * @author 朱伟伟

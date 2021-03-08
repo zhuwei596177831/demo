@@ -1,4 +1,4 @@
-package com.mianshi.singleton;
+package com.mianshi.designpatterns.singleton;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
