@@ -2,6 +2,7 @@ package com.example;
 
 import com.example.aop.PersonComponent;
 import com.example.aop.UserComponent;
+import com.example.mianshi.designpatterns.proxy.TestMapper;
 import com.example.servletfilterlistener.filter.TestWebFilter;
 import com.github.lianjiatech.retrofit.spring.boot.annotation.RetrofitScan;
 import com.test.getbean.getEarlyBeanReference.RequestEarlyBean;
@@ -14,6 +15,8 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.source.ConfigurationPropertySource;
@@ -43,7 +46,7 @@ import java.util.Properties;
 @MapperScan(basePackages = {"com.example.mapper"})
 @ServletComponentScan
 @RetrofitScan(basePackages = {"com.example.okhttp.retrofit"})
-public class DemoApplication implements EmbeddedValueResolverAware, EnvironmentAware, ResourceLoaderAware, MessageSourceAware, InitializingBean {
+public class DemoApplication implements EmbeddedValueResolverAware, EnvironmentAware, ResourceLoaderAware, MessageSourceAware, InitializingBean, ApplicationRunner {
 
     //    @Autowired
 //    private MyApplicationListener myApplicationListener;
@@ -69,6 +72,9 @@ public class DemoApplication implements EmbeddedValueResolverAware, EnvironmentA
     private String resolver;
     @Autowired
     TransactionManager transactionManager;
+    //学习mapper接口代理
+    @Autowired
+    TestMapper testMapper;
 
     public static void main(String[] args) {
         //classpath*:com/example/**/*.class
@@ -305,5 +311,10 @@ public class DemoApplication implements EmbeddedValueResolverAware, EnvironmentA
     @Override
     public void setMessageSource(MessageSource messageSource) {
         System.out.println("messageSource......" + messageSource.getClass().getName());
+    }
+
+    @Override
+    public void run(ApplicationArguments args) throws Exception {
+        testMapper.getList("dddd");
     }
 }
