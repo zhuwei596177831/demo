@@ -2,6 +2,7 @@ package com.example;
 
 import com.example.aop.PersonComponent;
 import com.example.aop.UserComponent;
+import com.example.applicationEvent.MyApplicationEvent;
 import com.example.mianshi.designpatterns.proxy.TestMapper;
 import com.example.servletfilterlistener.filter.TestWebFilter;
 import com.github.lianjiatech.retrofit.spring.boot.annotation.RetrofitScan;
@@ -316,5 +317,7 @@ public class DemoApplication implements EmbeddedValueResolverAware, EnvironmentA
     @Override
     public void run(ApplicationArguments args) throws Exception {
         testMapper.getList("dddd");
+        applicationEventMulticaster.multicastEvent(new MyApplicationEvent("朱伟伟"));
+        System.out.println("MyApplicationEvent finish");
     }
 }
