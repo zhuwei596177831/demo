@@ -47,9 +47,9 @@ public class ReentrantLockContidion {
             System.out.println(Thread.currentThread().getName() + " get lock fail");
         }
 
-        //唤醒
+        //先唤醒
         condition.signal();
-        //释放锁
+        //再释放锁
         reentrantLock.unlock();
     }
 

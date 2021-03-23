@@ -21,7 +21,7 @@ public class SellTicket implements Runnable {
                 this.notify();
                 System.out.println(Thread.currentThread().getName() + "sell ticket：" + num--);
                 try {
-                    TimeUnit.MILLISECONDS.sleep(500);
+                    TimeUnit.MILLISECONDS.sleep(100);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                     Thread.currentThread().interrupt();
