@@ -1,6 +1,7 @@
 package com.example.mianshi.thread.cyclicbarrier;
 
 import java.util.Random;
+import java.util.UUID;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.TimeUnit;
@@ -18,6 +19,7 @@ public class CyclicBarrierDemo {
 
 
     public static void main(String[] args) {
+        System.out.println(UUID.randomUUID().toString());
         //5个人到齐后才开始开会
         CyclicBarrier cyclicBarrier = new CyclicBarrier(5,
                 //5个人都到期后执行的代码

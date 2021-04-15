@@ -46,14 +46,15 @@ public class RetrofitController implements InitializingBean, ApiScenicPrefix {
             .connectTimeout(5, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)
             .writeTimeout(30, TimeUnit.SECONDS)
-            .addInterceptor(new MyLoggingInterceptor())
+//            .addInterceptor(new MyLoggingInterceptor())
             .build();
 
     private final Retrofit localRetrofit = new Retrofit.Builder()
-            .baseUrl("http://127.0.0.1:8082/demo/retrofit/")
+//            .baseUrl("http://127.0.0.1:8082/demo/retrofit/")
+            .baseUrl("http://127.0.0.1:8082/demo/api/scenic/v1/retrofit/")
             .client(interceptorClient)
-            .addConverterFactory(JacksonConverterFactory.create())
-//            .addConverterFactory(new Retrofit2ConverterFactory())
+//            .addConverterFactory(JacksonConverterFactory.create())
+            .addConverterFactory(new Retrofit2ConverterFactory())
 //            .addConverterFactory(GsonConverterFactory.create())
             .build();
 
@@ -71,30 +72,29 @@ public class RetrofitController implements InitializingBean, ApiScenicPrefix {
     }
 
     /**
-     * @description:
-     * // 指定request中必须包含某些参数值时，才让该方法处理
-     * 	// 使用 params 元素，你可以让多个处理方法处理到同一个URL 的请求, 而这些请求的参数是不一样的
-     * 	// 如：@RequestMapping(value = "/fetch", params = {"personId=10"} 和 @RequestMapping(value = "/fetch", params = {"personId=20"}
-     * 	// 这两个方法都处理请求`/fetch`，但是参数不一样，进入的方法也不一样~~~~
-     * 	// 支持!myParam和myParam!=myValue这种~~~
-     * 	String[] params() default {};
-     *
-     * 	// 指定request中必须包含某些指定的header值，才能让该方法处理请求
-     * 	// @RequestMapping(value = "/head", headers = {"content-type=text/plain"}
-     * 	String[] headers() default {};
-     *
-     * 	// 指定处理请求request的**提交内容类型**(Content-Type),例如application/json、text/html等
-     * 	// 相当于只有指定的这些Content-Type的才处理
-     * 	// @RequestMapping(value = "/cons", consumes = {"application/json", "application/XML"}
-     * 	// 不指定表示处理所有~~  取值参见枚举类：org.springframework.http.MediaType
-     * 	// 它可以使用!text/plain形如这样非的表达方式
-     * 	String[] consumes() default {};
-     *
-     * 	// 指定返回的内容类型，返回的内容类型必须是request请求头(Accept)中所包含的类型
-     * 	// 仅当request请求头中的(Accept)类型中包含该指定类型才返回；
-     * 	// 参见枚举类：org.springframework.http.MediaType
-     * 	// 它可以使用!text/plain形如这样非的表达方式
-     * 	String[] produces() default {};
+     * @description: // 指定request中必须包含某些参数值时，才让该方法处理
+     * // 使用 params 元素，你可以让多个处理方法处理到同一个URL 的请求, 而这些请求的参数是不一样的
+     * // 如：@RequestMapping(value = "/fetch", params = {"personId=10"} 和 @RequestMapping(value = "/fetch", params = {"personId=20"}
+     * // 这两个方法都处理请求`/fetch`，但是参数不一样，进入的方法也不一样~~~~
+     * // 支持!myParam和myParam!=myValue这种~~~
+     * String[] params() default {};
+     * <p>
+     * // 指定request中必须包含某些指定的header值，才能让该方法处理请求
+     * // @RequestMapping(value = "/head", headers = {"content-type=text/plain"}
+     * String[] headers() default {};
+     * <p>
+     * // 指定处理请求request的**提交内容类型**(Content-Type),例如application/json、text/html等
+     * // 相当于只有指定的这些Content-Type的才处理
+     * // @RequestMapping(value = "/cons", consumes = {"application/json", "application/XML"}
+     * // 不指定表示处理所有~~  取值参见枚举类：org.springframework.http.MediaType
+     * // 它可以使用!text/plain形如这样非的表达方式
+     * String[] consumes() default {};
+     * <p>
+     * // 指定返回的内容类型，返回的内容类型必须是request请求头(Accept)中所包含的类型
+     * // 仅当request请求头中的(Accept)类型中包含该指定类型才返回；
+     * // 参见枚举类：org.springframework.http.MediaType
+     * // 它可以使用!text/plain形如这样非的表达方式
+     * String[] produces() default {};
      **/
     @PostMapping(path = "/getScenicList", produces = {org.springframework.http.MediaType.APPLICATION_JSON_VALUE},
             consumes = {org.springframework.http.MediaType.APPLICATION_JSON_VALUE})
@@ -198,14 +198,17 @@ public class RetrofitController implements InitializingBean, ApiScenicPrefix {
         List<MultipartBody.Part> parts = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
                 .addFormDataPart("studentName", "朱伟伟")
+                .addFormDataPart("rectOrganList[0]", "aaa")
+                .addFormDataPart("rectOrganList[1]", "bbb")
                 .addFormDataPart("imageFile", file.getPath(), fileRequestBody)
                 .build().parts();
         return gitHubService.retrofitMultipartBodyFile(parts).execute().body();
     }
 
     @PutMapping("/retrofitMultipartBodyFile")
-    public ScenicHttpResult<ScenicList> retrofitMultipartBodyFile(String studentName, MultipartFile imageFile) throws IOException {
+    public ScenicHttpResult<ScenicList> retrofitMultipartBodyFile(String studentName, List<String> rectOrganList, MultipartFile imageFile) throws IOException {
         System.out.println("studentName：" + studentName);
+        System.out.println("rectOrganList：" + JSON.toJSONString(rectOrganList));
         System.out.println("图片文件名称：" + imageFile.getOriginalFilename());
         System.out.println("图片文件大小：" + imageFile.getSize());
         return getScenicList(null, null, null);

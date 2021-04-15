@@ -51,9 +51,10 @@ public class MyHttpServletRequestWrapper extends HttpServletRequestWrapper {
 
     private boolean isFormPost() {
         String contentType = getContentType();
-        return (contentType != null && (contentType.contains(MediaType.APPLICATION_FORM_URLENCODED_VALUE) ||
-                StringUtils.startsWithIgnoreCase(contentType, "multipart/")) &&
-                HttpMethod.POST.matches(getMethod()));
+        return (contentType != null &&
+                (contentType.contains(MediaType.APPLICATION_FORM_URLENCODED_VALUE) || StringUtils.startsWithIgnoreCase(contentType, "multipart/")) &&
+                (HttpMethod.POST.matches(getMethod()) || HttpMethod.PUT.matches(getMethod()))
+        );
     }
 
     @Override

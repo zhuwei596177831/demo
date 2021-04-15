@@ -69,5 +69,38 @@ public class DeadlockInterruptTest implements Runnable {
             }
             System.out.println("线程：" + Thread.currentThread().getName() + "退出");
         }
+
+
+//        try {
+//            if (lock == 1) {
+//                reentrantLock1.lock();
+//                try {
+//                    TimeUnit.MILLISECONDS.sleep(500);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//                reentrantLock2.lock();
+//            } else {
+//                reentrantLock2.lock();
+//                try {
+//                    TimeUnit.MILLISECONDS.sleep(500);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//                reentrantLock1.lock();
+//            }
+//        } finally {
+//            if (reentrantLock1.isHeldByCurrentThread()) {
+//                System.out.println("reentrantLock1 unlock");
+//                reentrantLock1.unlock();
+//            }
+//            if (reentrantLock2.isHeldByCurrentThread()) {
+//                System.out.println("reentrantLock2 unlock");
+//                reentrantLock2.unlock();
+//            }
+//            System.out.println("线程：" + Thread.currentThread().getName() + "退出");
+//        }
+
+
     }
 }
