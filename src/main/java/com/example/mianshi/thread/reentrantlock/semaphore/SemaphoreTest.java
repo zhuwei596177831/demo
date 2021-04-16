@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class SemaphoreTest {
     /**
-     * 指定同时最多5个线程访问共享区域
+     * 指定同时最多5个线程访问共享区域 23-25行
      */
     private static Semaphore semaphore = new Semaphore(5);
 

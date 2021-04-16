@@ -21,10 +21,11 @@ public class ReentrantLockContidion {
 //                reentrantLock.lock();
                 if (reentrantLock.tryLock()) {
                     System.out.println(Thread.currentThread().getName() + " get lock success");
+                    //await时必须持有重入锁
+                    condition.await();
                 } else {
                     System.out.println(Thread.currentThread().getName() + " get lock fail");
                 }
-                condition.await();
                 System.out.println(Thread.currentThread().getName() + "going on...");
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -43,14 +44,13 @@ public class ReentrantLockContidion {
         }
         if (reentrantLock.tryLock()) {
             System.out.println(Thread.currentThread().getName() + " get lock success");
+            //先唤醒 signal时必须持有重入锁
+            condition.signal();
+            //再释放锁
+            reentrantLock.unlock();
         } else {
             System.out.println(Thread.currentThread().getName() + " get lock fail");
         }
-
-        //先唤醒
-        condition.signal();
-        //再释放锁
-        reentrantLock.unlock();
     }
 
 }

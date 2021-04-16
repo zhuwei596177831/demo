@@ -1,5 +1,7 @@
 package com.example.mianshi.thread;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * @author 朱伟伟
  * @date 2021-03-18 10:33:16
@@ -14,6 +16,11 @@ public class volatileTest {
         @Override
         public void run() {
             for (int i1 = 0; i1 < 1000; i1++) {
+                try {
+                    TimeUnit.MILLISECONDS.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 i++;
             }
         }

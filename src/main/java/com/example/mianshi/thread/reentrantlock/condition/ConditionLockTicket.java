@@ -22,9 +22,10 @@ public class ConditionLockTicket {
                     condition.signal();
                     System.out.println(Thread.currentThread().getName() + " sell ticket " + ticket--);
                     condition.await();
-                    reentrantLock.unlock();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
+                } finally {
+                    reentrantLock.unlock();
                 }
             } while (ticket > 0);
         };

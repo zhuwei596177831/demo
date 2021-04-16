@@ -15,7 +15,7 @@ public class NoVisibility {
 
         @Override
         public void run() {
-            while (ready) {
+            while (!ready) {
                 System.out.println(number);
             }
         }
