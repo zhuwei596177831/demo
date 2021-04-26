@@ -17,10 +17,10 @@ public class ConditionLockTicket {
     public static void main(String[] args) {
         Runnable runnable = () -> {
             do {
+                reentrantLock.lock();
                 try {
-                    reentrantLock.lock();
-                    condition.signal();
                     System.out.println(Thread.currentThread().getName() + " sell ticket " + ticket--);
+                    condition.signal();
                     condition.await();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
