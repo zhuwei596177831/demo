@@ -4,6 +4,8 @@ import com.example.aop.PersonComponent;
 import com.example.aop.UserComponent;
 import com.example.applicationEvent.MyApplicationEvent;
 import com.example.mianshi.designpatterns.proxy.TestMapper;
+import com.example.mianshi.designpatterns.singleton.Singleton;
+import com.example.mianshi.designpatterns.singleton.Singleton3;
 import com.example.servletfilterlistener.filter.TestWebFilter;
 import com.github.lianjiatech.retrofit.spring.boot.annotation.RetrofitScan;
 import com.test.getbean.getEarlyBeanReference.RequestEarlyBean;
@@ -319,5 +321,8 @@ public class DemoApplication implements EmbeddedValueResolverAware, EnvironmentA
         testMapper.getList("dddd");
         applicationEventMulticaster.multicastEvent(new MyApplicationEvent("朱伟伟"));
         System.out.println("MyApplicationEvent finish");
+//        System.out.println(Singleton.STATUS);
+//        System.out.println(Singleton.getInstance());
+        System.out.println(Singleton3.STATUS);
     }
 }

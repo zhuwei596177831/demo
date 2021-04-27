@@ -7,8 +7,10 @@ package com.example.mianshi.designpatterns.singleton;
  */
 public class Singleton3 {
 
-    private Singleton3() {
+    public static int STATUS;
 
+    private Singleton3() {
+        System.out.println("Singleton3 constructor");
     }
 
     private static class SingletonHolder {

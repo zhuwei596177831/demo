@@ -7,9 +7,16 @@ package com.example.mianshi.designpatterns.singleton;
  */
 public class Singleton {
 
+    public static void main(String[] args) {
+        System.out.println(STATUS);
+    }
+
+    public static int STATUS = 1;
+
     private static final Singleton SINGLETON = new Singleton();
 
     private Singleton() {
+        System.out.println("Singleton constructor");
     }
 
     public static Singleton getInstance() {
