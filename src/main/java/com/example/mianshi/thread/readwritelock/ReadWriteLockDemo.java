@@ -21,7 +21,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * @date 2021-03-23 10:21:12
  * @description
  */
-@Component
+//@Component
 public class ReadWriteLockDemo implements ApplicationRunner {
 
     private DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");

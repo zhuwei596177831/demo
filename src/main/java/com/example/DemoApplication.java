@@ -36,6 +36,8 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
 import org.springframework.core.io.support.ResourcePropertySource;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.transaction.TransactionManager;
 import org.springframework.util.StringValueResolver;
 
@@ -316,6 +318,11 @@ public class DemoApplication implements EmbeddedValueResolverAware, EnvironmentA
         System.out.println("messageSource......" + messageSource.getClass().getName());
     }
 
+    @Autowired
+    private RedisTemplate redisTemplate;
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
+
     @Override
     public void run(ApplicationArguments args) throws Exception {
         testMapper.getList("dddd");
@@ -323,6 +330,7 @@ public class DemoApplication implements EmbeddedValueResolverAware, EnvironmentA
         System.out.println("MyApplicationEvent finish");
 //        System.out.println(Singleton.STATUS);
 //        System.out.println(Singleton.getInstance());
-        System.out.println(Singleton3.STATUS);
+//        System.out.println(Singleton3.STATUS);
+        System.out.println(stringRedisTemplate.boundValueOps("zhuweiwei").get());
     }
 }
