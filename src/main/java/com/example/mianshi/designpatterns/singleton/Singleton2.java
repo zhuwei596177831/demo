@@ -6,7 +6,8 @@ package com.example.mianshi.designpatterns.singleton;
  * @description 懒汉式
  */
 public class Singleton2 {
-    private static Singleton2 INSTANCE;
+    //volatile禁止指令重排
+    private static volatile Singleton2 INSTANCE;
 
     private Singleton2() {
     }
@@ -19,7 +20,7 @@ public class Singleton2 {
     public static Singleton2 getINSTANCE() {
         if (INSTANCE == null) {
             synchronized (Singleton2.class) {
-                return new Singleton2();
+                INSTANCE = new Singleton2();
             }
         }
         return INSTANCE;
@@ -32,7 +33,7 @@ public class Singleton2 {
      **/
     public static synchronized Singleton2 getINSTANCE1() {
         if (INSTANCE == null) {
-            return new Singleton2();
+            INSTANCE = new Singleton2();
         }
         return INSTANCE;
     }
@@ -46,7 +47,7 @@ public class Singleton2 {
         if (INSTANCE == null) {
             synchronized (Singleton2.class) {
                 if (INSTANCE == null) {
-                    return new Singleton2();
+                    INSTANCE = new Singleton2();
                 }
             }
         }
