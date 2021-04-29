@@ -318,10 +318,6 @@ public class DemoApplication implements EmbeddedValueResolverAware, EnvironmentA
         System.out.println("messageSource......" + messageSource.getClass().getName());
     }
 
-    @Autowired
-    private RedisTemplate redisTemplate;
-    @Autowired
-    private StringRedisTemplate stringRedisTemplate;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -331,6 +327,5 @@ public class DemoApplication implements EmbeddedValueResolverAware, EnvironmentA
 //        System.out.println(Singleton.STATUS);
 //        System.out.println(Singleton.getInstance());
 //        System.out.println(Singleton3.STATUS);
-        System.out.println(stringRedisTemplate.boundValueOps("zhuweiwei").get());
     }
 }
