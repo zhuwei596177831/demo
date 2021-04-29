@@ -4,23 +4,14 @@ package com.example.demo;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.example.configuration.TestConfiguration;
-import com.example.configuration.scan.TestScanBean;
-import com.example.demo.test.RedisEntity;
-import com.example.generic.BaseEntity;
-import com.google.common.collect.Maps;
+import com.example.demo.test.FastJsonRedisEntity;
+import com.example.redis.FastJsonRedisTemplate;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.data.redis.core.*;
 import org.springframework.util.CollectionUtils;
 
-import javax.annotation.Resource;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -34,25 +25,32 @@ class DemoApplicationTests {
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
+//    @Autowired
+//    private RedisTemplate<String, Object> fastJsonRedisTemplate;
     @Autowired
-    private RedisTemplate<String, Object> fastJsonRedisTemplate;
+    private FastJsonRedisTemplate fastJsonRedisTemplate;
 
     @Test
     public void testFastJsonRedisTemplate() {
         try {
             ValueOperations<String, Object> valueOperations = fastJsonRedisTemplate.opsForValue();
-//            RedisEntity redisEntity = new RedisEntity("朱伟伟", 26);
-//            valueOperations.set("fastJsonRedis", redisEntity);
+            FastJsonRedisEntity fastJsonFastJsonRedisEntity = new FastJsonRedisEntity("朱伟伟", 26);
+            valueOperations.set("fastJsonRedis", fastJsonFastJsonRedisEntity);
             JSONObject jsonObject = (JSONObject) valueOperations.get("fastJsonRedis");
             System.out.println(jsonObject.getClass());
             System.out.println(jsonObject);
+            System.out.println();
+            System.out.println(JSON.parseObject(jsonObject.toString(), FastJsonRedisEntity.class));
+            System.out.println();
 
-//            valueOperations.set("jsonArray", Arrays.asList(new RedisEntity("朱伟伟", 26), new RedisEntity("方明正", 23)));
+            valueOperations.set("jsonArray", Arrays.asList(new FastJsonRedisEntity("朱伟伟", 26), new FastJsonRedisEntity("方明正", 23)));
             JSONArray jsonArray = (JSONArray) valueOperations.get("jsonArray");
             System.out.println(jsonArray.getClass());
             System.out.println(jsonArray);
-            List<RedisEntity> redisEntityList = JSON.parseArray(jsonArray.toJSONString(), RedisEntity.class);
-            System.out.println(redisEntityList);
+            System.out.println();
+            List<FastJsonRedisEntity> fastJsonRedisEntities = JSON.parseArray(jsonArray.toJSONString(), FastJsonRedisEntity.class);
+            System.out.println(fastJsonRedisEntities);
+            System.out.println();
         } finally {
             RedisConnectionUtils.unbindConnection(fastJsonRedisTemplate.getRequiredConnectionFactory());
         }
@@ -61,7 +59,7 @@ class DemoApplicationTests {
     @Test
     public void testObject() {
         ValueOperations<Object, Object> valueOperations = objectRedisTemplate.opsForValue();
-//        RedisEntity redisEntity = new RedisEntity("朱伟伟", 26);
+//        FastJsonRedisEntity redisEntity = new FastJsonRedisEntity("朱伟伟", 26);
 //        valueOperations.set("objectRedis", redisEntity);
         System.out.println(valueOperations.get("objectRedis").getClass());
         System.out.println(valueOperations.get("objectRedis"));

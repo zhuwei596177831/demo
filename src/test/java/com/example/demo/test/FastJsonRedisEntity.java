@@ -1,5 +1,6 @@
 package com.example.demo.test;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.example.generic.BaseEntity;
 
 import java.time.LocalDate;
@@ -12,16 +13,20 @@ import java.util.Date;
  * @date 2021-04-29 11:16:56
  * @description
  */
-public class RedisEntity extends BaseEntity {
+public class FastJsonRedisEntity extends BaseEntity {
     private static final long serialVersionUID = 4266161984101152995L;
     private String name;
     private Integer age;
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime localDateTime;
+    @JSONField(format = "yyyy-MM-dd")
     private LocalDate localDate;
+    @JSONField(format = "HH:mm:ss")
     private LocalTime localTime;
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private Date date;
 
-    public RedisEntity(String name, Integer age) {
+    public FastJsonRedisEntity(String name, Integer age) {
         this.name = name;
         this.age = age;
         this.localDateTime = LocalDateTime.now();
