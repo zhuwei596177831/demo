@@ -1,4 +1,4 @@
-package com.example.demo.test;
+package com.example.redis;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.example.generic.BaseEntity;

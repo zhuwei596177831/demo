@@ -3,6 +3,7 @@ package com.example.redis;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonRedisSerializer;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializer;
 
@@ -13,9 +14,8 @@ import org.springframework.data.redis.serializer.RedisSerializer;
  */
 public class FastJsonRedisTemplate extends RedisTemplate<String, Object> {
 
-    public static final FastJsonRedisSerializer<Object> INSTANCE = new FastJsonRedisSerializer<>(Object.class);
-
-    static {
+    public FastJsonRedisTemplate(RedisConnectionFactory redisConnectionFactory) {
+        FastJsonRedisSerializer<Object> fastJsonRedisSerializer = new FastJsonRedisSerializer<>(Object.class);
         FastJsonConfig fastJsonConfig = new FastJsonConfig();
         fastJsonConfig.setSerializerFeatures(
                 SerializerFeature.WriteNullStringAsEmpty,
@@ -23,13 +23,11 @@ public class FastJsonRedisTemplate extends RedisTemplate<String, Object> {
                 SerializerFeature.WriteMapNullValue,
                 SerializerFeature.WriteDateUseDateFormat
         );
-        INSTANCE.setFastJsonConfig(fastJsonConfig);
-    }
-
-    public FastJsonRedisTemplate() {
+        fastJsonRedisSerializer.setFastJsonConfig(fastJsonConfig);
         setKeySerializer(RedisSerializer.string());
-        setValueSerializer(INSTANCE);
+        setValueSerializer(fastJsonRedisSerializer);
         setHashKeySerializer(RedisSerializer.string());
-        setHashValueSerializer(INSTANCE);
+        setHashValueSerializer(fastJsonRedisSerializer);
+        setConnectionFactory(redisConnectionFactory);
     }
 }

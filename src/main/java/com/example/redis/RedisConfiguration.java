@@ -18,10 +18,14 @@ public class RedisConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
+    public JacksonRedisTemplate jacksonRedisTemplate(RedisConnectionFactory redisConnectionFactory) {
+        return new JacksonRedisTemplate(redisConnectionFactory);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
     public FastJsonRedisTemplate fastJsonRedisTemplate(RedisConnectionFactory redisConnectionFactory) {
-        FastJsonRedisTemplate fastJsonRedisTemplate = new FastJsonRedisTemplate();
-        fastJsonRedisTemplate.setConnectionFactory(redisConnectionFactory);
-        return fastJsonRedisTemplate;
+        return new FastJsonRedisTemplate(redisConnectionFactory);
     }
 
 //    @Bean

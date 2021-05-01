@@ -4,8 +4,11 @@ package com.example.demo;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.example.demo.test.FastJsonRedisEntity;
+import com.example.redis.FastJsonRedisEntity;
 import com.example.redis.FastJsonRedisTemplate;
+import com.example.redis.JacksonRedisEntity;
+import com.example.redis.JacksonRedisTemplate;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,10 +28,39 @@ class DemoApplicationTests {
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
-//    @Autowired
+    //    @Autowired
 //    private RedisTemplate<String, Object> fastJsonRedisTemplate;
     @Autowired
     private FastJsonRedisTemplate fastJsonRedisTemplate;
+    @Autowired
+    private JacksonRedisTemplate jacksonRedisTemplate;
+
+    @Test
+    public void testJacksonRedisTemplate() throws JsonProcessingException {
+        try {
+            ValueOperations<String, Object> valueOperations = jacksonRedisTemplate.opsForValue();
+            JacksonRedisEntity jacksonRedisEntity = new JacksonRedisEntity("朱伟伟", 26);
+//            valueOperations.set("jacksonRedisEntity", jacksonRedisEntity);
+//            Object o = valueOperations.get("jacksonRedisEntity");
+            BoundValueOperations<String, Object> boundValueOps = jacksonRedisTemplate.boundValueOps("jacksonRedisEntity");
+            Object o = boundValueOps.get();
+            System.out.println(o.getClass());//class java.util.LinkedHashMap
+            System.out.println(o);
+            String s = JacksonRedisTemplate.objectMapper.writeValueAsString(o);
+            JacksonRedisEntity result = JacksonRedisTemplate.objectMapper.readValue(s, JacksonRedisEntity.class);
+            System.out.println(result);
+
+//            valueOperations.set("jacksonRedisEntityArray", Arrays.asList(new JacksonRedisEntity("朱伟伟", 26), new JacksonRedisEntity("方明正", 23)));
+//            Object o1 = valueOperations.get("jacksonRedisEntityArray");
+//            System.out.println(o1.getClass());//class java.util.ArrayList
+//            System.out.println(o1);
+//            System.out.println();
+//            List<JacksonRedisEntity> jacksonRedisEntities = JSON.parseArray(o1.toJSONString(), JacksonRedisEntity.class);
+//            System.out.println(jacksonRedisEntities);
+        } finally {
+            RedisConnectionUtils.unbindConnection(jacksonRedisTemplate.getRequiredConnectionFactory());
+        }
+    }
 
     @Test
     public void testFastJsonRedisTemplate() {
