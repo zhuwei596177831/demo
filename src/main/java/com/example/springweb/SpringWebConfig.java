@@ -18,6 +18,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.MethodParameter;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.format.support.FormattingConversionService;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
@@ -328,5 +329,46 @@ public class SpringWebConfig implements WebMvcConfigurer, BeanPostProcessor {
     @Override
     public void extendHandlerExceptionResolvers(List<HandlerExceptionResolver> resolvers) {
 
+    }
+
+    /**
+     * @param corsRegistry:
+     * @author: 朱伟伟
+     * @date: 2021-05-05 17:53
+     * @description: 其实实现CORS很简单，就是在服务端加一些响应头，并且这样做对前端来说是无感知的，很方便。
+     * 详解响应头：
+     * <p>
+     * Access-Control-Allow-Origin 该字段必填。它的值要么是请求时Origin字段的具体值，要么是一个*，表示接受任意域名的请求。
+     * <p>
+     * Access-Control-Allow-Methods 该字段必填。它的值是逗号分隔的一个具体的字符串或者*，表明服务器支持的所有跨域请求的方法。
+     * 注意，返回的是所有支持的方法，而不单是浏览器请求的那个方法。这是为了避免多次"预检"请求。
+     * <p>
+     * Access-Control-Expose-Headers 该字段可选。CORS请求时，XMLHttpRequest对象的getResponseHeader()方法只能拿到6个基本字段：
+     * Cache-Control、Content-Language、Content-Type、Expires、Last-Modified、Pragma。
+     * 如果想拿到其他字段，就必须在Access-Control-Expose-Headers里面指定。
+     * <p
+     * Access-Control-Allow-Credentials 该字段可选。它的值是一个布尔值，表示是否允许发送Cookie.默认情况下，不发生Cookie，
+     * 即：false。对服务器有特殊要求的请求，比如请求方法是PUT或DELETE，或者Content-Type字段的类型是application/json，
+     * 这个值只能设为true。如果服务器不要浏览器发送Cookie，删除该字段即可。
+     * <p>
+     * Access-Control-Max-Age 该字段可选，用来指定本次预检请求的有效期，单位为秒。在有效期间，不用发出另一条预检请求。
+     * <p>
+     * 顺便提一下，如果在开发中，发现每次发起请求都是两条，一次OPTIONS，一次正常请求，注意是每次，
+     * 那么就需要配置Access-Control-Max-Age，避免每次都发出预检请求
+     * <p>
+     * 方案一：cors同源策略 解决跨域请求
+     **/
+    @Override
+    public void addCorsMappings(CorsRegistry corsRegistry) {
+        corsRegistry
+                .addMapping("/**")
+//                .allowedOrigins("*")
+//                .allowedOrigins("http://127.0.0.1:9090")
+                .allowedMethods(HttpMethod.GET.name(), HttpMethod.POST.name(), HttpMethod.PUT.name(), HttpMethod.DELETE.name())
+                .allowCredentials(true)
+                //By default this is set to 1800 seconds (30 minutes).
+                .maxAge(3600)
+//                .allowedHeaders("*")
+        ;
     }
 }

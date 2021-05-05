@@ -3,6 +3,7 @@ package com.example.springweb.filter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.servlet.filter.OrderedFilter;
+import org.springframework.core.Ordered;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.AbstractRequestLoggingFilter;
@@ -28,7 +29,7 @@ import java.util.Map;
  */
 //@Component
 @WebFilter(filterName = "customRequestLoggingFilter", urlPatterns = {"/*"})
-public class CustomRequestLoggingFilter extends AbstractRequestLoggingFilter {
+public class CustomRequestLoggingFilter extends AbstractRequestLoggingFilter implements OrderedFilter {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     //这些配置都可以在init-param中进行设置,但是基于注解的，这里就不要这么麻烦了，统一在初始化的时候设置值吧
@@ -126,5 +127,17 @@ public class CustomRequestLoggingFilter extends AbstractRequestLoggingFilter {
 
     private String getThreadId() {
         return "[ThreadId:" + Thread.currentThread().getId() + "] ";
+    }
+
+    /***
+     * @author: 朱伟伟
+     * @date: 2021-05-05 21:56
+     * @description: 高优先级 在{@link MyHttpServletRequestWrapperFilter}之前执行 不然@requeatbody无法重复读取
+     * @see AbstractRequestLoggingFilter#doFilterInternal
+     * @see org.springframework.web.util.ContentCachingRequestWrapper
+     **/
+    @Override
+    public int getOrder() {
+        return REQUEST_WRAPPER_FILTER_MAX_ORDER;
     }
 }

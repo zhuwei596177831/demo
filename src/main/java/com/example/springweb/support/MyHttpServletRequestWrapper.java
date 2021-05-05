@@ -4,21 +4,23 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.util.StreamUtils;
 import org.springframework.util.StringUtils;
-import org.springframework.web.util.ContentCachingRequestWrapper;
-import org.springframework.web.util.WebUtils;
 
 import javax.servlet.ReadListener;
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author 朱伟伟
@@ -28,8 +30,6 @@ import java.util.*;
 public class MyHttpServletRequestWrapper extends HttpServletRequestWrapper {
     private final Logger logger = LoggerFactory.getLogger(getClass());
     private final String body;
-    private ServletInputStream servletInputStream;
-    private BufferedReader bufferedReader;
 
     /**
      * Constructs a request object wrapping the given request.
@@ -45,7 +45,6 @@ public class MyHttpServletRequestWrapper extends HttpServletRequestWrapper {
             this.body = StreamUtils.copyToString(request.getInputStream(), StandardCharsets.UTF_8);
         }
         logger.info("MyHttpServletRequestWrapper body:\n{}", body);
-        this.servletInputStream = new BodyCachingInputStream(body.getBytes());
     }
 
 
@@ -94,44 +93,33 @@ public class MyHttpServletRequestWrapper extends HttpServletRequestWrapper {
 
     @Override
     public ServletInputStream getInputStream() throws IOException {
-        return servletInputStream;
+        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(body.getBytes());
+        return new ServletInputStream() {
+            @Override
+            public boolean isFinished() {
+                return false;
+            }
+
+            @Override
+            public boolean isReady() {
+                return false;
+            }
+
+            @Override
+            public void setReadListener(ReadListener listener) {
+
+            }
+
+            @Override
+            public int read() throws IOException {
+                return byteArrayInputStream.read();
+            }
+        };
     }
 
     @Override
     public BufferedReader getReader() throws IOException {
-        if (bufferedReader == null) {
-            bufferedReader = new BufferedReader(new InputStreamReader(getInputStream()));
-        }
-        return bufferedReader;
-    }
-
-
-    private static class BodyCachingInputStream extends ServletInputStream {
-        private final ByteArrayInputStream byteArrayInputStream;
-
-        BodyCachingInputStream(byte[] body) {
-            this.byteArrayInputStream = new ByteArrayInputStream(body);
-        }
-
-        @Override
-        public boolean isFinished() {
-            return true;
-        }
-
-        @Override
-        public boolean isReady() {
-            return byteArrayInputStream.available() == 0;
-        }
-
-        @Override
-        public void setReadListener(ReadListener listener) {
-
-        }
-
-        @Override
-        public int read() throws IOException {
-            return byteArrayInputStream.read();
-        }
+        return new BufferedReader(new InputStreamReader(getInputStream()));
     }
 
 }

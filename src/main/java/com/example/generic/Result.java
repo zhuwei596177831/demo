@@ -41,13 +41,13 @@ public class Result<T> extends BaseEntity {
     public static <E> Result<ArrayData<E>> ok(Collection<E> data) {
         if (data instanceof Page) {
             Page<E> page = (Page<E>) data;
-            return new Result<>("0000", "成功", new ArrayData<>(page, page.getTotal()));
+            return new Result<>("0000", "成功", new ArrayData<>(page));
         }
-        return new Result<>("0000", "成功", new ArrayData<>(data, data.size()));
+        return new Result<>("0000", "成功", new ArrayData<>(data));
     }
 
     public static <E> Result<ArrayData<E>> ok(com.baomidou.mybatisplus.extension.plugins.pagination.Page<E> page) {
-        return new Result<>("0000", "成功", new ArrayData<>(page.getRecords(), page.getTotal()));
+        return new Result<>("0000", "成功", new ArrayData<>(page));
     }
 
     public String getCode() {

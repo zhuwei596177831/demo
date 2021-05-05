@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSONPObject;
 import com.example.okhttp.retrofit.MyLoggingInterceptor;
 import okhttp3.*;
 import okhttp3.logging.HttpLoggingInterceptor;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -42,43 +43,46 @@ public class OkHttpController {
      * @author: 朱伟伟
      * @date: 2020-12-17 20:13
      * @description: 景区列表
+     * 方案三：cors同源策略 解决跨域请求
      **/
     @GetMapping("/getScenicList")
+    //默认全部
+//    @CrossOrigin(origins = {"http://127.0.0.1:9090"})
 //    public synchronized String getScenicList() throws Exception {
     public String getScenicList() throws Exception {
         try {
             readWriteLock.readLock().lock();
-//            lock.lock();
-//            FormBody formBody = new FormBody.Builder()
-//                    .add("supplierIdentity", supplierIdentity)
-//                    .add("signkey", signkey)
-//                    .build();
-//            MultipartBody multipartBody = new MultipartBody.Builder()
-//                    .setType(MultipartBody.FORM)
-//                    .addFormDataPart("supplierIdentity", supplierIdentity)
-//                    .addFormDataPart("signkey", signkey)
-//                    .build();
-//            Request request = new Request.Builder()
-//                    .url(baseUrl + "getScenicList")
-//                    .post(formBody)
-////                .post(multipartBody)
-//                    .build();
-//            try (Response response = okHttpClient.newCall(request).execute()) {
-//                if (!response.isSuccessful()) {
-//                    throw new IOException("Unexpected code " + response);
-//                }
-//                String result = response.body().string();
-//                System.out.println(response.body().contentType().toString());
-//                result = JSON.parseObject(result).toJSONString();
-//                response.body().close();
-//                response.close();
-//                return result;
-//            }
-            Thread.sleep(100);
-            return "";
+            lock.lock();
+            FormBody formBody = new FormBody.Builder()
+                    .add("supplierIdentity", supplierIdentity)
+                    .add("signkey", signkey)
+                    .build();
+            MultipartBody multipartBody = new MultipartBody.Builder()
+                    .setType(MultipartBody.FORM)
+                    .addFormDataPart("supplierIdentity", supplierIdentity)
+                    .addFormDataPart("signkey", signkey)
+                    .build();
+            Request request = new Request.Builder()
+                    .url(baseUrl + "getScenicList")
+                    .post(formBody)
+//                .post(multipartBody)
+                    .build();
+            try (Response response = okHttpClient.newCall(request).execute()) {
+                if (!response.isSuccessful()) {
+                    throw new IOException("Unexpected code " + response);
+                }
+                String result = response.body().string();
+                System.out.println(response.body().contentType().toString());
+                result = JSON.parseObject(result).toJSONString();
+                response.body().close();
+                response.close();
+                return result;
+            }
+//            Thread.sleep(100);
+//            return "";
         } finally {
             readWriteLock.readLock().unlock();
-//            lock.unlock();
+            lock.unlock();
         }
     }
 

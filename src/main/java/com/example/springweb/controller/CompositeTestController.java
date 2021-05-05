@@ -262,11 +262,11 @@ public class CompositeTestController {
     @PostMapping("/requestResponseBodyMethodProcessor")
 //    @ResponseStatus(code = HttpStatus.OK, reason = "ok")
     public Result requestResponseBodyMethodProcessor(
-//            @RequestBody String data
+            @RequestBody String data,
             @RequestBody @Validated WorkGroup workGroup
     ) throws Exception {
         StopWatch stopWatch = new StopWatch(UUID.randomUUID().toString());
-        Thread.sleep(2000);
+//        Thread.sleep(2000);
         stopWatch.start("requestResponseBodyMethodProcessor");
         workGroup.setDate(new Date());
         workGroup.setLocalDate(LocalDate.now());
@@ -276,7 +276,7 @@ public class CompositeTestController {
         System.out.println(stopWatch.getTotalTimeSeconds());
         System.out.println(stopWatch.shortSummary());
         stopWatch.start("sss");
-        Thread.sleep(1000);
+//        Thread.sleep(1000);
         stopWatch.stop();
         System.out.println(stopWatch.getTotalTimeSeconds());
         System.out.println(stopWatch.shortSummary());
