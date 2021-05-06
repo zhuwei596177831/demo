@@ -8,12 +8,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.*;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author 朱伟伟
@@ -30,7 +29,12 @@ public class AxiosController {
 //    public Result<ArrayData<Organ>> getOrganList(@RequestParam String username,
 //                                                 @RequestParam String password,
 //                                                 MultipartFile picFile) {
-        return Result.ok(Organ.ORGANS);
+        try {
+            TimeUnit.SECONDS.sleep(1);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return Result.ok();
     }
 
     @GetMapping("/getOrgan")
